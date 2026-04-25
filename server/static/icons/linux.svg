@@ -1,0 +1,16 @@
+<svg width="140" height="140" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Body -->
+  <ellipse cx="64" cy="70" rx="42" ry="52" fill="#000"/>
+  <!-- Belly -->
+  <ellipse cx="64" cy="78" rx="28" ry="36" fill="#fff"/>
+  <!-- Eyes -->
+  <circle cx="48" cy="48" r="12" fill="#fff"/>
+  <circle cx="80" cy="48" r="12" fill="#fff"/>
+  <circle cx="48" cy="48" r="5" fill="#000"/>
+  <circle cx="80" cy="48" r="5" fill="#000"/>
+  <!-- Beak -->
+  <ellipse cx="64" cy="62" rx="14" ry="9" fill="#ffcc33"/>
+  <!-- Feet -->
+  <ellipse cx="45" cy="112" rx="20" ry="10" fill="#ffcc33"/>
+  <ellipse cx="83" cy="112" rx="20" ry="10" fill="#ffcc33"/>
+</svg>

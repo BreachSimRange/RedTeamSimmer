@@ -1,0 +1,494 @@
+{
+  "name": "Wizard Spider (Conti/Ryuk)",
+  "description": "VALIDATED emulation plan for Wizard Spider, a Russia-based financially motivated threat group known for TrickBot (since 2016) and ransomware operations (Ryuk, Conti). Notable for targeting hospitals and major corporations.",
+  "mitre_group_id": "G0102",
+  "mitre_url": "https://attack.mitre.org/groups/G0102/",
+  "aliases": ["UNC1878", "TEMP.MixMaster", "Grim Spider", "FIN12", "GOLD BLACKBURN", "ITG23", "Periwinkle Tempest", "DEV-0193"],
+  "attribution": "Russia-based Financially Motivated Criminal Group",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v18 - All techniques documented with evidence citations. Featured in MITRE Engenuity ATT&CK Evaluations 2022.",
+  "techniques_without_atomic_coverage": [
+    "T1585.002 - Establish Accounts: Email Accounts (ProtonMail for ransom notes)",
+    "T1021 - Remote Services (WebDAV for Ryuk payloads)",
+    "T1588.002 - Obtain Capabilities: Tool (Empire, Cobalt Strike, Rubeus, AdFind, BloodHound)",
+    "T1588.003 - Obtain Capabilities: Code Signing Certificates (DigiCert, GlobalSign, COMOOD)"
+  ],
+  "AtomicTests": [
+    {
+      "TestNumber": 1,
+      "Technique": "T1087.002",
+      "TechniqueName": "Account Discovery: Domain Account",
+      "MitreReference": "Wizard Spider used net group \"Domain admins\" /DOMAIN and Get-ADComputer",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1087.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 2,
+      "Technique": "T1557.001",
+      "TechniqueName": "Adversary-in-the-Middle: LLMNR/NBT-NS Poisoning",
+      "MitreReference": "Wizard Spider used Invoke-Inveigh PowerShell cmdlets for name service poisoning",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1557.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 3,
+      "Technique": "T1071.001",
+      "TechniqueName": "Application Layer Protocol: Web Protocols",
+      "MitreReference": "Wizard Spider used HTTP for network communications",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1071.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 4,
+      "Technique": "T1560.001",
+      "TechniqueName": "Archive Collected Data: Archive via Utility",
+      "MitreReference": "Wizard Spider archived data into ZIP files on compromised machines",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1560.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 5,
+      "Technique": "T1197",
+      "TechniqueName": "BITS Jobs",
+      "MitreReference": "Wizard Spider used batch scripts with WMIC to execute BITSAdmin transfers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1197 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 6,
+      "Technique": "T1547.001",
+      "TechniqueName": "Boot or Logon Autostart Execution: Registry Run Keys",
+      "MitreReference": "Wizard Spider established persistence via HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1547.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 7,
+      "Technique": "T1547.004",
+      "TechniqueName": "Boot or Logon Autostart Execution: Winlogon Helper DLL",
+      "MitreReference": "Wizard Spider established persistence using HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1547.004 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 8,
+      "Technique": "T1059.001",
+      "TechniqueName": "Command and Scripting Interpreter: PowerShell",
+      "MitreReference": "Wizard Spider used macros to execute PowerShell for malware download and lateral movement",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 9,
+      "Technique": "T1059.003",
+      "TechniqueName": "Command and Scripting Interpreter: Windows Command Shell",
+      "MitreReference": "Wizard Spider used cmd.exe to execute commands on victim's machine",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 10,
+      "Technique": "T1136.001",
+      "TechniqueName": "Create Account: Local Account",
+      "MitreReference": "Wizard Spider created local administrator accounts for persistence",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1136.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 11,
+      "Technique": "T1136.002",
+      "TechniqueName": "Create Account: Domain Account",
+      "MitreReference": "Wizard Spider created new accounts within Active Directory",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1136.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 12,
+      "Technique": "T1543.003",
+      "TechniqueName": "Create or Modify System Process: Windows Service",
+      "MitreReference": "Wizard Spider installed TrickBot as service named ControlServiceA",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1543.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 13,
+      "Technique": "T1555.004",
+      "TechniqueName": "Credentials from Password Stores: Windows Credential Manager",
+      "MitreReference": "Wizard Spider used Invoke-WCMDump to enumerate Windows Credential Manager",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1555.004 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 14,
+      "Technique": "T1005",
+      "TechniqueName": "Data from Local System",
+      "MitreReference": "Wizard Spider collected data from compromised hosts prior to exfiltration",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1005 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 15,
+      "Technique": "T1074.001",
+      "TechniqueName": "Data Staged: Local Data Staging",
+      "MitreReference": "Wizard Spider staged ZIP files in C:\\PerfLogs\\1\\ and C:\\User\\1\\",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1074.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 16,
+      "Technique": "T1048.003",
+      "TechniqueName": "Exfiltration Over Alternative Protocol: Unencrypted Non-C2",
+      "MitreReference": "Wizard Spider exfiltrated victim information using FTP",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1048.003 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 17,
+      "Technique": "T1041",
+      "TechniqueName": "Exfiltration Over C2 Channel",
+      "MitreReference": "Wizard Spider exfiltrated domain credentials and network enumeration over C2",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1041 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 18,
+      "Technique": "T1567.002",
+      "TechniqueName": "Exfiltration Over Web Service: Cloud Storage",
+      "MitreReference": "Wizard Spider exfiltrated stolen data to various cloud storage providers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1567.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 19,
+      "Technique": "T1210",
+      "TechniqueName": "Exploitation of Remote Services",
+      "MitreReference": "Wizard Spider exploited Zerologon (CVE-2020-1472) and EternalBlue (MS17-010)",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1210 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 20,
+      "Technique": "T1133",
+      "TechniqueName": "External Remote Services",
+      "MitreReference": "Wizard Spider accessed victim networks using stolen VPN credentials",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1133 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 21,
+      "Technique": "T1222.001",
+      "TechniqueName": "File and Directory Permissions Modification: Windows",
+      "MitreReference": "Wizard Spider used icacls to modify access control on backup servers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1222.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 22,
+      "Technique": "T1562.001",
+      "TechniqueName": "Impair Defenses: Disable or Modify Tools",
+      "MitreReference": "Wizard Spider shut down or uninstalled security applications",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1562.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 23,
+      "Technique": "T1070.004",
+      "TechniqueName": "Indicator Removal: File Deletion",
+      "MitreReference": "Wizard Spider used file deletion to remove modules and configurations",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1070.004 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 24,
+      "Technique": "T1105",
+      "TechniqueName": "Ingress Tool Transfer",
+      "MitreReference": "Wizard Spider transferred malicious payloads such as ransomware",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1105 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 25,
+      "Technique": "T1490",
+      "TechniqueName": "Inhibit System Recovery",
+      "MitreReference": "Wizard Spider used WMIC and vssadmin to delete volume shadow copies",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1490 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 26,
+      "Technique": "T1570",
+      "TechniqueName": "Lateral Tool Transfer",
+      "MitreReference": "Wizard Spider used stolen credentials to copy tools into %TEMP% of domain controllers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1570 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 27,
+      "Technique": "T1036.004",
+      "TechniqueName": "Masquerading: Masquerade Task or Service",
+      "MitreReference": "Wizard Spider used scheduled tasks with legitimate names like WinDotNet, GoogleTask, Sysnetsf",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036.004 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 28,
+      "Technique": "T1112",
+      "TechniqueName": "Modify Registry",
+      "MitreReference": "Wizard Spider modified WDigest registry key to cache plaintext credentials in memory",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1112 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 29,
+      "Technique": "T1135",
+      "TechniqueName": "Network Share Discovery",
+      "MitreReference": "Wizard Spider used 'net view' to locate mapped network shares",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1135 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 30,
+      "Technique": "T1027.010",
+      "TechniqueName": "Obfuscated Files or Information: Command Obfuscation",
+      "MitreReference": "Wizard Spider used Base64 encoding to obfuscate Empire service and PowerShell commands",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1027.010 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 31,
+      "Technique": "T1003.001",
+      "TechniqueName": "OS Credential Dumping: LSASS Memory",
+      "MitreReference": "Wizard Spider dumped lsass.exe memory with LaZagne tool",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1003.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 32,
+      "Technique": "T1003.002",
+      "TechniqueName": "OS Credential Dumping: Security Account Manager",
+      "MitreReference": "Wizard Spider acquired credentials from SAM/SECURITY registry hives",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1003.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 33,
+      "Technique": "T1003.003",
+      "TechniqueName": "OS Credential Dumping: NTDS",
+      "MitreReference": "Wizard Spider exported ntds.dit Active Directory database using ntdsutil",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1003.003 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 34,
+      "Technique": "T1566.001",
+      "TechniqueName": "Phishing: Spearphishing Attachment",
+      "MitreReference": "Wizard Spider used spearphishing with macros to deliver Emotet, TrickBot, Bazar",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1566.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 35,
+      "Technique": "T1566.002",
+      "TechniqueName": "Phishing: Spearphishing Link",
+      "MitreReference": "Wizard Spider sent phishing emails with links to actor-controlled Google Drive documents",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1566.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 36,
+      "Technique": "T1055",
+      "TechniqueName": "Process Injection",
+      "MitreReference": "Wizard Spider used process injection to escalate privileges",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1055 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 37,
+      "Technique": "T1055.001",
+      "TechniqueName": "Process Injection: Dynamic-link Library Injection",
+      "MitreReference": "Wizard Spider injected malicious DLLs into memory with read, write, execute permissions",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1055.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 38,
+      "Technique": "T1021.001",
+      "TechniqueName": "Remote Services: Remote Desktop Protocol",
+      "MitreReference": "Wizard Spider used RDP for lateral movement and interactive ransomware deployment",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 39,
+      "Technique": "T1021.002",
+      "TechniqueName": "Remote Services: SMB/Windows Admin Shares",
+      "MitreReference": "Wizard Spider used SMB to drop Cobalt Strike Beacon on domain controllers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 40,
+      "Technique": "T1021.006",
+      "TechniqueName": "Remote Services: Windows Remote Management",
+      "MitreReference": "Wizard Spider used WinRM to move laterally through victim network",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.006 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 41,
+      "Technique": "T1018",
+      "TechniqueName": "Remote System Discovery",
+      "MitreReference": "Wizard Spider used AdFind, nltest/dclist, and Get-DataInfo.ps1 to enumerate domain computers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1018 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 42,
+      "Technique": "T1053.005",
+      "TechniqueName": "Scheduled Task/Job: Scheduled Task",
+      "MitreReference": "Wizard Spider used scheduled tasks to establish persistence for TrickBot",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1053.005 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 43,
+      "Technique": "T1489",
+      "TechniqueName": "Service Stop",
+      "MitreReference": "Wizard Spider used taskkill.exe and net.exe to stop backup, catalog, cloud services",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1489 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 44,
+      "Technique": "T1518.001",
+      "TechniqueName": "Software Discovery: Security Software Discovery",
+      "MitreReference": "Wizard Spider used WMI to identify anti-virus products on victim machine",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1518.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 45,
+      "Technique": "T1518.002",
+      "TechniqueName": "Software Discovery: Backup Software Discovery",
+      "MitreReference": "Wizard Spider used Get-DataInfo.ps1 to collect installed backup software information",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1518.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 46,
+      "Technique": "T1558.003",
+      "TechniqueName": "Steal or Forge Kerberos Tickets: Kerberoasting",
+      "MitreReference": "Wizard Spider used Rubeus, MimiKatz Kerberos module, and Invoke-Kerberoast to steal AES hashes",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1558.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 47,
+      "Technique": "T1553.002",
+      "TechniqueName": "Subvert Trust Controls: Code Signing",
+      "MitreReference": "Wizard Spider used Digicert code-signing certificates for malware",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1553.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 48,
+      "Technique": "T1218.011",
+      "TechniqueName": "System Binary Proxy Execution: Rundll32",
+      "MitreReference": "Wizard Spider used rundll32.exe to deploy ransomware commands with WebDAV",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 49,
+      "Technique": "T1082",
+      "TechniqueName": "System Information Discovery",
+      "MitreReference": "Wizard Spider used Systeminfo and Get-ADComputer to collect host information",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1082 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 50,
+      "Technique": "T1016",
+      "TechniqueName": "System Network Configuration Discovery",
+      "MitreReference": "Wizard Spider used ipconfig and Get-ADComputer to collect IP address data",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1016 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 51,
+      "Technique": "T1033",
+      "TechniqueName": "System Owner/User Discovery",
+      "MitreReference": "Wizard Spider used 'whoami' to identify local user and privileges",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1033 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 52,
+      "Technique": "T1569.002",
+      "TechniqueName": "System Services: Service Execution",
+      "MitreReference": "Wizard Spider used services.exe and PsExec batch scripts for lateral movement",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1569.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 53,
+      "Technique": "T1552.006",
+      "TechniqueName": "Unsecured Credentials: Group Policy Preferences",
+      "MitreReference": "Wizard Spider used Get-GPPPassword and Find-GPOPassword to find unsecured credentials",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1552.006 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 54,
+      "Technique": "T1550.002",
+      "TechniqueName": "Use Alternate Authentication Material: Pass the Hash",
+      "MitreReference": "Wizard Spider used Invoke-SMBExec for pass-the-hash lateral movement",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1550.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 55,
+      "Technique": "T1204.001",
+      "TechniqueName": "User Execution: Malicious Link",
+      "MitreReference": "Wizard Spider lured victims into clicking malicious links via spearphishing",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1204.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 56,
+      "Technique": "T1204.002",
+      "TechniqueName": "User Execution: Malicious File",
+      "MitreReference": "Wizard Spider lured victims to execute malware via spearphishing attachments with macros",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1204.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 57,
+      "Technique": "T1078",
+      "TechniqueName": "Valid Accounts",
+      "MitreReference": "Wizard Spider used valid credentials to access domain controllers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1078 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 58,
+      "Technique": "T1078.002",
+      "TechniqueName": "Valid Accounts: Domain Accounts",
+      "MitreReference": "Wizard Spider used Domain Admin accounts for lateral movement",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1078.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 59,
+      "Technique": "T1047",
+      "TechniqueName": "Windows Management Instrumentation",
+      "MitreReference": "Wizard Spider used WMI and LDAP queries for discovery and lateral movement with WMIC batch scripts",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1047 -TestNumbers 1,2,3"
+    }
+  ],
+  "coverage_stats": {
+    "documented_techniques": 63,
+    "atomic_tests_available": 59,
+    "coverage_percentage": 94
+  }
+}

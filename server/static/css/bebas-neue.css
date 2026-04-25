@@ -1,0 +1,9 @@
+/* Bebas Neue - Local */
+@font-face {
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/bebas-neue-latin.woff2') format('woff2'),
+         url('../fonts/bebas-neue-latin.woff') format('woff');
+}

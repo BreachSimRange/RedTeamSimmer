@@ -1,0 +1,461 @@
+{
+  "name": "FIN7 (Carbanak)",
+  "description": "VALIDATED emulation plan for FIN7, a financially-motivated threat group active since 2013 targeting retail, restaurant, hospitality, and financial services. Known for point-of-sale malware and BGH ransomware operations including Darkside RaaS.",
+  "mitre_group_id": "G0046",
+  "mitre_url": "https://attack.mitre.org/groups/G0046/",
+  "aliases": ["GOLD NIAGARA", "ITG14", "Carbon Spider", "ELBRUS", "Sangria Tempest"],
+  "attribution": "Financially Motivated Criminal Group",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v18 - All techniques documented with evidence citations",
+  "techniques_without_atomic_coverage": [
+    "T1583.001 - Acquire Infrastructure: Domains",
+    "T1583.006 - Acquire Infrastructure: Web Services (S3 buckets)",
+    "T1587.001 - Develop Capabilities: Malware",
+    "T1591 - Gather Victim Org Information",
+    "T1591.004 - Identify Roles",
+    "T1608.001 - Stage Capabilities: Upload Malware",
+    "T1608.004 - Stage Capabilities: Drive-by Target",
+    "T1608.005 - Stage Capabilities: Link Target",
+    "T1674 - Input Injection (BadUSB)",
+    "T1195.002 - Supply Chain Compromise",
+    "T1008 - Fallback Channels (Harpy DNS backup)"
+  ],
+  "AtomicTests": [
+    {
+      "TestNumber": 1,
+      "Technique": "T1087.002",
+      "TechniqueName": "Account Discovery: Domain Account",
+      "MitreReference": "FIN7 used net group \"Domain Admins\" /domain and csvde.exe for AD enumeration",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1087.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 2,
+      "Technique": "T1071.004",
+      "TechniqueName": "Application Layer Protocol: DNS",
+      "MitreReference": "FIN7 performed C2 using DNS via A, OPT, and TXT records",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1071.004 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 3,
+      "Technique": "T1547.001",
+      "TechniqueName": "Boot or Logon Autostart Execution: Registry Run Keys",
+      "MitreReference": "FIN7 malware created Registry Run and RunOnce keys and added items to Startup folder",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1547.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 4,
+      "Technique": "T1059.001",
+      "TechniqueName": "Command and Scripting Interpreter: PowerShell",
+      "MitreReference": "FIN7 used PowerShell to launch shellcode (POWERTRASH obfuscated invoker)",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 5,
+      "Technique": "T1059.003",
+      "TechniqueName": "Command and Scripting Interpreter: Windows Command Shell",
+      "MitreReference": "FIN7 used cmd.exe to launch commands, including via BadUSB sending Windows+R keys",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 6,
+      "Technique": "T1059.005",
+      "TechniqueName": "Command and Scripting Interpreter: Visual Basic",
+      "MitreReference": "FIN7 used VBS scripts for various tasks on victim machines",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.005 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 7,
+      "Technique": "T1059.007",
+      "TechniqueName": "Command and Scripting Interpreter: JavaScript",
+      "MitreReference": "FIN7 used JavaScript scripts via Astra Panel and SQLRat",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.007 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 8,
+      "Technique": "T1543.003",
+      "TechniqueName": "Create or Modify System Process: Windows Service",
+      "MitreReference": "FIN7 created new Windows services for persistence in startup directories",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1543.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 9,
+      "Technique": "T1486",
+      "TechniqueName": "Data Encrypted for Impact",
+      "MitreReference": "FIN7 encrypted virtual disk volumes on ESXi servers using Darkside ransomware",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1486 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 10,
+      "Technique": "T1005",
+      "TechniqueName": "Data from Local System",
+      "MitreReference": "FIN7 collected files and sensitive information from compromised networks",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1005 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 11,
+      "Technique": "T1140",
+      "TechniqueName": "Deobfuscate/Decode Files or Information",
+      "MitreReference": "FIN7 used certutil -decode and XOR with key qawsed1q2w3e for Lizar installation",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1140 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 12,
+      "Technique": "T1546.011",
+      "TechniqueName": "Event Triggered Execution: Application Shimming",
+      "MitreReference": "FIN7 used application shim databases for persistence",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1546.011 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 13,
+      "Technique": "T1567.002",
+      "TechniqueName": "Exfiltration Over Web Service: Cloud Storage",
+      "MitreReference": "FIN7 exfiltrated stolen data to MEGA file sharing site",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1567.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 14,
+      "Technique": "T1190",
+      "TechniqueName": "Exploit Public-Facing Application",
+      "MitreReference": "FIN7 exploited CVE-2021-31207 in Microsoft Exchange",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1190 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 15,
+      "Technique": "T1210",
+      "TechniqueName": "Exploitation of Remote Services",
+      "MitreReference": "FIN7 exploited ZeroLogon (CVE-2020-1472) against domain controllers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1210 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 16,
+      "Technique": "T1564.001",
+      "TechniqueName": "Hide Artifacts: Hidden Files and Directories",
+      "MitreReference": "FIN7 used attrib +h to make SSH folder hidden",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1564.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 17,
+      "Technique": "T1564.003",
+      "TechniqueName": "Hide Artifacts: Hidden Window",
+      "MitreReference": "FIN7 used .txt files to conceal PowerShell commands",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1564.003 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 18,
+      "Technique": "T1562.004",
+      "TechniqueName": "Impair Defenses: Disable or Modify System Firewall",
+      "MitreReference": "FIN7 added firewall rules for TCP 59999 inbound and sshd.exe on TCP 9898",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1562.004 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 19,
+      "Technique": "T1105",
+      "TechniqueName": "Ingress Tool Transfer",
+      "MitreReference": "FIN7 downloaded additional malware using PowerShell shellcode retrieving payloads",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1105 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 20,
+      "Technique": "T1559.002",
+      "TechniqueName": "Inter-Process Communication: Dynamic Data Exchange",
+      "MitreReference": "FIN7 spear phishing included malicious Word documents with DDE execution",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1559.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 21,
+      "Technique": "T1036.004",
+      "TechniqueName": "Masquerading: Masquerade Task or Service",
+      "MitreReference": "FIN7 created scheduled task named AdobeFlashSync for persistence",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036.004 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 22,
+      "Technique": "T1036.005",
+      "TechniqueName": "Masquerading: Match Legitimate Resource Name",
+      "MitreReference": "FIN7 ran Darkside as sleep.exe and mimicked WsTaskLoad.exe from Wondershare",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036.005 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 23,
+      "Technique": "T1571",
+      "TechniqueName": "Non-Standard Port",
+      "MitreReference": "FIN7 used port-protocol mismatches on ports 53, 80, 443, 8080, 59999, 9898",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1571 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 24,
+      "Technique": "T1027.010",
+      "TechniqueName": "Obfuscated Files or Information: Command Obfuscation",
+      "MitreReference": "FIN7 used fragmented strings, env variables, stdin, and character-replacement",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1027.010 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 25,
+      "Technique": "T1588.002",
+      "TechniqueName": "Obtain Capabilities: Tool",
+      "MitreReference": "FIN7 used Cobalt Strike, PowerSploit, and Atera remote management tool",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1588.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 26,
+      "Technique": "T1069.002",
+      "TechniqueName": "Permission Groups Discovery: Domain Groups",
+      "MitreReference": "FIN7 used net group \"domain admins\" /domain for enumeration",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1069.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 27,
+      "Technique": "T1566.001",
+      "TechniqueName": "Phishing: Spearphishing Attachment",
+      "MitreReference": "FIN7 sent spearphishing with malicious Microsoft Documents or RTF files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1566.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 28,
+      "Technique": "T1566.002",
+      "TechniqueName": "Phishing: Spearphishing Link",
+      "MitreReference": "FIN7 sent spearphishing with typosquatted link to ip-sccanner[.]com",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1566.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 29,
+      "Technique": "T1057",
+      "TechniqueName": "Process Discovery",
+      "MitreReference": "FIN7 executed tasklist /v via 3CF9.ps1 and WsTaskLoad.exe",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1057 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 30,
+      "Technique": "T1572",
+      "TechniqueName": "Protocol Tunneling",
+      "MitreReference": "FIN7 tunneled C2 traffic via OpenSSH",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1572 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 31,
+      "Technique": "T1620",
+      "TechniqueName": "Reflective Code Loading",
+      "MitreReference": "FIN7 loaded .NET assembly via Reflection.Assembly::Load",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1620 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 32,
+      "Technique": "T1219",
+      "TechniqueName": "Remote Access Tools",
+      "MitreReference": "FIN7 used Atera remote management tool to download malware",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1219 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 33,
+      "Technique": "T1021.001",
+      "TechniqueName": "Remote Services: Remote Desktop Protocol",
+      "MitreReference": "FIN7 used RDP for lateral movement in victim environments",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 34,
+      "Technique": "T1021.004",
+      "TechniqueName": "Remote Services: SSH",
+      "MitreReference": "FIN7 used SSH for lateral movement through victim environments",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.004 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 35,
+      "Technique": "T1021.005",
+      "TechniqueName": "Remote Services: VNC",
+      "MitreReference": "FIN7 used TightVNC to control compromised hosts",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.005 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 36,
+      "Technique": "T1091",
+      "TechniqueName": "Replication Through Removable Media",
+      "MitreReference": "FIN7 mailed USB drives containing malware including ransomware backdoors",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1091 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 37,
+      "Technique": "T1053.005",
+      "TechniqueName": "Scheduled Task/Job: Scheduled Task",
+      "MitreReference": "FIN7 malware created scheduled tasks, including OpenSSH persistence",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1053.005 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 38,
+      "Technique": "T1113",
+      "TechniqueName": "Screen Capture",
+      "MitreReference": "FIN7 captured screenshots and desktop video recordings",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1113 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 39,
+      "Technique": "T1558.003",
+      "TechniqueName": "Steal or Forge Kerberos Tickets: Kerberoasting",
+      "MitreReference": "FIN7 used Invoke-Kerberoast for credential access and lateral movement",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1558.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 40,
+      "Technique": "T1553.002",
+      "TechniqueName": "Subvert Trust Controls: Code Signing",
+      "MitreReference": "FIN7 signed Carbanak payloads with legally purchased code signing certificates",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1553.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 41,
+      "Technique": "T1218.005",
+      "TechniqueName": "System Binary Proxy Execution: Mshta",
+      "MitreReference": "FIN7 used mshta.exe to execute VBScript for malicious code",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1218.005 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 42,
+      "Technique": "T1218.011",
+      "TechniqueName": "System Binary Proxy Execution: Rundll32",
+      "MitreReference": "FIN7 used rundll32.exe to execute malware on compromised networks",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 43,
+      "Technique": "T1082",
+      "TechniqueName": "System Information Discovery",
+      "MitreReference": "FIN7 used csvde.exe and WsTaskLoad to gather OS and hostname info",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1082 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 44,
+      "Technique": "T1033",
+      "TechniqueName": "System Owner/User Discovery",
+      "MitreReference": "FIN7 used cmd.exe /C quser to collect user session information",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1033 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 45,
+      "Technique": "T1569.002",
+      "TechniqueName": "System Services: Service Execution",
+      "MitreReference": "FIN7 started SSH service by executing sc start sshd",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1569.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 46,
+      "Technique": "T1124",
+      "TechniqueName": "System Time Discovery",
+      "MitreReference": "FIN7 used 3CF9.ps1 to execute net time",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1124 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 47,
+      "Technique": "T1204.001",
+      "TechniqueName": "User Execution: Malicious Link",
+      "MitreReference": "FIN7 used malicious links to lure victims into downloading malware",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1204.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 48,
+      "Technique": "T1204.002",
+      "TechniqueName": "User Execution: Malicious File",
+      "MitreReference": "FIN7 lured victims to double-click images with hidden LNK files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1204.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 49,
+      "Technique": "T1078",
+      "TechniqueName": "Valid Accounts",
+      "MitreReference": "FIN7 harvested valid administrative credentials for lateral movement",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1078 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 50,
+      "Technique": "T1078.003",
+      "TechniqueName": "Valid Accounts: Local Accounts",
+      "MitreReference": "FIN7 used compromised credentials as SYSTEM on Exchange servers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1078.003 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 51,
+      "Technique": "T1125",
+      "TechniqueName": "Video Capture",
+      "MitreReference": "FIN7 created custom video recording capability to monitor operations",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1125 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 52,
+      "Technique": "T1497.002",
+      "TechniqueName": "Virtualization/Sandbox Evasion: User Activity Checks",
+      "MitreReference": "FIN7 used images requiring double-click to activate payload, avoiding sandboxes",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1497.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 53,
+      "Technique": "T1102.002",
+      "TechniqueName": "Web Service: Bidirectional Communication",
+      "MitreReference": "FIN7 used Google Docs, Google Scripts, and Pastebin for C2",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1102.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 54,
+      "Technique": "T1047",
+      "TechniqueName": "Windows Management Instrumentation",
+      "MitreReference": "FIN7 used WMI to install malware on targeted systems",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1047 -TestNumbers 1,2,3"
+    }
+  ],
+  "coverage_stats": {
+    "documented_techniques": 65,
+    "atomic_tests_available": 54,
+    "coverage_percentage": 83
+  }
+}

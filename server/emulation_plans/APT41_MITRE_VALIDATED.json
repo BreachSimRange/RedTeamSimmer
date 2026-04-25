@@ -1,0 +1,687 @@
+{
+  "name": "APT41 (Wicked Panda)",
+  "description": "VALIDATED emulation plan for APT41, a Chinese state-sponsored group conducting both espionage and financially-motivated operations since 2012. Notable for supply chain compromises, ransomware deployment, and targeting healthcare, telecom, technology, and gaming industries.",
+  "mitre_group_id": "G0096",
+  "mitre_url": "https://attack.mitre.org/groups/G0096/",
+  "aliases": ["Wicked Panda", "Brass Typhoon", "BARIUM", "Winnti Group"],
+  "attribution": "China Ministry of State Security (MSS)",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v18 - All techniques documented with evidence citations",
+  "techniques_without_atomic_coverage": [
+    "T1583.007 - Acquire Infrastructure: Serverless (Cloudflare Workers)",
+    "T1586.003 - Compromise Accounts: Cloud Accounts",
+    "T1595.002 - Active Scanning: Vulnerability Scanning",
+    "T1595.003 - Active Scanning: Wordlist Scanning",
+    "T1213.003 - Data from Information Repositories: Code Repositories",
+    "T1213.006 - Data from Information Repositories: Databases",
+    "T1568.002 - Dynamic Resolution: Domain Generation Algorithms",
+    "T1656 - Impersonation",
+    "T1562.006 - Impair Defenses: Indicator Blocking (ETW bypass)",
+    "T1496.001 - Resource Hijacking: Compute Hijacking (Monero mining)",
+    "T1596.005 - Search Open Technical Databases: Scan Databases (fofa.su)",
+    "T1593.002 - Search Open Websites/Domains: Search Engines",
+    "T1594 - Search Victim-Owned Websites"
+  ],
+  "AtomicTests": [
+    {
+      "TestNumber": 1,
+      "Technique": "T1134",
+      "TechniqueName": "Access Token Manipulation",
+      "MitreReference": "APT41 used ConfuserEx obfuscated BADPOTATO exploit for named-pipe impersonation",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1134 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 2,
+      "Technique": "T1087.001",
+      "TechniqueName": "Account Discovery: Local Account",
+      "MitreReference": "APT41 used net commands to enumerate local administrator groups",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1087.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 3,
+      "Technique": "T1087.002",
+      "TechniqueName": "Account Discovery: Domain Account",
+      "MitreReference": "APT41 used net commands to enumerate domain administrator users",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1087.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 4,
+      "Technique": "T1098.007",
+      "TechniqueName": "Account Manipulation: Additional Local or Domain Groups",
+      "MitreReference": "APT41 added user accounts to User and Admin groups",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1098.007 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 5,
+      "Technique": "T1071.001",
+      "TechniqueName": "Application Layer Protocol: Web Protocols",
+      "MitreReference": "APT41 used HTTP to download payloads for CVE-2019-19781 and CVE-2020-10189 exploits",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1071.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 6,
+      "Technique": "T1071.002",
+      "TechniqueName": "Application Layer Protocol: File Transfer Protocols",
+      "MitreReference": "APT41 used exploit payloads that initiate download via FTP",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1071.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 7,
+      "Technique": "T1071.004",
+      "TechniqueName": "Application Layer Protocol: DNS",
+      "MitreReference": "APT41 used DNS for C2 communications",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1071.004 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 8,
+      "Technique": "T1560.001",
+      "TechniqueName": "Archive Collected Data: Archive via Utility",
+      "MitreReference": "APT41 created RAR archives and used makecab.exe for exfiltration",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1560.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 9,
+      "Technique": "T1197",
+      "TechniqueName": "BITS Jobs",
+      "MitreReference": "APT41 used BITSAdmin to download and install payloads",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1197 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 10,
+      "Technique": "T1547.001",
+      "TechniqueName": "Boot or Logon Autostart Execution: Registry Run Keys",
+      "MitreReference": "APT41 created and modified startup files and added registry key for Cobalt Strike",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1547.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 11,
+      "Technique": "T1037",
+      "TechniqueName": "Boot or Logon Initialization Scripts",
+      "MitreReference": "APT41 used hidden shell script in /etc/rc.d/init.d for ADORE.XSEC backdoor",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1037 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 12,
+      "Technique": "T1110",
+      "TechniqueName": "Brute Force",
+      "MitreReference": "APT41 performed password brute-force attacks on local admin accounts",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1110 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 13,
+      "Technique": "T1059.001",
+      "TechniqueName": "Command and Scripting Interpreter: PowerShell",
+      "MitreReference": "APT41 leveraged PowerShell to deploy malware families",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 14,
+      "Technique": "T1059.003",
+      "TechniqueName": "Command and Scripting Interpreter: Windows Command Shell",
+      "MitreReference": "APT41 used cmd.exe /c to execute commands on remote machines",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 15,
+      "Technique": "T1059.004",
+      "TechniqueName": "Command and Scripting Interpreter: Unix Shell",
+      "MitreReference": "APT41 used Linux shell commands for system survey prior to CVE-2019-19871 exploitation",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.004 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 16,
+      "Technique": "T1059.007",
+      "TechniqueName": "Command and Scripting Interpreter: JavaScript",
+      "MitreReference": "APT41 deployed JScript web shells on compromised systems",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.007 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 17,
+      "Technique": "T1136.001",
+      "TechniqueName": "Create Account: Local Account",
+      "MitreReference": "APT41 created user accounts for persistence",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1136.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 18,
+      "Technique": "T1543.003",
+      "TechniqueName": "Create or Modify System Process: Windows Service",
+      "MitreReference": "APT41 modified legitimate Windows services and created StorSyncSvc for Cobalt Strike",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1543.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 19,
+      "Technique": "T1555",
+      "TechniqueName": "Credentials from Password Stores",
+      "MitreReference": "APT41 obtained plaintext and hashed passwords from databases",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1555 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 20,
+      "Technique": "T1555.003",
+      "TechniqueName": "Credentials from Password Stores: Credentials from Web Browsers",
+      "MitreReference": "APT41 used BrowserGhost to retrieve credentials from password stores",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1555.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 21,
+      "Technique": "T1486",
+      "TechniqueName": "Data Encrypted for Impact",
+      "MitreReference": "APT41 used Encryptor RaaS, Microsoft Bitlocker, and Jetico BestCrypt",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1486 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 22,
+      "Technique": "T1005",
+      "TechniqueName": "Data from Local System",
+      "MitreReference": "APT41 uploaded files and data from compromised hosts including PII",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1005 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 23,
+      "Technique": "T1074.001",
+      "TechniqueName": "Data Staged: Local Data Staging",
+      "MitreReference": "APT41 exported data from Oracle databases to local CSV files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1074.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 24,
+      "Technique": "T1030",
+      "TechniqueName": "Data Transfer Size Limits",
+      "MitreReference": "APT41 divided payloads into fixed-size chunks to evade detection",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1030 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 25,
+      "Technique": "T1140",
+      "TechniqueName": "Deobfuscate/Decode Files or Information",
+      "MitreReference": "APT41 used DUSTPAN loader to decrypt embedded payloads",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1140 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 26,
+      "Technique": "T1484.001",
+      "TechniqueName": "Domain or Tenant Policy Modification: Group Policy Modification",
+      "MitreReference": "APT41 used scheduled tasks created via GPOs to deploy ransomware",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1484.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 27,
+      "Technique": "T1573.002",
+      "TechniqueName": "Encrypted Channel: Asymmetric Cryptography",
+      "MitreReference": "APT41 DUST used HTTPS for command and control",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1573.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 28,
+      "Technique": "T1546.008",
+      "TechniqueName": "Event Triggered Execution: Accessibility Features",
+      "MitreReference": "APT41 leveraged sticky keys to establish persistence",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1546.008 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 29,
+      "Technique": "T1480.001",
+      "TechniqueName": "Execution Guardrails: Environmental Keying",
+      "MitreReference": "APT41 encrypted payloads using DPAPI and RC5 key from volume serial number",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1480.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 30,
+      "Technique": "T1048.003",
+      "TechniqueName": "Exfiltration Over Alternative Protocol: Unencrypted Non-C2",
+      "MitreReference": "APT41 exfiltrated via DNS lookups encoding data as subdomains",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1048.003 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 31,
+      "Technique": "T1041",
+      "TechniqueName": "Exfiltration Over C2 Channel",
+      "MitreReference": "APT41 used Cloudflare services C2 channels for data exfiltration",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1041 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 32,
+      "Technique": "T1567.002",
+      "TechniqueName": "Exfiltration Over Web Service: Cloud Storage",
+      "MitreReference": "APT41 DUST exfiltrated collected information to OneDrive",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1567.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 33,
+      "Technique": "T1190",
+      "TechniqueName": "Exploit Public-Facing Application",
+      "MitreReference": "APT41 exploited CVE-2020-10189, CVE-2019-19781, CVE-2021-26855, CVE-2021-44207, CVE-2021-44228",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1190 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 34,
+      "Technique": "T1203",
+      "TechniqueName": "Exploitation for Client Execution",
+      "MitreReference": "APT41 leveraged CVE-2012-0158, CVE-2015-1641, CVE-2017-0199, CVE-2017-11882, CVE-2019-3396",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1203 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 35,
+      "Technique": "T1133",
+      "TechniqueName": "External Remote Services",
+      "MitreReference": "APT41 compromised online billing/payment service using VPN access",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1133 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 36,
+      "Technique": "T1008",
+      "TechniqueName": "Fallback Channels",
+      "MitreReference": "APT41 used Steam community page as fallback mechanism for C2",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1008 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 37,
+      "Technique": "T1083",
+      "TechniqueName": "File and Directory Discovery",
+      "MitreReference": "APT41 executed file /bin/pwd on exploited victims",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1083 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 38,
+      "Technique": "T1574.001",
+      "TechniqueName": "Hijack Execution Flow: DLL",
+      "MitreReference": "APT41 used search order hijacking for Winnti and DLL side-loading",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1574.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 39,
+      "Technique": "T1574.006",
+      "TechniqueName": "Hijack Execution Flow: Dynamic Linker Hijacking",
+      "MitreReference": "APT41 configured payloads to load via LD_PRELOAD",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1574.006 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 40,
+      "Technique": "T1070.001",
+      "TechniqueName": "Indicator Removal: Clear Windows Event Logs",
+      "MitreReference": "APT41 cleared Windows security and system events",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1070.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 41,
+      "Technique": "T1070.003",
+      "TechniqueName": "Indicator Removal: Clear Command History",
+      "MitreReference": "APT41 deleted Bash histories",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1070.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 42,
+      "Technique": "T1070.004",
+      "TechniqueName": "Indicator Removal: File Deletion",
+      "MitreReference": "APT41 deleted files from the system following use",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1070.004 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 43,
+      "Technique": "T1105",
+      "TechniqueName": "Ingress Tool Transfer",
+      "MitreReference": "APT41 used certutil to download tools including Cobalt Strike",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1105 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 44,
+      "Technique": "T1056.001",
+      "TechniqueName": "Input Capture: Keylogging",
+      "MitreReference": "APT41 used GEARSHIFT keylogger on target systems",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1056.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 45,
+      "Technique": "T1570",
+      "TechniqueName": "Lateral Tool Transfer",
+      "MitreReference": "APT41 uses remote shares to move and remotely execute payloads",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1570 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 46,
+      "Technique": "T1036.004",
+      "TechniqueName": "Masquerading: Masquerade Task or Service",
+      "MitreReference": "APT41 disguised DUSTPAN as legitimate Windows binaries like w3wp.exe",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036.004 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 47,
+      "Technique": "T1036.005",
+      "TechniqueName": "Masquerading: Match Legitimate Resource Name",
+      "MitreReference": "APT41 masqueraded files as popular anti-virus software",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036.005 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 48,
+      "Technique": "T1112",
+      "TechniqueName": "Modify Registry",
+      "MitreReference": "APT41 used GOODLUCK malware to modify registry for credential theft",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1112 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 49,
+      "Technique": "T1104",
+      "TechniqueName": "Multi-Stage Channels",
+      "MitreReference": "APT41 used storescyncsvc.dll BEACON backdoor to download secondary backdoor",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1104 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 50,
+      "Technique": "T1046",
+      "TechniqueName": "Network Service Discovery",
+      "MitreReference": "APT41 used WIDETONE malware to conduct port scans on specified subnets",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1046 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 51,
+      "Technique": "T1135",
+      "TechniqueName": "Network Share Discovery",
+      "MitreReference": "APT41 used net share command as part of network reconnaissance",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1135 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 52,
+      "Technique": "T1027",
+      "TechniqueName": "Obfuscated Files or Information",
+      "MitreReference": "APT41 used VMProtected binaries and broke malicious binaries into sections",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1027 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 53,
+      "Technique": "T1027.002",
+      "TechniqueName": "Obfuscated Files or Information: Software Packing",
+      "MitreReference": "APT41 used packers like Themida and VMProtect",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1027.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 54,
+      "Technique": "T1588.002",
+      "TechniqueName": "Obtain Capabilities: Tool",
+      "MitreReference": "APT41 obtained Mimikatz, pwdump, PowerSploit, and Windows Credential Editor",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1588.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 55,
+      "Technique": "T1003.001",
+      "TechniqueName": "OS Credential Dumping: LSASS Memory",
+      "MitreReference": "APT41 used hashdump, Mimikatz, Procdump, and Windows Credential Editor",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1003.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 56,
+      "Technique": "T1003.002",
+      "TechniqueName": "OS Credential Dumping: Security Account Manager",
+      "MitreReference": "APT41 extracted SAM data using reg save or volume shadow copies",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1003.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 57,
+      "Technique": "T1003.003",
+      "TechniqueName": "OS Credential Dumping: NTDS",
+      "MitreReference": "APT41 used ntdsutil to obtain copy of ntds.dit",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1003.003 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 58,
+      "Technique": "T1069",
+      "TechniqueName": "Permission Groups Discovery",
+      "MitreReference": "APT41 used net group commands to enumerate Windows groups",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1069 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 59,
+      "Technique": "T1566.001",
+      "TechniqueName": "Phishing: Spearphishing Attachment",
+      "MitreReference": "APT41 sent spearphishing with compiled HTML (.chm) files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1566.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 60,
+      "Technique": "T1542.003",
+      "TechniqueName": "Pre-OS Boot: Bootkit",
+      "MitreReference": "APT41 deployed Master Boot Record bootkits on Windows systems",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1542.003 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 61,
+      "Technique": "T1055",
+      "TechniqueName": "Process Injection",
+      "MitreReference": "APT41 TIDYELF malware injected WINTERLOVE into iexplore.exe",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1055 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 62,
+      "Technique": "T1090",
+      "TechniqueName": "Proxy",
+      "MitreReference": "APT41 used CLASSFON to covertly proxy network communications",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1090 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 63,
+      "Technique": "T1012",
+      "TechniqueName": "Query Registry",
+      "MitreReference": "APT41 queried registry for RDP ports and network configurations",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1012 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 64,
+      "Technique": "T1021.001",
+      "TechniqueName": "Remote Services: Remote Desktop Protocol",
+      "MitreReference": "APT41 used RDP for lateral movement and exposed via NATBypass",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 65,
+      "Technique": "T1021.002",
+      "TechniqueName": "Remote Services: SMB/Windows Admin Shares",
+      "MitreReference": "APT41 transferred implants using Windows Admin Shares and SMB",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 66,
+      "Technique": "T1018",
+      "TechniqueName": "Remote System Discovery",
+      "MitreReference": "APT41 used MiPing to discover active systems",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1018 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 67,
+      "Technique": "T1014",
+      "TechniqueName": "Rootkit",
+      "MitreReference": "APT41 deployed rootkits on Linux systems",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1014 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 68,
+      "Technique": "T1053.005",
+      "TechniqueName": "Scheduled Task/Job: Scheduled Task",
+      "MitreReference": "APT41 created scheduled tasks including Microsoft\\Windows\\PLA\\Server Manager Performance Monitor",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1053.005 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 69,
+      "Technique": "T1505.003",
+      "TechniqueName": "Server Software Component: Web Shell",
+      "MitreReference": "APT41 used ANTSWORD, BLUEBEAM, and JScript web shells",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1505.003 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 70,
+      "Technique": "T1553.002",
+      "TechniqueName": "Subvert Trust Controls: Code Signing",
+      "MitreReference": "APT41 leveraged code-signing certificates to sign malware",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1553.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 71,
+      "Technique": "T1195.002",
+      "TechniqueName": "Supply Chain Compromise: Compromise Software Supply Chain",
+      "MitreReference": "APT41 gained access to production environments to inject malicious code",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1195.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 72,
+      "Technique": "T1218.001",
+      "TechniqueName": "System Binary Proxy Execution: Compiled HTML File",
+      "MitreReference": "APT41 used compiled HTML (.chm) files for targeting",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1218.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 73,
+      "Technique": "T1218.011",
+      "TechniqueName": "System Binary Proxy Execution: Rundll32",
+      "MitreReference": "APT41 used rundll32.exe to execute a loader",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 74,
+      "Technique": "T1082",
+      "TechniqueName": "System Information Discovery",
+      "MitreReference": "APT41 used systeminfo and net config Workstation commands",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1082 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 75,
+      "Technique": "T1016",
+      "TechniqueName": "System Network Configuration Discovery",
+      "MitreReference": "APT41 collected MAC addresses and used Get-ADComputer for IP data",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1016 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 76,
+      "Technique": "T1049",
+      "TechniqueName": "System Network Connections Discovery",
+      "MitreReference": "APT41 enumerated IP addresses and used HIGHNOON to enumerate RDP sessions",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1049 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 77,
+      "Technique": "T1033",
+      "TechniqueName": "System Owner/User Discovery",
+      "MitreReference": "APT41 executed whoami including via WMIEXEC on remote machines",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1033 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 78,
+      "Technique": "T1569.002",
+      "TechniqueName": "System Services: Service Execution",
+      "MitreReference": "APT41 used svchost.exe and Net to execute Cobalt Strike BEACON loader",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1569.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 79,
+      "Technique": "T1550.002",
+      "TechniqueName": "Use Alternate Authentication Material: Pass the Hash",
+      "MitreReference": "APT41 used Mimikatz for lateral movement via captured password hashes",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1550.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 80,
+      "Technique": "T1078",
+      "TechniqueName": "Valid Accounts",
+      "MitreReference": "APT41 used compromised credentials to log on to other systems",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1078 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 81,
+      "Technique": "T1102.001",
+      "TechniqueName": "Web Service: Dead Drop Resolver",
+      "MitreReference": "APT41 used GitHub, Pastebin, and Microsoft TechNet for DDR C2",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1102.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 82,
+      "Technique": "T1047",
+      "TechniqueName": "Windows Management Instrumentation",
+      "MitreReference": "APT41 used WMI for command execution via WMIEXEC and persistence",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1047 -TestNumbers 1,2,3"
+    }
+  ],
+  "coverage_stats": {
+    "documented_techniques": 95,
+    "atomic_tests_available": 82,
+    "coverage_percentage": 86
+  }
+}

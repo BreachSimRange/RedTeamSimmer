@@ -1,0 +1,736 @@
+{
+  "name": "Lazarus Group",
+  "description": "Lazarus Group is a North Korean state-sponsored cyber threat group attributed to the Reconnaissance General Bureau (RGB). Active since at least 2009. Responsible for Sony Pictures attack (2014), Bangladesh Bank heist (2016), WannaCry ransomware (2017). Aka: HIDDEN COBRA, Guardians of Peace, ZINC, Diamond Sleet, Labyrinth Chollima",
+  "references": [
+    "https://attack.mitre.org/groups/G0032/"
+  ],
+  "mitre_group_id": "G0032",
+  "operating_system": "windows",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v18 (G0032). Only techniques with documented Lazarus Group usage are included.",
+  "techniques_without_atomic_coverage": [
+    "T1583.001 - Acquire Infrastructure: Domains (reconnaissance)",
+    "T1583.004 - Acquire Infrastructure: Server (reconnaissance)",
+    "T1583.006 - Acquire Infrastructure: Web Services (reconnaissance)",
+    "T1584.001 - Compromise Infrastructure: Domains (reconnaissance)",
+    "T1584.004 - Compromise Infrastructure: Server (reconnaissance)",
+    "T1587.001 - Develop Capabilities: Malware (reconnaissance)",
+    "T1587.002 - Develop Capabilities: Code Signing Certificates (reconnaissance)",
+    "T1585.001 - Establish Accounts: Social Media (reconnaissance)",
+    "T1585.002 - Establish Accounts: Email Accounts (reconnaissance)",
+    "T1589.002 - Gather Victim Identity: Email Addresses (reconnaissance)",
+    "T1591 - Gather Victim Org Information (reconnaissance)",
+    "T1591.004 - Identify Roles (reconnaissance)",
+    "T1588.002 - Obtain Capabilities: Tool (reconnaissance)",
+    "T1588.003 - Obtain Capabilities: Code Signing Certificates (reconnaissance)",
+    "T1588.004 - Obtain Capabilities: Digital Certificates (reconnaissance)",
+    "T1593.001 - Search Open Websites: Social Media (reconnaissance)",
+    "T1608.001 - Stage Capabilities: Upload Malware (reconnaissance)",
+    "T1608.002 - Stage Capabilities: Upload Tool (reconnaissance)",
+    "T1656 - Impersonation (social engineering)",
+    "T1534 - Internal Spearphishing (requires email access)",
+    "T1001.003 - Protocol Impersonation (FakeTLS - custom)",
+    "T1008 - Fallback Channels (C2 infrastructure)",
+    "T1104 - Multi-Stage Channels (C2 infrastructure)"
+  ],
+  "AtomicTests": [
+    {
+      "TestNumber": 1,
+      "Technique": "T1134.002",
+      "TechniqueName": "Access Token Manipulation: Create Process with Token",
+      "MitreReference": "KiloAlfa obtains user tokens to execute with CreateProcessAsUserA",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1134.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 2,
+      "Technique": "T1087.002",
+      "TechniqueName": "Account Discovery: Domain Account",
+      "MitreReference": "Lazarus queried AD servers for employee list",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1087.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 3,
+      "Technique": "T1098",
+      "TechniqueName": "Account Manipulation",
+      "MitreReference": "WhiskeyDelta-Two attempts to rename administrator account",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1098 -TestNumber 1"
+    },
+    {
+      "TestNumber": 4,
+      "Technique": "T1557.001",
+      "TechniqueName": "Adversary-in-the-Middle: LLMNR/NBT-NS Poisoning",
+      "MitreReference": "Lazarus executed Responder for credential harvesting",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1557.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 5,
+      "Technique": "T1071.001",
+      "TechniqueName": "Application Layer Protocol: Web Protocols",
+      "MitreReference": "Lazarus conducts C2 over HTTP and HTTPS",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1071.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 6,
+      "Technique": "T1010",
+      "TechniqueName": "Application Window Discovery",
+      "MitreReference": "IndiaIndia sends window titles for running processes to C2",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1010 -TestNumber 1"
+    },
+    {
+      "TestNumber": 7,
+      "Technique": "T1560",
+      "TechniqueName": "Archive Collected Data",
+      "MitreReference": "Lazarus compressed data with RAR, RomeoDelta archives to .zip",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1560 -TestNumber 1"
+    },
+    {
+      "TestNumber": 8,
+      "Technique": "T1560.001",
+      "TechniqueName": "Archive Collected Data: Archive via Utility",
+      "MitreReference": "Lazarus archived victim data into RAR files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1560.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 9,
+      "Technique": "T1547.001",
+      "TechniqueName": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+      "MitreReference": "Lazarus maintained persistence via startup folder and Registry Run keys",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1547.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 10,
+      "Technique": "T1547.009",
+      "TechniqueName": "Boot or Logon Autostart Execution: Shortcut Modification",
+      "MitreReference": "Lazarus created LNK shortcut in Startup folder",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1547.009 -TestNumber 1"
+    },
+    {
+      "TestNumber": 11,
+      "Technique": "T1110.003",
+      "TechniqueName": "Brute Force: Password Spraying",
+      "MitreReference": "Lazarus used permutations of Administrator with weak passwords",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1110.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 12,
+      "Technique": "T1059.001",
+      "TechniqueName": "Command and Scripting Interpreter: PowerShell",
+      "MitreReference": "Lazarus used PowerShell to execute commands and malicious code",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 13,
+      "Technique": "T1059.003",
+      "TechniqueName": "Command and Scripting Interpreter: Windows Command Shell",
+      "MitreReference": "Lazarus malware uses cmd.exe to execute commands",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 14,
+      "Technique": "T1059.005",
+      "TechniqueName": "Command and Scripting Interpreter: Visual Basic",
+      "MitreReference": "Lazarus used VBA and embedded macros in Word",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.005 -TestNumber 1"
+    },
+    {
+      "TestNumber": 15,
+      "Technique": "T1543.003",
+      "TechniqueName": "Create or Modify System Process: Windows Service",
+      "MitreReference": "Several Lazarus malware families install as new services",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1543.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 16,
+      "Technique": "T1485",
+      "TechniqueName": "Data Destruction",
+      "MitreReference": "Lazarus used custom secure delete to overwrite file contents",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1485 -TestNumber 1"
+    },
+    {
+      "TestNumber": 17,
+      "Technique": "T1132.001",
+      "TechniqueName": "Data Encoding: Standard Encoding",
+      "MitreReference": "Lazarus malware encodes data with base64",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1132.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 18,
+      "Technique": "T1005",
+      "TechniqueName": "Data from Local System",
+      "MitreReference": "Lazarus collected data and files from compromised networks",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1005 -TestNumber 1"
+    },
+    {
+      "TestNumber": 19,
+      "Technique": "T1074.001",
+      "TechniqueName": "Data Staged: Local Data Staging",
+      "MitreReference": "IndiaIndia saves info to %TEMP% before upload",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1074.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 20,
+      "Technique": "T1622",
+      "TechniqueName": "Debugger Evasion",
+      "MitreReference": "Lazarus tools used IsDebuggerPresent to detect debuggers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1622 -TestNumber 1"
+    },
+    {
+      "TestNumber": 21,
+      "Technique": "T1491.001",
+      "TechniqueName": "Defacement: Internal Defacement",
+      "MitreReference": "Lazarus replaced wallpaper with threatening image",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1491.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 22,
+      "Technique": "T1140",
+      "TechniqueName": "Deobfuscate/Decode Files or Information",
+      "MitreReference": "Lazarus used shellcode to decrypt and map DLLs at runtime",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1140 -TestNumber 1"
+    },
+    {
+      "TestNumber": 23,
+      "Technique": "T1561.001",
+      "TechniqueName": "Disk Wipe: Disk Content Wipe",
+      "MitreReference": "WhiskeyAlfa overwrites first 64MB of every drive",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1561.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 24,
+      "Technique": "T1561.002",
+      "TechniqueName": "Disk Wipe: Disk Structure Wipe",
+      "MitreReference": "SHARPKNOT overwrites and deletes MBR",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1561.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 25,
+      "Technique": "T1189",
+      "TechniqueName": "Drive-by Compromise",
+      "MitreReference": "Lazarus delivered RATANKBA via compromised legitimate website",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1189 -TestNumber 1"
+    },
+    {
+      "TestNumber": 26,
+      "Technique": "T1573.001",
+      "TechniqueName": "Encrypted Channel: Symmetric Cryptography",
+      "MitreReference": "Lazarus uses XOR, Caracachs, AES encryption for C2",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1573.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 27,
+      "Technique": "T1048.003",
+      "TechniqueName": "Exfiltration Over Alternative Protocol: Unencrypted Non-C2",
+      "MitreReference": "SierraBravo-Two generates SMTP email with victim info",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1048.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 28,
+      "Technique": "T1041",
+      "TechniqueName": "Exfiltration Over C2 Channel",
+      "MitreReference": "Lazarus exfiltrated data over C2 channel",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1041 -TestNumber 1"
+    },
+    {
+      "TestNumber": 29,
+      "Technique": "T1567.002",
+      "TechniqueName": "Exfiltration Over Web Service: Cloud Storage",
+      "MitreReference": "Lazarus used dbxcli to exfiltrate to Dropbox",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1567.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 30,
+      "Technique": "T1203",
+      "TechniqueName": "Exploitation for Client Execution",
+      "MitreReference": "Lazarus exploited Adobe Flash CVE-2018-4878",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1203 -TestNumber 1"
+    },
+    {
+      "TestNumber": 31,
+      "Technique": "T1083",
+      "TechniqueName": "File and Directory Discovery",
+      "MitreReference": "Lazarus identifies target files by extension",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1083 -TestNumber 1"
+    },
+    {
+      "TestNumber": 32,
+      "Technique": "T1564.001",
+      "TechniqueName": "Hide Artifacts: Hidden Files and Directories",
+      "MitreReference": "Lazarus set file attributes to System and Hidden",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1564.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 33,
+      "Technique": "T1574.001",
+      "TechniqueName": "Hijack Execution Flow: DLL",
+      "MitreReference": "Lazarus replaced win_fw.dll in IDA Pro with malicious DLL",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1574.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 34,
+      "Technique": "T1574.013",
+      "TechniqueName": "Hijack Execution Flow: KernelCallbackTable",
+      "MitreReference": "Lazarus abused KernelCallbackTable to execute shellcode",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1574.013 -TestNumber 1"
+    },
+    {
+      "TestNumber": 35,
+      "Technique": "T1562.001",
+      "TechniqueName": "Impair Defenses: Disable or Modify Tools",
+      "MitreReference": "TangoDelta terminates McAfee processes, SHARPKNOT disables services",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1562.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 36,
+      "Technique": "T1562.004",
+      "TechniqueName": "Impair Defenses: Disable or Modify System Firewall",
+      "MitreReference": "Lazarus modifies Windows firewall via netsh",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1562.004 -TestNumber 1"
+    },
+    {
+      "TestNumber": 37,
+      "Technique": "T1070.003",
+      "TechniqueName": "Indicator Removal: Clear Command History",
+      "MitreReference": "Lazarus deleted log files on compromised router",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1070.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 38,
+      "Technique": "T1070.004",
+      "TechniqueName": "Indicator Removal: File Deletion",
+      "MitreReference": "Lazarus uses suicide scripts to delete malware binaries",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1070.004 -TestNumber 1"
+    },
+    {
+      "TestNumber": 39,
+      "Technique": "T1070.006",
+      "TechniqueName": "Indicator Removal: Timestomp",
+      "MitreReference": "Lazarus copies timestamps from calc.exe/mspaint.exe",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1070.006 -TestNumber 1"
+    },
+    {
+      "TestNumber": 40,
+      "Technique": "T1202",
+      "TechniqueName": "Indirect Command Execution",
+      "MitreReference": "Lazarus used forfiles.exe to execute .htm files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1202 -TestNumber 1"
+    },
+    {
+      "TestNumber": 41,
+      "Technique": "T1105",
+      "TechniqueName": "Ingress Tool Transfer",
+      "MitreReference": "Lazarus downloaded files, malware, tools from C2",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1105 -TestNumber 1"
+    },
+    {
+      "TestNumber": 42,
+      "Technique": "T1056.001",
+      "TechniqueName": "Input Capture: Keylogging",
+      "MitreReference": "KiloAlfa contains keylogging functionality",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1056.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 43,
+      "Technique": "T1680",
+      "TechniqueName": "Local Storage Discovery",
+      "MitreReference": "Destover-like variant collects disk space info",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1680 -TestNumber 1"
+    },
+    {
+      "TestNumber": 44,
+      "Technique": "T1036.003",
+      "TechniqueName": "Masquerading: Rename Legitimate Utilities",
+      "MitreReference": "Lazarus renamed wscript.exe and mshta.exe",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 45,
+      "Technique": "T1036.004",
+      "TechniqueName": "Masquerading: Masquerade Task or Service",
+      "MitreReference": "Lazarus used scheduled task SRCheck to mask .dll execution",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036.004 -TestNumber 1"
+    },
+    {
+      "TestNumber": 46,
+      "Technique": "T1036.005",
+      "TechniqueName": "Masquerading: Match Legitimate Name or Location",
+      "MitreReference": "Lazarus renamed malware to disguise as Microsoft narrator",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036.005 -TestNumber 1"
+    },
+    {
+      "TestNumber": 47,
+      "Technique": "T1036.008",
+      "TechniqueName": "Masquerading: Masquerade File Type",
+      "MitreReference": "Lazarus disguised malicious templates as JPEG files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036.008 -TestNumber 1"
+    },
+    {
+      "TestNumber": 48,
+      "Technique": "T1106",
+      "TechniqueName": "Native API",
+      "MitreReference": "Lazarus used ObtainUserAgentString API for C2",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1106 -TestNumber 1"
+    },
+    {
+      "TestNumber": 49,
+      "Technique": "T1046",
+      "TechniqueName": "Network Service Discovery",
+      "MitreReference": "Lazarus used nmap from router VM to scan ports",
+      "atomic_validated": true,
+      "Commands": [
+        "Invoke-AtomicTest T1046 -TestNumber 1 -GetPrereqs",
+        "Invoke-AtomicTest T1046 -TestNumber 1"
+      ]
+    },
+    {
+      "TestNumber": 50,
+      "Technique": "T1571",
+      "TechniqueName": "Non-Standard Port",
+      "MitreReference": "Lazarus uses ordered port list creating port-protocol mismatches",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1571 -TestNumber 1"
+    },
+    {
+      "TestNumber": 51,
+      "Technique": "T1027.002",
+      "TechniqueName": "Obfuscated Files or Information: Software Packing",
+      "MitreReference": "Lazarus packed .db files with Themida",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1027.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 52,
+      "Technique": "T1027.013",
+      "TechniqueName": "Obfuscated Files or Information: Encrypted/Encoded File",
+      "MitreReference": "Lazarus uses AES, Caracachs, RC4, XOR, Base64 encryption",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1027 -TestNumber 1"
+    },
+    {
+      "TestNumber": 53,
+      "Technique": "T1566.001",
+      "TechniqueName": "Phishing: Spearphishing Attachment",
+      "MitreReference": "Lazarus targeted victims with malicious Word documents",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1566.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 54,
+      "Technique": "T1566.002",
+      "TechniqueName": "Phishing: Spearphishing Link",
+      "MitreReference": "Lazarus sent malicious links via email",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1566.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 55,
+      "Technique": "T1566.003",
+      "TechniqueName": "Phishing: Spearphishing via Service",
+      "MitreReference": "Lazarus used LinkedIn and Twitter for spearphishing",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1566.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 56,
+      "Technique": "T1542.003",
+      "TechniqueName": "Pre-OS Boot: Bootkit",
+      "MitreReference": "WhiskeyAlfa-Three modifies sector 0 of MBR",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1542.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 57,
+      "Technique": "T1057",
+      "TechniqueName": "Process Discovery",
+      "MitreReference": "Lazarus gathers list of running processes",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1057 -TestNumber 1"
+    },
+    {
+      "TestNumber": 58,
+      "Technique": "T1055.001",
+      "TechniqueName": "Process Injection: Dynamic-link Library Injection",
+      "MitreReference": "Lazarus performs reflective DLL injection",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1055.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 59,
+      "Technique": "T1090.001",
+      "TechniqueName": "Proxy: Internal Proxy",
+      "MitreReference": "Lazarus used compromised router as proxy",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1090.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 60,
+      "Technique": "T1090.002",
+      "TechniqueName": "Proxy: External Proxy",
+      "MitreReference": "Lazarus used multiple proxies to obfuscate traffic",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1090.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 61,
+      "Technique": "T1012",
+      "TechniqueName": "Query Registry",
+      "MitreReference": "IndiaIndia checks registry for SecureCRT, VNC, TeamViewer, Bitcoin-Qt",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1012 -TestNumber 1"
+    },
+    {
+      "TestNumber": 62,
+      "Technique": "T1620",
+      "TechniqueName": "Reflective Code Loading",
+      "MitreReference": "Lazarus changes memory protection and overwrites DLL function code",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1620 -TestNumber 1"
+    },
+    {
+      "TestNumber": 63,
+      "Technique": "T1021.001",
+      "TechniqueName": "Remote Services: Remote Desktop Protocol",
+      "MitreReference": "SierraCharlie uses RDP for propagation",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 64,
+      "Technique": "T1021.002",
+      "TechniqueName": "Remote Services: SMB/Windows Admin Shares",
+      "MitreReference": "SierraAlfa accesses ADMIN$ share via SMB",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 65,
+      "Technique": "T1021.004",
+      "TechniqueName": "Remote Services: SSH",
+      "MitreReference": "Lazarus used SSH and PuTTy PSCP",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.004 -TestNumber 1"
+    },
+    {
+      "TestNumber": 66,
+      "Technique": "T1053.005",
+      "TechniqueName": "Scheduled Task/Job: Scheduled Task",
+      "MitreReference": "Lazarus used schtasks for persistence and XSL execution",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1053.005 -TestNumber 1"
+    },
+    {
+      "TestNumber": 67,
+      "Technique": "T1489",
+      "TechniqueName": "Service Stop",
+      "MitreReference": "Lazarus stopped MSExchangeIS service",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1489 -TestNumber 1"
+    },
+    {
+      "TestNumber": 68,
+      "Technique": "T1553.002",
+      "TechniqueName": "Subvert Trust Controls: Code Signing",
+      "MitreReference": "Lazarus digitally signed malware to evade detection",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1553.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 69,
+      "Technique": "T1218.005",
+      "TechniqueName": "System Binary Proxy Execution: Mshta",
+      "MitreReference": "Lazarus used mshta.exe to execute HTML pages",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1218.005 -TestNumber 1"
+    },
+    {
+      "TestNumber": 70,
+      "Technique": "T1218.010",
+      "TechniqueName": "System Binary Proxy Execution: Regsvr32",
+      "MitreReference": "Lazarus used regsvr32 to execute malware",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1218.010 -TestNumber 1"
+    },
+    {
+      "TestNumber": 71,
+      "Technique": "T1218.011",
+      "TechniqueName": "System Binary Proxy Execution: Rundll32",
+      "MitreReference": "Lazarus used rundll32 to execute payloads",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumber 1"
+    },
+    {
+      "TestNumber": 72,
+      "Technique": "T1082",
+      "TechniqueName": "System Information Discovery",
+      "MitreReference": "Lazarus collects OS type/version, computer name, CPU info",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1082 -TestNumber 1"
+    },
+    {
+      "TestNumber": 73,
+      "Technique": "T1614.001",
+      "TechniqueName": "System Location Discovery: System Language Discovery",
+      "MitreReference": "Lazarus malware won't run on Korean/Japanese/Chinese systems",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1614.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 74,
+      "Technique": "T1016",
+      "TechniqueName": "System Network Configuration Discovery",
+      "MitreReference": "IndiaIndia obtains NIC configuration, IP, gateways, DHCP",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1016 -TestNumber 1"
+    },
+    {
+      "TestNumber": 75,
+      "Technique": "T1049",
+      "TechniqueName": "System Network Connections Discovery",
+      "MitreReference": "Lazarus used net use to identify network connections",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1049 -TestNumber 1"
+    },
+    {
+      "TestNumber": 76,
+      "Technique": "T1033",
+      "TechniqueName": "System Owner/User Discovery",
+      "MitreReference": "Lazarus malware enumerates logged-on users",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1033 -TestNumber 1"
+    },
+    {
+      "TestNumber": 77,
+      "Technique": "T1529",
+      "TechniqueName": "System Shutdown/Reboot",
+      "MitreReference": "Lazarus rebooted systems after destroying files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1529 -TestNumber 1"
+    },
+    {
+      "TestNumber": 78,
+      "Technique": "T1124",
+      "TechniqueName": "System Time Discovery",
+      "MitreReference": "Destover-like implant obtains system time",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1124 -TestNumber 1"
+    },
+    {
+      "TestNumber": 79,
+      "Technique": "T1221",
+      "TechniqueName": "Template Injection",
+      "MitreReference": "Lazarus used DOCX to retrieve malicious DOTM template",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1221 -TestNumber 1"
+    },
+    {
+      "TestNumber": 80,
+      "Technique": "T1204.001",
+      "TechniqueName": "User Execution: Malicious Link",
+      "MitreReference": "Lazarus lured users to execute malicious links",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1204.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 81,
+      "Technique": "T1204.002",
+      "TechniqueName": "User Execution: Malicious File",
+      "MitreReference": "Lazarus used malicious Word attachments",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1204.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 82,
+      "Technique": "T1078",
+      "TechniqueName": "Valid Accounts",
+      "MitreReference": "Lazarus used admin credentials for restricted segments",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1078 -TestNumber 1"
+    },
+    {
+      "TestNumber": 83,
+      "Technique": "T1497.001",
+      "TechniqueName": "Virtualization/Sandbox Evasion: System Checks",
+      "MitreReference": "Lazarus tools detect sandboxes and VMware services",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1497.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 84,
+      "Technique": "T1497.003",
+      "TechniqueName": "Virtualization/Sandbox Evasion: Time Based Checks",
+      "MitreReference": "Lazarus used GetTickCount and GetSystemTimeAsFileTime",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1497.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 85,
+      "Technique": "T1102.002",
+      "TechniqueName": "Web Service: Bidirectional Communication",
+      "MitreReference": "Lazarus used GitHub as C2",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1102.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 86,
+      "Technique": "T1047",
+      "TechniqueName": "Windows Management Instrumentation",
+      "MitreReference": "Lazarus used WMIC for discovery and payload execution",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1047 -TestNumber 1"
+    },
+    {
+      "TestNumber": 87,
+      "Technique": "T1220",
+      "TechniqueName": "XSL Script Processing",
+      "MitreReference": "Lazarus used remote XSL script to download Base64 DLL",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1220 -TestNumber 1"
+    }
+  ]
+}

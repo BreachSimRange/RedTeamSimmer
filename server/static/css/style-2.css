@@ -1,0 +1,199 @@
+
+    html, body { height: 100%; }
+    body { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.5px; }
+    .hidden { display: none; }
+    .menu-active { background: rgba(255,255,255,0.10); border-left: 4px solid #de0039; }
+    .modal-overlay { background: rgba(0,0,0,0.55); }
+
+    #live-output [data-output-type] {
+      font-family: 'Courier New', monospace;
+      line-height: 1.4;
+    }
+    .opacity-50 { opacity: 0.5; }
+    #test-results-table tr:hover { background-color: #f9fafb; }
+    #detailed-output-modal pre { font-family: 'Courier New', monospace; font-size: 11px; }
+    #detailed-output-modal code { font-size: 12px; word-break: break-all; }
+
+    #execution-flow-graph {
+      position: relative;
+    }
+    .graph-node { cursor: pointer; transition: all 0.3s ease; }
+    .graph-node:hover { filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8)); transform: scale(1.05); }
+    .graph-node rect { stroke-width: 3; rx: 10; }
+    .graph-node.completed rect { fill: #10b981; stroke: #059669; }
+    .graph-node.failed rect { fill: #ef4444; stroke: #dc2626; }
+    .graph-node.running rect { fill: #3b82f6; stroke: #2563eb; animation: pulse 2s infinite; }
+    .graph-node.pending rect { fill: #6b7280; stroke: #4b5563; }
+    .graph-node.skipped rect { fill: #f59e0b; stroke: #d97706; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+    .graph-link { fill: none; stroke: rgba(255, 255, 255, 0.3); stroke-width: 3; marker-end: url(#arrowhead); }
+    .graph-link.active { stroke: rgba(255, 255, 255, 0.8); stroke-width: 4; animation: flowAnimation 2s infinite; stroke-dasharray: 10,5; }
+    @keyframes flowAnimation { 0% { stroke-dashoffset: 20; } 100% { stroke-dashoffset: 0; } }
+
+    .node-label { fill: white; font-size: 14px; font-weight: bold; text-anchor: middle; pointer-events: none; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+    .node-sublabel { fill: rgba(255, 255, 255, 0.9); font-size: 10px; text-anchor: middle; pointer-events: none; }
+    .node-status { fill: white; font-size: 11px; font-weight: bold; text-anchor: middle; pointer-events: none; }
+
+    .agent-settings-row { display: grid; grid-template-columns: 150px 1fr; gap: 10px; align-items: center; margin-bottom: 15px; }
+    .agent-settings-row label { font-weight: 600; color: #374151; }
+    .agent-settings-row input, .agent-settings-row select { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; }
+    .agent-settings-row input[type="checkbox"] { width: 20px; height: 20px; }
+
+  .mitre-heatmap {
+      background: linear-gradient(135deg, #1a1a2e 0%, #000 50%, #000 100%);
+      border-radius: 12px;
+      padding: 20px;
+      overflow-x: auto;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .mitre-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+    .mitre-title { color: #fff; font-size: 16px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+    .mitre-title svg { width: 20px; height: 20px; }
+    .mitre-stats { display: flex; gap: 12px; flex-wrap: wrap; }
+    .mitre-stats .stat { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 12px; display: flex; align-items: center; gap: 4px; }
+    .mitre-stats .stat.completed { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+    .mitre-stats .stat.failed { background: rgba(239,68,68,0.2); color: #fca5a5; }
+    .mitre-stats .stat.running { background: rgba(59,130,246,0.2); color: #93c5fd; }
+    .mitre-stats .stat.pending { background: rgba(107,114,128,0.2); color: #d1d5db; }
+
+    .mitre-legend { display: flex; gap: 20px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap; }
+    .mitre-legend .legend-item { display: flex; align-items: center; gap: 6px; color: #94a3b8; font-size: 11px; }
+    .mitre-legend .box { width: 14px; height: 14px; border-radius: 3px; }
+    .mitre-legend .box.completed { background: #10b981; }
+    .mitre-legend .box.failed { background: #ef4444; }
+    .mitre-legend .box.running { background: #3b82f6; }
+    .mitre-legend .box.pending { background: #4b5563; }
+
+    .mitre-matrix { display: flex; gap: 6px; min-width: max-content; padding-bottom: 10px; }
+    .mitre-tactic { min-width: 130px; max-width: 150px; flex-shrink: 0; }
+    .mitre-tactic.empty { opacity: 0.35; }
+    .mitre-tactic.empty .mitre-tactic-header { background: linear-gradient(135deg, #4b5563 0%, #374151 100%); }
+    .mitre-tactic-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 8px; font-size: 10px; font-weight: bold; text-align: center; border-radius: 6px 6px 0 0; text-transform: uppercase; letter-spacing: 0.3px; display: flex; justify-content: center; align-items: center; gap: 6px; min-height: 36px; }
+    .mitre-tactic-header .tech-count { background: rgba(255,255,255,0.25); padding: 2px 7px; border-radius: 10px; font-size: 9px; font-weight: bold; }
+
+    .mitre-techniques { background: #0f172a; padding: 6px; border-radius: 0 0 6px 6px; min-height: 100px; max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+    .mitre-techniques::-webkit-scrollbar { width: 4px; }
+    .mitre-techniques::-webkit-scrollbar-track { background: #1e293b; border-radius: 2px; }
+    .mitre-techniques::-webkit-scrollbar-thumb { background: #475569; border-radius: 2px; }
+    .no-techniques { color: #475569; text-align: center; padding: 30px 0; font-size: 20px; }
+
+    .mitre-technique { padding: 8px; border-radius: 4px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; position: relative; }
+    .mitre-technique:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .mitre-technique.pending { background: #1e293b; border-color: #334155; }
+    .mitre-technique.pending .tech-id { color: #94a3b8; }
+    .mitre-technique.pending .tech-name { color: #64748b; }
+    .mitre-technique.running { background: rgba(59,130,246,0.15); border-color: #3b82f6; animation: pulse-running 2s infinite; }
+    .mitre-technique.running .tech-id { color: #93c5fd; }
+    .mitre-technique.running .tech-name { color: #60a5fa; }
+    .mitre-technique.completed { background: rgba(16,185,129,0.15); border-color: #10b981; }
+    .mitre-technique.completed .tech-id { color: #6ee7b7; }
+    .mitre-technique.completed .tech-name { color: #34d399; }
+    .mitre-technique.failed { background: rgba(239,68,68,0.15); border-color: #ef4444; }
+    .mitre-technique.failed .tech-id { color: #fca5a5; }
+    .mitre-technique.failed .tech-name { color: #f87171; }
+
+    @keyframes pulse-running {
+      0%, 100% { border-color: #3b82f6; box-shadow: 0 0 0 rgba(59,130,246,0); }
+      50% { border-color: #60a5fa; box-shadow: 0 0 15px rgba(59,130,246,0.4); }
+    }
+
+    .mitre-technique .tech-id { font-family: 'Monaco', 'Menlo', 'Consolas', monospace; font-size: 11px; font-weight: bold; color: #e2e8f0; }
+    .mitre-technique .tech-name { font-size: 9px; color: #94a3b8; margin-top: 3px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .mitre-technique .tech-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; padding: 2px 6px; border-radius: 4px; margin-top: 5px; font-weight: bold; }
+    .mitre-technique .tech-badge.completed { background: #10b981; color: #fff; }
+    .mitre-technique .tech-badge.failed { background: #ef4444; color: #fff; }
+    .mitre-technique .tech-badge.running { background: #3b82f6; color: #fff; }
+
+    .technique-detail-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .technique-detail-content { background: #1e293b; border-radius: 12px; padding: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; border: 1px solid #334155; }
+    .technique-detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .technique-detail-title { color: #f1f5f9; font-size: 18px; font-weight: bold; }
+    .technique-detail-id { color: #e94560; font-family: monospace; font-size: 14px; margin-top: 4px; }
+    .technique-detail-close { background: #334155; border: none; color: #94a3b8; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+    .technique-detail-close:hover { background: #475569; color: #fff; }
+    .technique-detail-status { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+    .technique-detail-status.completed { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+    .technique-detail-status.failed { background: rgba(239,68,68,0.2); color: #fca5a5; }
+    .technique-detail-status.running { background: rgba(59,130,246,0.2); color: #93c5fd; }
+    .technique-detail-status.pending { background: rgba(107,114,128,0.2); color: #d1d5db; }
+    .technique-detail-info { display: grid; gap: 12px; margin-bottom: 16px; }
+    .technique-detail-row { display: flex; gap: 12px; }
+    .technique-detail-label { color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; min-width: 80px; }
+    .technique-detail-value { color: #e2e8f0; font-size: 13px; }
+    .technique-detail-links { display: flex; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #334155; }
+    .technique-detail-link { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #334155; color: #93c5fd; text-decoration: none; border-radius: 6px; font-size: 12px; transition: background 0.2s; }
+    .technique-detail-link:hover { background: #475569; }
+
+    
+    .emulation-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 16px; overflow: hidden; transition: all 0.3s ease; cursor: pointer; border: 2px solid transparent; }
+    .emulation-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); border-color: #e94560; }
+    .emulation-card-header { position: relative; height: 250px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: linear-gradient(135deg, rgba(233,69,96,0.15) 0%, rgba(59,130,246,0.15) 100%); }
+    .emulation-card-header img { width: 100%; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+    .emulation-card-body { padding: 20px; }
+    .emulation-card-title { color: #fff; font-size: 1.25rem; font-weight: bold; margin-bottom: 8px; }
+    .emulation-card-subtitle { color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .emulation-card-stats { display: flex; gap: 8px; flex-wrap: wrap; }
+    .emulation-card-stat { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; color: #e2e8f0; }
+    .emulation-card-stat.coverage { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+
+    .test-selection-table { width: 100%; border-collapse: collapse; }
+    .test-selection-table th { background: #f1f5f9; padding: 12px 8px; text-align: left; font-weight: 600; font-size: 0.85rem; border-bottom: 2px solid #e2e8f0; position: sticky; top: 0; }
+    .test-selection-table td { padding: 10px 8px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; }
+    .test-selection-table tr:hover { background: #f8fafc; }
+    .test-selection-table .technique-id { font-family: 'Monaco', 'Menlo', monospace; color: #3b82f6; font-weight: bold; font-size: 0.8rem; }
+
+    .tactic-accordion { margin-bottom: 12px; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; background: white; }
+    .tactic-accordion-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; cursor: pointer; transition: all 0.2s ease; }
+    .tactic-accordion-header:hover { background: #f1f5f9; }
+    .tactic-accordion-header.expanded { border-bottom: 1px solid #e2e8f0; }
+    .tactic-accordion-title { display: flex; align-items: center; gap: 12px; }
+    .tactic-accordion-title .tactic-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; }
+    .tactic-accordion-title .tactic-name { font-weight: 500; font-size: 1rem; color: #1e293b; letter-spacing:1px; }
+    .tactic-accordion-badge { display: flex; align-items: center; gap: 8px; }
+    .tactic-accordion-badge .count { background: #e0e7ff; color: #4338ca; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .tactic-accordion-badge .selected-count { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .tactic-accordion-badge .chevron { transition: transform 0.2s ease; color: #64748b; }
+    .tactic-accordion-header.expanded .chevron { transform: rotate(180deg); }
+    .tactic-accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.tactic-accordion-content.expanded { max-height: none; }
+    .tactic-accordion-body { padding: 16px 20px; background: #fafafa; }
+    
+    .tactic-technique-row { padding: 12px 16px; border-radius: 8px; margin-bottom: 8px; background: white; border: 1px solid #e2e8f0; transition: all 0.2s ease; }
+    .tactic-technique-row:hover { border-color: #a5b4fc; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1); }
+    .tactic-technique-header { display: flex; align-items: center; gap: 12px; cursor: pointer; flex-wrap: wrap; }
+    .tactic-technique-header .tech-id { font-family: 'Monaco', 'Menlo', monospace; color: #4f46e5; font-weight: 700; font-size: 0.9rem; }
+    .tactic-technique-header .tech-name { color: #374151; font-weight: 500; }
+    .tactic-technique-header .test-count-badge { background: #e0e7ff; color: #4338ca; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600; margin-left: 8px; }
+    .tactic-test-list { margin-top: 12px; padding-left: 32px; border-left: 3px solid #e0e7ff; }
+    .tactic-test-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; flex-wrap: wrap; }
+    .tactic-test-item:last-child { border-bottom: none; }
+    .tactic-test-item label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .tactic-test-item .test-name { color: #4b5563; font-size: 0.9rem; }
+    .tactic-test-item .test-executor { background: #f3f4f6; color: #6b7280; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 500; }
+
+  
+    .tactic-initial-access { background: none; }
+    .tactic-execution { background: none; }
+    .tactic-persistence { background: none; }
+    .tactic-privilege-escalation { background: none; }
+    .tactic-defense-evasion { background: none; }
+    .tactic-credential-access { background: none; }
+    .tactic-discovery { background: none; }
+    .tactic-lateral-movement { background: none; }
+    .tactic-collection { background: none; }
+    .tactic-exfiltration { background: none; }
+    .tactic-command-control { background: none; }
+    .tactic-impact { background: none; }
+    .tactic-reconnaissance { background: none; }
+    .tactic-resource-development { background: none; }
+    .tactic-default { background: none; }
+    #technique-detail-modal > div { max-height: 70vh; }
+    
+    @media (max-width: 768px) {
+      #op-test-summary-stats { grid-template-columns: repeat(2, 1fr) !important; }
+      .mitre-tactic { min-width: 100% !important; max-width: 100% !important; }
+      #op-test-results-table, #emulation-results-table { display: block; overflow-x: auto; }
+      .mitre-matrix { flex-wrap: wrap; }
+    }
+ 

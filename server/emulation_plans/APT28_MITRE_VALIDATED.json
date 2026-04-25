@@ -1,0 +1,566 @@
+{
+  "name": "APT28 (Fancy Bear)",
+  "description": "APT28 is a threat group attributed to Russia's General Staff Main Intelligence Directorate (GRU) 85th Main Special Service Center (GTsSS) military unit 26165. Active since at least 2004. Aka: Fancy Bear, Sofacy, Pawn Storm, Sednit, STRONTIUM, Forest Blizzard, IRON TWILIGHT, GruesomeLarch",
+  "references": [
+    "https://attack.mitre.org/groups/G0007/"
+  ],
+  "mitre_group_id": "G0007",
+  "operating_system": "windows",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v18 (G0007). Only techniques with documented APT28 usage are included. Tests marked with 'atomic_validated: true' have confirmed Atomic Red Team coverage.",
+  "techniques_without_atomic_coverage": [
+    "T1557.004 - Evil Twin (no atomic test)",
+    "T1583.001 - Acquire Infrastructure: Domains (reconnaissance, no atomic)",
+    "T1583.003 - Virtual Private Server (no atomic)",
+    "T1583.006 - Web Services (no atomic)",
+    "T1595.002 - Vulnerability Scanning (no atomic)",
+    "T1586.002 - Compromise Accounts: Email (no atomic)",
+    "T1584.008 - Network Devices (no atomic)",
+    "T1589.001 - Gather Victim Identity (no atomic)",
+    "T1591 - Gather Victim Org Info (no atomic)",
+    "T1092 - Communication Through Removable Media (limited atomic)",
+    "T1001.001 - Junk Data (no atomic)",
+    "T1030 - Data Transfer Size Limits (no atomic)",
+    "T1006 - Direct Volume Access (limited atomic)",
+    "T1211 - Exploitation for Defense Evasion (no atomic)",
+    "T1210 - Exploitation of Remote Services (no atomic)",
+    "T1498 - Network Denial of Service (no atomic)",
+    "T1542.003 - Bootkit (no atomic)",
+    "T1596 - Search Open Technical Databases (no atomic)",
+    "T1528 - Steal Application Access Token (no atomic)",
+    "T1199 - Trusted Relationship (no atomic)",
+    "T1550.001 - Application Access Token (no atomic)"
+  ],
+  "AtomicTests": [
+    {
+      "TestNumber": 1,
+      "Technique": "T1134.001",
+      "TechniqueName": "Access Token Manipulation: Token Impersonation/Theft",
+      "MitreReference": "APT28 used CVE-2015-1701 to access SYSTEM token",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1134.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 2,
+      "Technique": "T1071.001",
+      "TechniqueName": "Application Layer Protocol: Web Protocols",
+      "MitreReference": "CHOPSTICK uses HTTP/HTTPS for C2",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1071.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 3,
+      "Technique": "T1560",
+      "TechniqueName": "Archive Collected Data",
+      "MitreReference": "APT28 compressed documents on DCCC/DNC networks",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1560 -TestNumber 1"
+    },
+    {
+      "TestNumber": 4,
+      "Technique": "T1560.001",
+      "TechniqueName": "Archive Collected Data: Archive via Utility",
+      "MitreReference": "APT28 used WinRAR with password protection",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1560.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 5,
+      "Technique": "T1119",
+      "TechniqueName": "Automated Collection",
+      "MitreReference": "APT28 used tools to gather and compress documents",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1119 -TestNumber 1"
+    },
+    {
+      "TestNumber": 6,
+      "Technique": "T1547.001",
+      "TechniqueName": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+      "MitreReference": "APT28 deployed malware copying to startup directory",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1547.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 7,
+      "Technique": "T1037.001",
+      "TechniqueName": "Boot or Logon Initialization Scripts: Logon Script (Windows)",
+      "MitreReference": "APT28 loader adds UserInitMprLogonScript registry key",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1037.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 8,
+      "Technique": "T1110",
+      "TechniqueName": "Brute Force",
+      "MitreReference": "APT28 performs brute force to obtain credentials",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1110 -TestNumber 1"
+    },
+    {
+      "TestNumber": 9,
+      "Technique": "T1110.003",
+      "TechniqueName": "Brute Force: Password Spraying",
+      "MitreReference": "APT28 used password-spraying (~4 attempts/hour per account)",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1110.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 10,
+      "Technique": "T1059.001",
+      "TechniqueName": "Command and Scripting Interpreter: PowerShell",
+      "MitreReference": "APT28 downloads and executes PowerShell scripts",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 11,
+      "Technique": "T1059.003",
+      "TechniqueName": "Command and Scripting Interpreter: Windows Command Shell",
+      "MitreReference": "APT28 loader uses cmd.exe and batch scripts",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 12,
+      "Technique": "T1213.002",
+      "TechniqueName": "Data from Information Repositories: Sharepoint",
+      "MitreReference": "APT28 collected information from Microsoft SharePoint",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1213.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 13,
+      "Technique": "T1005",
+      "TechniqueName": "Data from Local System",
+      "MitreReference": "APT28 retrieved documents using Forfiles",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1005 -TestNumber 1"
+    },
+    {
+      "TestNumber": 14,
+      "Technique": "T1039",
+      "TechniqueName": "Data from Network Shared Drive",
+      "MitreReference": "APT28 collected files from network shared drives",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1039 -TestNumber 1"
+    },
+    {
+      "TestNumber": 15,
+      "Technique": "T1025",
+      "TechniqueName": "Data from Removable Media",
+      "MitreReference": "APT28 backdoor collects contents of USB device",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1025 -TestNumber 1"
+    },
+    {
+      "TestNumber": 16,
+      "Technique": "T1074.001",
+      "TechniqueName": "Data Staged: Local Data Staging",
+      "MitreReference": "APT28 staged captured credentials in pi.log",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1074.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 17,
+      "Technique": "T1140",
+      "TechniqueName": "Deobfuscate/Decode Files or Information",
+      "MitreReference": "APT28 macro uses certutil -decode for base64",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1140 -TestNumber 1"
+    },
+    {
+      "TestNumber": 18,
+      "Technique": "T1561.001",
+      "TechniqueName": "Disk Wipe: Disk Content Wipe",
+      "MitreReference": "APT28 used cipher.exe to securely wipe files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1561.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 19,
+      "Technique": "T1189",
+      "TechniqueName": "Drive-by Compromise",
+      "MitreReference": "APT28 compromised targets via strategic web compromise",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1189 -TestNumber 1"
+    },
+    {
+      "TestNumber": 20,
+      "Technique": "T1114.002",
+      "TechniqueName": "Email Collection: Remote Email Collection",
+      "MitreReference": "APT28 collected emails from Exchange servers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1114.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 21,
+      "Technique": "T1573.001",
+      "TechniqueName": "Encrypted Channel: Symmetric Cryptography",
+      "MitreReference": "APT28 Delphi backdoor with custom C2 algorithm",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1573.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 22,
+      "Technique": "T1546.015",
+      "TechniqueName": "Event Triggered Execution: Component Object Model Hijacking",
+      "MitreReference": "APT28 used COM hijacking replacing MMDeviceEnumerator",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1546.015 -TestNumber 1"
+    },
+    {
+      "TestNumber": 23,
+      "Technique": "T1048.002",
+      "TechniqueName": "Exfiltration Over Alternative Protocol: Asymmetric Encrypted Non-C2",
+      "MitreReference": "APT28 exfiltrated archives via HTTPS",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1048.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 24,
+      "Technique": "T1567",
+      "TechniqueName": "Exfiltration Over Web Service",
+      "MitreReference": "APT28 exfiltrates data over Google Drive",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1567 -TestNumber 1"
+    },
+    {
+      "TestNumber": 25,
+      "Technique": "T1190",
+      "TechniqueName": "Exploit Public-Facing Application",
+      "MitreReference": "APT28 used CVE-2020-0688, CVE-2020-17144 against Exchange",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1190 -TestNumber 1"
+    },
+    {
+      "TestNumber": 26,
+      "Technique": "T1203",
+      "TechniqueName": "Exploitation for Client Execution",
+      "MitreReference": "APT28 exploited CVE-2017-0262 in Microsoft Office",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1203 -TestNumber 1"
+    },
+    {
+      "TestNumber": 27,
+      "Technique": "T1068",
+      "TechniqueName": "Exploitation for Privilege Escalation",
+      "MitreReference": "APT28 exploited CVE-2014-4076, CVE-2015-2387, CVE-2017-0263",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1068 -TestNumber 1"
+    },
+    {
+      "TestNumber": 28,
+      "Technique": "T1133",
+      "TechniqueName": "External Remote Services",
+      "MitreReference": "APT28 used Tor and VPN for brute force routing",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1133 -TestNumber 1"
+    },
+    {
+      "TestNumber": 29,
+      "Technique": "T1083",
+      "TechniqueName": "File and Directory Discovery",
+      "MitreReference": "APT28 used Forfiles to locate PDF, Excel, Word",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1083 -TestNumber 1"
+    },
+    {
+      "TestNumber": 30,
+      "Technique": "T1564.001",
+      "TechniqueName": "Hide Artifacts: Hidden Files and Directories",
+      "MitreReference": "APT28 saved files with hidden file attributes",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1564.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 31,
+      "Technique": "T1564.003",
+      "TechniqueName": "Hide Artifacts: Hidden Window",
+      "MitreReference": "APT28 used WindowStyle parameter to conceal PowerShell",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1564.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 32,
+      "Technique": "T1562.004",
+      "TechniqueName": "Impair Defenses: Disable or Modify System Firewall",
+      "MitreReference": "APT28 added firewall rules for port-forwards",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1562.004 -TestNumber 1"
+    },
+    {
+      "TestNumber": 33,
+      "Technique": "T1070.001",
+      "TechniqueName": "Indicator Removal: Clear Windows Event Logs",
+      "MitreReference": "APT28 used wevtutil cl System/Security",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1070.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 34,
+      "Technique": "T1070.004",
+      "TechniqueName": "Indicator Removal: File Deletion",
+      "MitreReference": "APT28 deleted files using CCleaner",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1070.004 -TestNumber 1"
+    },
+    {
+      "TestNumber": 35,
+      "Technique": "T1070.006",
+      "TechniqueName": "Indicator Removal: Timestomp",
+      "MitreReference": "APT28 performed timestomping on victim files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1070.006 -TestNumber 1"
+    },
+    {
+      "TestNumber": 36,
+      "Technique": "T1105",
+      "TechniqueName": "Ingress Tool Transfer",
+      "MitreReference": "APT28 used first-stage downloader for second-stage",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1105 -TestNumber 1"
+    },
+    {
+      "TestNumber": 37,
+      "Technique": "T1056.001",
+      "TechniqueName": "Input Capture: Keylogging",
+      "MitreReference": "APT28 has used keylogging tools",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1056.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 38,
+      "Technique": "T1559.002",
+      "TechniqueName": "Inter-Process Communication: Dynamic Data Exchange",
+      "MitreReference": "APT28 delivered JHUHUGIT via DDE in Word",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1559.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 39,
+      "Technique": "T1036",
+      "TechniqueName": "Masquerading",
+      "MitreReference": "APT28 renamed WinRAR to avoid detection",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036 -TestNumber 1"
+    },
+    {
+      "TestNumber": 40,
+      "Technique": "T1036.005",
+      "TechniqueName": "Masquerading: Match Legitimate Name or Location",
+      "MitreReference": "APT28 changed extensions to make exfil benign",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036.005 -TestNumber 1"
+    },
+    {
+      "TestNumber": 41,
+      "Technique": "T1040",
+      "TechniqueName": "Network Sniffing",
+      "MitreReference": "APT28 deployed Responder for NetBIOS poisoning",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1040 -TestNumber 1"
+    },
+    {
+      "TestNumber": 42,
+      "Technique": "T1027.013",
+      "TechniqueName": "Obfuscated Files or Information: Encrypted/Encoded File",
+      "MitreReference": "APT28 obfuscated payloads with base64, XOR, RC4",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1027 -TestNumber 1"
+    },
+    {
+      "TestNumber": 43,
+      "Technique": "T1137.002",
+      "TechniqueName": "Office Application Startup: Office Test",
+      "MitreReference": "APT28 used Office Test persistence mechanism",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1137.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 44,
+      "Technique": "T1003",
+      "TechniqueName": "OS Credential Dumping",
+      "MitreReference": "APT28 deploys Mimikatz and custom tools",
+      "atomic_validated": true,
+      "Commands": [
+        "Invoke-AtomicTest T1003.001 -TestNumber 6 -GetPrereqs",
+        "Invoke-AtomicTest T1003.001 -TestNumber 6"
+      ]
+    },
+    {
+      "TestNumber": 45,
+      "Technique": "T1003.001",
+      "TechniqueName": "OS Credential Dumping: LSASS Memory",
+      "MitreReference": "APT28 dumped LSASS using MiniDump function",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1003.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 46,
+      "Technique": "T1003.002",
+      "TechniqueName": "OS Credential Dumping: Security Account Manager",
+      "MitreReference": "APT28 used reg save hklm\\sam to dump SAM",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1003.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 47,
+      "Technique": "T1003.003",
+      "TechniqueName": "OS Credential Dumping: NTDS",
+      "MitreReference": "APT28 used ntdsutil.exe and vssadmin for NTDS.dit",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1003.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 48,
+      "Technique": "T1120",
+      "TechniqueName": "Peripheral Device Discovery",
+      "MitreReference": "APT28 module notifies when USB storage inserted",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1120 -TestNumber 1"
+    },
+    {
+      "TestNumber": 49,
+      "Technique": "T1566.001",
+      "TechniqueName": "Phishing: Spearphishing Attachment",
+      "MitreReference": "APT28 sent spearphishing with Office/RAR attachments",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1566.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 50,
+      "Technique": "T1057",
+      "TechniqueName": "Process Discovery",
+      "MitreReference": "APT28 loader enumerates processes for explorer.exe",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1057 -TestNumber 1"
+    },
+    {
+      "TestNumber": 51,
+      "Technique": "T1090.001",
+      "TechniqueName": "Proxy: Internal Proxy",
+      "MitreReference": "APT28 used netsh portproxy for internal proxies",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1090.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 52,
+      "Technique": "T1090.002",
+      "TechniqueName": "Proxy: External Proxy",
+      "MitreReference": "APT28 used victims as proxies for C2 relay",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1090.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 53,
+      "Technique": "T1021.001",
+      "TechniqueName": "Remote Services: Remote Desktop Protocol",
+      "MitreReference": "APT28 used RDP for lateral movement",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 54,
+      "Technique": "T1021.002",
+      "TechniqueName": "Remote Services: SMB/Windows Admin Shares",
+      "MitreReference": "APT28 mapped network drives with admin credentials",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 55,
+      "Technique": "T1091",
+      "TechniqueName": "Replication Through Removable Media",
+      "MitreReference": "APT28 tool infects USB for air-gapped systems",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1091 -TestNumber 1"
+    },
+    {
+      "TestNumber": 56,
+      "Technique": "T1014",
+      "TechniqueName": "Rootkit",
+      "MitreReference": "APT28 used UEFI rootkit LoJax",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1014 -TestNumber 1"
+    },
+    {
+      "TestNumber": 57,
+      "Technique": "T1113",
+      "TechniqueName": "Screen Capture",
+      "MitreReference": "APT28 used tools to take screenshots",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1113 -TestNumber 1"
+    },
+    {
+      "TestNumber": 58,
+      "Technique": "T1505.003",
+      "TechniqueName": "Server Software Component: Web Shell",
+      "MitreReference": "APT28 used obfuscated reGeorg web shell",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1505.003 -TestNumber 1"
+    },
+    {
+      "TestNumber": 59,
+      "Technique": "T1218.011",
+      "TechniqueName": "System Binary Proxy Execution: Rundll32",
+      "MitreReference": "APT28 executed CHOPSTICK via rundll32",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumber 1"
+    },
+    {
+      "TestNumber": 60,
+      "Technique": "T1016.002",
+      "TechniqueName": "System Network Configuration Discovery: Wi-Fi Discovery",
+      "MitreReference": "APT28 collected info on wireless interfaces",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1016 -TestNumber 1"
+    },
+    {
+      "TestNumber": 61,
+      "Technique": "T1221",
+      "TechniqueName": "Template Injection",
+      "MitreReference": "APT28 used weaponized Word docs with remote template",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1221 -TestNumber 1"
+    },
+    {
+      "TestNumber": 62,
+      "Technique": "T1550.002",
+      "TechniqueName": "Use Alternate Authentication Material: Pass the Hash",
+      "MitreReference": "APT28 used pass the hash for lateral movement",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1550.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 63,
+      "Technique": "T1204.001",
+      "TechniqueName": "User Execution: Malicious Link",
+      "MitreReference": "APT28 tricked recipients into clicking malicious links",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1204.001 -TestNumber 1"
+    },
+    {
+      "TestNumber": 64,
+      "Technique": "T1204.002",
+      "TechniqueName": "User Execution: Malicious File",
+      "MitreReference": "APT28 used Office attachments with macros",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1204.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 65,
+      "Technique": "T1078",
+      "TechniqueName": "Valid Accounts",
+      "MitreReference": "APT28 used stolen credentials via spearphishing",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1078 -TestNumber 1"
+    },
+    {
+      "TestNumber": 66,
+      "Technique": "T1102.002",
+      "TechniqueName": "Web Service: Bidirectional Communication",
+      "MitreReference": "APT28 used Google Drive for C2",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1102.002 -TestNumber 1"
+    }
+  ]
+}

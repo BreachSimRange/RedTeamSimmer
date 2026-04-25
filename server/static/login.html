@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RedTeamSimmer - Login</title>
+
+<link rel="stylesheet" href="static/css/bebas-neue.css">
+<link rel="stylesheet" href="static/css/login.css">
+
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      <h1>Red<span>Team</span>Simmer</h1>
+      <p>Adversary Emulation Platform</p>
+    </div>
+    
+    <div id="error-msg" class="error-msg"></div>
+    
+    <form id="login-form">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="username" placeholder="Enter username" required autofocus>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter password" required>
+      </div>
+      <button type="submit" class="login-btn" id="login-btn">Sign In</button>
+    </form>
+    
+    <div class="footer">
+     <a href="https://breachsimrange.io" style="color: white; text-decoration: none;"> <p>https://breachsimrange.io</p></a> 
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('login-btn');
+      const errorDiv = document.getElementById('error-msg');
+      
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+      errorDiv.classList.remove('show');
+      
+      try {
+        const resp = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value
+          })
+        });
+        
+        const data = await resp.json();
+        
+        if (resp.ok && data.status === 'success') {
+          window.location.href = '/';
+        } else {
+          errorDiv.textContent = data.error || 'Login failed';
+          errorDiv.classList.add('show');
+        }
+      } catch (err) {
+        errorDiv.textContent = 'Connection error';
+        errorDiv.classList.add('show');
+      }
+      
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    });
+  </script>
+</body>
+</html>

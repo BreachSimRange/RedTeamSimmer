@@ -1,0 +1,349 @@
+{
+  "name": "APT3 (Gothic Panda)",
+  "description": "VALIDATED emulation plan for APT3, a China-based threat group attributed to China's Ministry of State Security. Responsible for Operation Clandestine Fox, Operation Clandestine Wolf, and Operation Double Tap. Shifted from US victims to Hong Kong political organizations in 2015.",
+  "mitre_group_id": "G0022",
+  "mitre_url": "https://attack.mitre.org/groups/G0022/",
+  "aliases": ["Gothic Panda", "Pirpi", "UPS Team", "Buckeye", "Threat Group-0110", "TG-0110"],
+  "attribution": "China Ministry of State Security (MSS)",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v18 - All techniques documented with evidence citations. MITRE has published official APT3 Adversary Emulation Plan.",
+  "techniques_without_atomic_coverage": [
+    "T1104 - Multi-Stage Channels (SOCKS5 to 192.157.198.103 then 192.184.60.229)",
+    "T1095 - Non-Application Layer Protocol (SOCKS5 connections)",
+    "T1090.002 - Proxy: External Proxy (SOCKS5)"
+  ],
+  "AtomicTests": [
+    {
+      "TestNumber": 1,
+      "Technique": "T1087.001",
+      "TechniqueName": "Account Discovery: Local Account",
+      "MitreReference": "APT3 tool obtained info about local/global group users, power users, administrators",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1087.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 2,
+      "Technique": "T1098.007",
+      "TechniqueName": "Account Manipulation: Additional Local or Domain Groups",
+      "MitreReference": "APT3 added created accounts to local admin groups for elevated access",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1098.007 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 3,
+      "Technique": "T1560.001",
+      "TechniqueName": "Archive Collected Data: Archive via Utility",
+      "MitreReference": "APT3 used tools to compress data before exfilling",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1560.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 4,
+      "Technique": "T1547.001",
+      "TechniqueName": "Boot or Logon Autostart Execution: Registry Run Keys",
+      "MitreReference": "APT3 placed scripts in startup folder for persistence",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1547.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 5,
+      "Technique": "T1110.002",
+      "TechniqueName": "Brute Force: Password Cracking",
+      "MitreReference": "APT3 brute forced password hashes to leverage plain text credentials",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1110.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 6,
+      "Technique": "T1059.001",
+      "TechniqueName": "Command and Scripting Interpreter: PowerShell",
+      "MitreReference": "APT3 used PowerShell to download and run payloads after exploitation",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 7,
+      "Technique": "T1059.003",
+      "TechniqueName": "Command and Scripting Interpreter: Windows Command Shell",
+      "MitreReference": "APT3 downloader uses cmd.exe /C whoami, tool executes commands on remote computers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1059.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 8,
+      "Technique": "T1136.001",
+      "TechniqueName": "Create Account: Local Account",
+      "MitreReference": "APT3 created/enabled accounts such as support_388945a0",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1136.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 9,
+      "Technique": "T1543.003",
+      "TechniqueName": "Create or Modify System Process: Windows Service",
+      "MitreReference": "APT3 tool creates new service for persistence",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1543.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 10,
+      "Technique": "T1555.003",
+      "TechniqueName": "Credentials from Password Stores: Credentials from Web Browsers",
+      "MitreReference": "APT3 used tools to dump passwords from browsers",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1555.003 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 11,
+      "Technique": "T1005",
+      "TechniqueName": "Data from Local System",
+      "MitreReference": "APT3 identified Microsoft Office documents on victim's computer",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1005 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 12,
+      "Technique": "T1074.001",
+      "TechniqueName": "Data Staged: Local Data Staging",
+      "MitreReference": "APT3 staged files for exfiltration in a single location",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1074.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 13,
+      "Technique": "T1546.008",
+      "TechniqueName": "Event Triggered Execution: Accessibility Features",
+      "MitreReference": "APT3 replaced Sticky Keys binary C:\\Windows\\System32\\sethc.exe for persistence",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1546.008 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 14,
+      "Technique": "T1041",
+      "TechniqueName": "Exfiltration Over C2 Channel",
+      "MitreReference": "APT3 tool exfiltrates data over the C2 channel",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1041 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 15,
+      "Technique": "T1203",
+      "TechniqueName": "Exploitation for Client Execution",
+      "MitreReference": "APT3 exploited Adobe Flash CVE-2015-3113 and IE CVE-2014-1776",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1203 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 16,
+      "Technique": "T1083",
+      "TechniqueName": "File and Directory Discovery",
+      "MitreReference": "APT3 tool looks for files/directories on local file system",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1083 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 17,
+      "Technique": "T1564.003",
+      "TechniqueName": "Hide Artifacts: Hidden Window",
+      "MitreReference": "APT3 used -WindowStyle Hidden to conceal PowerShell windows",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1564.003 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 18,
+      "Technique": "T1574.001",
+      "TechniqueName": "Hijack Execution Flow: DLL",
+      "MitreReference": "APT3 side loaded DLLs with valid version of Chrome",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1574.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 19,
+      "Technique": "T1070.004",
+      "TechniqueName": "Indicator Removal: File Deletion",
+      "MitreReference": "APT3 tool can delete files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1070.004 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 20,
+      "Technique": "T1105",
+      "TechniqueName": "Ingress Tool Transfer",
+      "MitreReference": "APT3 tool can copy files to remote machines",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1105 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 21,
+      "Technique": "T1056.001",
+      "TechniqueName": "Input Capture: Keylogging",
+      "MitreReference": "APT3 used keylogging tool that records keystrokes in encrypted files",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1056.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 22,
+      "Technique": "T1036.010",
+      "TechniqueName": "Masquerading: Masquerade Account Name",
+      "MitreReference": "APT3 created accounts such as support_388945a0 (legitimate-looking name)",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1036.010 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 23,
+      "Technique": "T1027",
+      "TechniqueName": "Obfuscated Files or Information",
+      "MitreReference": "APT3 obfuscates files/information to evade defensive measures",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1027 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 24,
+      "Technique": "T1027.002",
+      "TechniqueName": "Obfuscated Files or Information: Software Packing",
+      "MitreReference": "APT3 has been known to pack their tools",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1027.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 25,
+      "Technique": "T1027.005",
+      "TechniqueName": "Obfuscated Files or Information: Indicator Removal from Tools",
+      "MitreReference": "APT3 removes indicators of compromise from tools",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1027.005 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 26,
+      "Technique": "T1003.001",
+      "TechniqueName": "OS Credential Dumping: LSASS Memory",
+      "MitreReference": "APT3 tool dumps credentials by injecting into lsass.exe with 'dig' argument",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1003.001 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 27,
+      "Technique": "T1069",
+      "TechniqueName": "Permission Groups Discovery",
+      "MitreReference": "APT3 tool enumerates permissions associated with Windows groups",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1069 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 28,
+      "Technique": "T1566.002",
+      "TechniqueName": "Phishing: Spearphishing Link",
+      "MitreReference": "APT3 sent spearphishing emails containing malicious links",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1566.002 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 29,
+      "Technique": "T1057",
+      "TechniqueName": "Process Discovery",
+      "MitreReference": "APT3 tool lists currently running processes",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1057 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 30,
+      "Technique": "T1021.001",
+      "TechniqueName": "Remote Services: Remote Desktop Protocol",
+      "MitreReference": "APT3 enabled RDP for persistence and browsed/copied files through RDP sessions",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 31,
+      "Technique": "T1021.002",
+      "TechniqueName": "Remote Services: SMB/Windows Admin Shares",
+      "MitreReference": "APT3 copied files to Windows Admin Shares (ADMIN$) for lateral movement",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1021.002 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 32,
+      "Technique": "T1018",
+      "TechniqueName": "Remote System Discovery",
+      "MitreReference": "APT3 tool can detect existence of remote systems",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1018 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 33,
+      "Technique": "T1053.005",
+      "TechniqueName": "Scheduled Task/Job: Scheduled Task",
+      "MitreReference": "APT3 downloader creates persistence via schtasks /create /tn mysc",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1053.005 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 34,
+      "Technique": "T1218.011",
+      "TechniqueName": "System Binary Proxy Execution: Rundll32",
+      "MitreReference": "APT3 tool can run DLLs",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 35,
+      "Technique": "T1082",
+      "TechniqueName": "System Information Discovery",
+      "MitreReference": "APT3 tool obtains information about the local system",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1082 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 36,
+      "Technique": "T1016",
+      "TechniqueName": "System Network Configuration Discovery",
+      "MitreReference": "APT3 keylogging tool gathers MAC address, IP, WINS, DHCP server, gateway",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1016 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 37,
+      "Technique": "T1049",
+      "TechniqueName": "System Network Connections Discovery",
+      "MitreReference": "APT3 tool enumerates current network connections",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1049 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 38,
+      "Technique": "T1033",
+      "TechniqueName": "System Owner/User Discovery",
+      "MitreReference": "APT3 downloader uses cmd.exe /C whoami to verify System privileges",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1033 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 39,
+      "Technique": "T1552.001",
+      "TechniqueName": "Unsecured Credentials: Credentials In Files",
+      "MitreReference": "APT3 tool locates credentials in files from Firefox or Chrome",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1552.001 -TestNumbers 1,2"
+    },
+    {
+      "TestNumber": 40,
+      "Technique": "T1204.001",
+      "TechniqueName": "User Execution: Malicious Link",
+      "MitreReference": "APT3 lured victims into clicking malicious links via spearphishing",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1204.001 -TestNumbers 1"
+    },
+    {
+      "TestNumber": 41,
+      "Technique": "T1078.002",
+      "TechniqueName": "Valid Accounts: Domain Accounts",
+      "MitreReference": "APT3 leveraged valid accounts after gaining credentials within victim domain",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1078.002 -TestNumbers 1"
+    }
+  ],
+  "coverage_stats": {
+    "documented_techniques": 44,
+    "atomic_tests_available": 41,
+    "coverage_percentage": 93
+  }
+}

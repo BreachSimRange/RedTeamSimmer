@@ -1,0 +1,110 @@
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+    }
+    .login-container {
+      background: #121212;
+      border-radius: 20px;
+      padding: 50px 40px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 100px rgba(222, 0, 57, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .logo h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: #fff;
+      letter-spacing: 3px;
+      margin-bottom: 5px;
+    }
+    .logo span {
+      color: #de0039;
+    }
+    .logo p {
+      color: #fff;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .form-group {
+      margin-bottom: 25px;
+    }
+    .form-group label {
+      display: block;
+      color: #888;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 15px 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #de0039;
+      box-shadow: 0 0 20px rgba(222, 0, 57, 0.2);
+    }
+    .form-group input::placeholder {
+      color: #555;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #de0039 0%, #a80025 100%);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(222, 0, 57, 0.4);
+    }
+    .login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .error-msg {
+      background: rgba(222, 0, 57, 0.1);
+      border: 1px solid #de0039;
+      color: #ff6b6b;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .error-msg.show {
+      display: block;
+    }
+    .footer {
+      
+      text-align: center;
+      margin-top: 30px;
+      color: #ffffff;
+      font-size: 0.9rem;
+    }
