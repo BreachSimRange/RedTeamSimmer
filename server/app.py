@@ -51,7 +51,7 @@ THREAT_ACTOR_IMAGES = {
     "G0022": "apt3.jpeg",
     "G0096": "apt41.jpeg",
     "G0046": "fin7.jpeg",
-    "G0032": "lazarus.png",
+    "G0032": "lazarus.jpg",
     "G0102": "wizard_spider.jpeg",
 }
 
