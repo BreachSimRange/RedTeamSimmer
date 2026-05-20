@@ -193,13 +193,36 @@ deactivate
 # With the venv activated:
 pip install --upgrade pip
 pip install -r requirements.txt
+```
 
-# Download Atomic Red Team atomics
-git clone https://github.com/redcanaryco/atomic-red-team.git atomics_repo
-mv atomics_repo ./atomic
-rm -rf atomics_repo
+#### Clone the Atomic Red Team Repository
 
-# Initialize the database and create default admin user
+RedTeamSimmer reads atomic test definitions from `atomic/atomics/` relative to the project root. This path is mandatory - the server parses it on startup to build the technique catalogue, resolve `prereq_command` / `get_prereq_command` / executor blocks, and stage technique folders for the file drop system. If the directory is missing or empty, technique listings will be blank in the UI and every execution will fail.
+
+Clone the upstream Atomic Red Team repository directly into the `atomic/` directory. The repo's own root contains an `atomics/` folder, so cloning it as `atomic` gives you the required `atomic/atomics/T<NNNN>/` layout in one step:
+
+```bash
+# From the RedTeamSimmer project root
+git clone https://github.com/redcanaryco/atomic-red-team.git atomic
+
+# Verify the layout
+ls atomic/atomics | head
+# Expected: Indexes  T1003  T1005  T1007  T1010  T1012  T1014  T1016 ...
+```
+
+Refresh the tests periodically to pick up new techniques and upstream fixes:
+
+```bash
+cd atomic && git pull && cd ..
+```
+
+> **Air-gapped deployments:** if the server host has no internet egress, clone the repository on a connected machine, archive it (`tar czf atomic.tar.gz atomic/`), transfer it across, and extract under the project root so the final path is still `atomic/atomics/`. External payloads referenced by individual atomics (binaries, scripts, samples fetched at runtime) need to be pre-staged separately - see the air-gapped deployment notes in the docs.
+
+#### Initialise the Database
+
+With dependencies installed and `atomic/atomics/` in place, run the server once to create the SQLite schema and seed the default admin user:
+
+```bash
 python3 app.py
 ```
 
