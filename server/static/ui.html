@@ -2628,7 +2628,7 @@ function loadModuleFiles() {
 }
 
 // ============================================================================
-// MITRE ATT&CK DATA — hydrated from the server (no hard-coded technique IDs).
+// MITRE ATT&CK DATA - hydrated from the server (no hard-coded technique IDs).
 // Sources:
 //   GET /api/mitre/tactics?all=1            -> ordered v19 tactic list
 //   GET /api/mitre/technique_tactic_map     -> {techId: {tactic_id, tactic_name, tactic_short}}
@@ -2825,7 +2825,7 @@ function drawExecutionFlowGraph(techniques, testResults) {
     const techContainer = tacticDiv.querySelector('.mitre-techniques');
     
     if (!hasTechniques) {
-      techContainer.innerHTML = '<div class="no-techniques">—</div>';
+      techContainer.innerHTML = '<div class="no-techniques">-</div>';
     } else {
       techs.forEach(tech => {
         const techEl = document.createElement('div');
