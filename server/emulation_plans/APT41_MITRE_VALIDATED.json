@@ -3,9 +3,15 @@
   "description": "VALIDATED emulation plan for APT41, a Chinese state-sponsored group conducting both espionage and financially-motivated operations since 2012. Notable for supply chain compromises, ransomware deployment, and targeting healthcare, telecom, technology, and gaming industries.",
   "mitre_group_id": "G0096",
   "mitre_url": "https://attack.mitre.org/groups/G0096/",
-  "aliases": ["Wicked Panda", "Brass Typhoon", "BARIUM", "Winnti Group"],
+  "aliases": [
+    "APT41",
+    "Wicked Panda",
+    "Brass Typhoon",
+    "BARIUM",
+    "Winnti Group"
+  ],
   "attribution": "China Ministry of State Security (MSS)",
-  "validation_notes": "VALIDATED against MITRE ATT&CK v18 - All techniques documented with evidence citations",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v19.1 - All techniques documented with evidence citations v19 update: Defense Evasion split into Stealth (TA0005) and Defense Impairment (TA0112); existing tests re-tagged via crosswalk, v19-new attributions appended where Atomic Red Team coverage exists.",
   "techniques_without_atomic_coverage": [
     "T1583.007 - Acquire Infrastructure: Serverless (Cloudflare Workers)",
     "T1586.003 - Compromise Accounts: Cloud Accounts",
@@ -28,7 +34,9 @@
       "TechniqueName": "Access Token Manipulation",
       "MitreReference": "APT41 used ConfuserEx obfuscated BADPOTATO exploit for named-pipe impersonation",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1134 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1134 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 2,
@@ -92,7 +100,9 @@
       "TechniqueName": "BITS Jobs",
       "MitreReference": "APT41 used BITSAdmin to download and install payloads",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1197 -TestNumbers 1,2,3"
+      "Command": "Invoke-AtomicTest T1197 -TestNumbers 1,2,3",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 10,
@@ -220,7 +230,9 @@
       "TechniqueName": "Deobfuscate/Decode Files or Information",
       "MitreReference": "APT41 used DUSTPAN loader to decrypt embedded payloads",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1140 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1140 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 26,
@@ -228,7 +240,9 @@
       "TechniqueName": "Domain or Tenant Policy Modification: Group Policy Modification",
       "MitreReference": "APT41 used scheduled tasks created via GPOs to deploy ransomware",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1484.001 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1484.001 -TestNumbers 1",
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment"
     },
     {
       "TestNumber": 27,
@@ -252,7 +266,9 @@
       "TechniqueName": "Execution Guardrails: Environmental Keying",
       "MitreReference": "APT41 encrypted payloads using DPAPI and RC5 key from volume serial number",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1480.001 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1480.001 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 30,
@@ -324,7 +340,9 @@
       "TechniqueName": "Hijack Execution Flow: DLL",
       "MitreReference": "APT41 used search order hijacking for Winnti and DLL side-loading",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1574.001 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1574.001 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 39,
@@ -332,7 +350,9 @@
       "TechniqueName": "Hijack Execution Flow: Dynamic Linker Hijacking",
       "MitreReference": "APT41 configured payloads to load via LD_PRELOAD",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1574.006 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1574.006 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 40,
@@ -340,7 +360,9 @@
       "TechniqueName": "Indicator Removal: Clear Windows Event Logs",
       "MitreReference": "APT41 cleared Windows security and system events",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1070.001 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1070.001 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 41,
@@ -348,7 +370,9 @@
       "TechniqueName": "Indicator Removal: Clear Command History",
       "MitreReference": "APT41 deleted Bash histories",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1070.003 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1070.003 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 42,
@@ -356,7 +380,9 @@
       "TechniqueName": "Indicator Removal: File Deletion",
       "MitreReference": "APT41 deleted files from the system following use",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1070.004 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1070.004 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 43,
@@ -388,7 +414,9 @@
       "TechniqueName": "Masquerading: Masquerade Task or Service",
       "MitreReference": "APT41 disguised DUSTPAN as legitimate Windows binaries like w3wp.exe",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036.004 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1036.004 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 47,
@@ -396,7 +424,9 @@
       "TechniqueName": "Masquerading: Match Legitimate Resource Name",
       "MitreReference": "APT41 masqueraded files as popular anti-virus software",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036.005 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1036.005 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 48,
@@ -404,7 +434,9 @@
       "TechniqueName": "Modify Registry",
       "MitreReference": "APT41 used GOODLUCK malware to modify registry for credential theft",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1112 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1112 -TestNumbers 1,2",
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment"
     },
     {
       "TestNumber": 49,
@@ -436,7 +468,9 @@
       "TechniqueName": "Obfuscated Files or Information",
       "MitreReference": "APT41 used VMProtected binaries and broke malicious binaries into sections",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1027 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1027 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 53,
@@ -444,7 +478,9 @@
       "TechniqueName": "Obfuscated Files or Information: Software Packing",
       "MitreReference": "APT41 used packers like Themida and VMProtect",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1027.002 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1027.002 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 54,
@@ -500,7 +536,9 @@
       "TechniqueName": "Pre-OS Boot: Bootkit",
       "MitreReference": "APT41 deployed Master Boot Record bootkits on Windows systems",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1542.003 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1542.003 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 61,
@@ -508,7 +546,9 @@
       "TechniqueName": "Process Injection",
       "MitreReference": "APT41 TIDYELF malware injected WINTERLOVE into iexplore.exe",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1055 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1055 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 62,
@@ -556,7 +596,9 @@
       "TechniqueName": "Rootkit",
       "MitreReference": "APT41 deployed rootkits on Linux systems",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1014 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1014 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 68,
@@ -580,7 +622,9 @@
       "TechniqueName": "Subvert Trust Controls: Code Signing",
       "MitreReference": "APT41 leveraged code-signing certificates to sign malware",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1553.002 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1553.002 -TestNumbers 1",
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment"
     },
     {
       "TestNumber": 71,
@@ -596,7 +640,9 @@
       "TechniqueName": "System Binary Proxy Execution: Compiled HTML File",
       "MitreReference": "APT41 used compiled HTML (.chm) files for targeting",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1218.001 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1218.001 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 73,
@@ -604,7 +650,9 @@
       "TechniqueName": "System Binary Proxy Execution: Rundll32",
       "MitreReference": "APT41 used rundll32.exe to execute a loader",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 74,
@@ -660,7 +708,9 @@
       "TechniqueName": "Valid Accounts",
       "MitreReference": "APT41 used compromised credentials to log on to other systems",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1078 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1078 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 81,
@@ -677,11 +727,45 @@
       "MitreReference": "APT41 used WMI for command execution via WMIEXEC and persistence",
       "atomic_validated": true,
       "Command": "Invoke-AtomicTest T1047 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 83,
+      "Technique": "T1685",
+      "TechniqueName": "Disable or Modify Tools",
+      "MitreReference": "APT41 used MOONWALK to disable EDR agents and security tooling",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1685 -TestNumbers 1",
+      "v19_new": true,
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment",
+      "attribution_source": "MITRE ATT&CK v19.1 (April 2026)"
     }
   ],
   "coverage_stats": {
     "documented_techniques": 95,
     "atomic_tests_available": 82,
     "coverage_percentage": 86
+  },
+  "mitre_version": "19.1",
+  "mitre_released": "2026-04-28",
+  "v19_attributed_no_atomic_coverage": [
+    "T1684"
+  ],
+  "v19_changes": {
+    "version": "19.1",
+    "released": "2026-04-28",
+    "tactic_split": "Defense Evasion split into Stealth (TA0005) + Defense Impairment (TA0112)",
+    "existing_tests_retagged": {
+      "stealth": 19,
+      "defense_impairment": 3
+    },
+    "v19_new_attributions_added": [
+      "T1685"
+    ],
+    "v19_attributed_without_atomic_coverage": [
+      "T1684"
+    ],
+    "aliases_refreshed": true,
+    "source": "https://attack.mitre.org/groups/G0096/"
   }
 }

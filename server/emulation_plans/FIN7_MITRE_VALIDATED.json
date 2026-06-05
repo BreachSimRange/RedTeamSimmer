@@ -3,9 +3,16 @@
   "description": "VALIDATED emulation plan for FIN7, a financially-motivated threat group active since 2013 targeting retail, restaurant, hospitality, and financial services. Known for point-of-sale malware and BGH ransomware operations including Darkside RaaS.",
   "mitre_group_id": "G0046",
   "mitre_url": "https://attack.mitre.org/groups/G0046/",
-  "aliases": ["GOLD NIAGARA", "ITG14", "Carbon Spider", "ELBRUS", "Sangria Tempest"],
+  "aliases": [
+    "FIN7",
+    "GOLD NIAGARA",
+    "ITG14",
+    "Carbon Spider",
+    "ELBRUS",
+    "Sangria Tempest"
+  ],
   "attribution": "Financially Motivated Criminal Group",
-  "validation_notes": "VALIDATED against MITRE ATT&CK v18 - All techniques documented with evidence citations",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v19.1 - All techniques documented with evidence citations v19 update: Defense Evasion split into Stealth (TA0005) and Defense Impairment (TA0112); existing tests re-tagged via crosswalk, v19-new attributions appended where Atomic Red Team coverage exists.",
   "techniques_without_atomic_coverage": [
     "T1583.001 - Acquire Infrastructure: Domains",
     "T1583.006 - Acquire Infrastructure: Web Services (S3 buckets)",
@@ -106,7 +113,9 @@
       "TechniqueName": "Deobfuscate/Decode Files or Information",
       "MitreReference": "FIN7 used certutil -decode and XOR with key qawsed1q2w3e for Lizar installation",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1140 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1140 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 12,
@@ -146,7 +155,9 @@
       "TechniqueName": "Hide Artifacts: Hidden Files and Directories",
       "MitreReference": "FIN7 used attrib +h to make SSH folder hidden",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1564.001 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1564.001 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 17,
@@ -154,7 +165,9 @@
       "TechniqueName": "Hide Artifacts: Hidden Window",
       "MitreReference": "FIN7 used .txt files to conceal PowerShell commands",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1564.003 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1564.003 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 18,
@@ -186,7 +199,9 @@
       "TechniqueName": "Masquerading: Masquerade Task or Service",
       "MitreReference": "FIN7 created scheduled task named AdobeFlashSync for persistence",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036.004 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1036.004 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 22,
@@ -194,7 +209,9 @@
       "TechniqueName": "Masquerading: Match Legitimate Resource Name",
       "MitreReference": "FIN7 ran Darkside as sleep.exe and mimicked WsTaskLoad.exe from Wondershare",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036.005 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1036.005 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 23,
@@ -210,7 +227,9 @@
       "TechniqueName": "Obfuscated Files or Information: Command Obfuscation",
       "MitreReference": "FIN7 used fragmented strings, env variables, stdin, and character-replacement",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1027.010 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1027.010 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 25,
@@ -266,7 +285,9 @@
       "TechniqueName": "Reflective Code Loading",
       "MitreReference": "FIN7 loaded .NET assembly via Reflection.Assembly::Load",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1620 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1620 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 32,
@@ -338,7 +359,9 @@
       "TechniqueName": "Subvert Trust Controls: Code Signing",
       "MitreReference": "FIN7 signed Carbanak payloads with legally purchased code signing certificates",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1553.002 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1553.002 -TestNumbers 1",
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment"
     },
     {
       "TestNumber": 41,
@@ -346,7 +369,9 @@
       "TechniqueName": "System Binary Proxy Execution: Mshta",
       "MitreReference": "FIN7 used mshta.exe to execute VBScript for malicious code",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1218.005 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1218.005 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 42,
@@ -354,7 +379,9 @@
       "TechniqueName": "System Binary Proxy Execution: Rundll32",
       "MitreReference": "FIN7 used rundll32.exe to execute malware on compromised networks",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 43,
@@ -410,7 +437,9 @@
       "TechniqueName": "Valid Accounts",
       "MitreReference": "FIN7 harvested valid administrative credentials for lateral movement",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1078 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1078 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 50,
@@ -418,7 +447,9 @@
       "TechniqueName": "Valid Accounts: Local Accounts",
       "MitreReference": "FIN7 used compromised credentials as SYSTEM on Exchange servers",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1078.003 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1078.003 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 51,
@@ -434,7 +465,9 @@
       "TechniqueName": "Virtualization/Sandbox Evasion: User Activity Checks",
       "MitreReference": "FIN7 used images requiring double-click to activate payload, avoiding sandboxes",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1497.002 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1497.002 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 53,
@@ -451,11 +484,53 @@
       "MitreReference": "FIN7 used WMI to install malware on targeted systems",
       "atomic_validated": true,
       "Command": "Invoke-AtomicTest T1047 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 55,
+      "Technique": "T1685",
+      "TechniqueName": "Disable or Modify Tools",
+      "MitreReference": "FIN7 disabled Defender real-time protection prior to ransomware staging",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1685 -TestNumbers 1",
+      "v19_new": true,
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment",
+      "attribution_source": "MITRE ATT&CK v19.1 (April 2026)"
+    },
+    {
+      "TestNumber": 56,
+      "Technique": "T1686",
+      "TechniqueName": "Disable or Modify System Firewall",
+      "MitreReference": "FIN7 opened firewall rules for SMB lateral movement",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1686 -TestNumbers 1",
+      "v19_new": true,
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment",
+      "attribution_source": "MITRE ATT&CK v19.1 (April 2026)"
     }
   ],
   "coverage_stats": {
     "documented_techniques": 65,
     "atomic_tests_available": 54,
     "coverage_percentage": 83
+  },
+  "mitre_version": "19.1",
+  "mitre_released": "2026-04-28",
+  "v19_changes": {
+    "version": "19.1",
+    "released": "2026-04-28",
+    "tactic_split": "Defense Evasion split into Stealth (TA0005) + Defense Impairment (TA0112)",
+    "existing_tests_retagged": {
+      "stealth": 12,
+      "defense_impairment": 1
+    },
+    "v19_new_attributions_added": [
+      "T1685",
+      "T1686"
+    ],
+    "v19_attributed_without_atomic_coverage": [],
+    "aliases_refreshed": true,
+    "source": "https://attack.mitre.org/groups/G0046/"
   }
 }

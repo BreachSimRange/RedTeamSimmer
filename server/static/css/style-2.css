@@ -177,7 +177,8 @@
     .tactic-execution { background: none; }
     .tactic-persistence { background: none; }
     .tactic-privilege-escalation { background: none; }
-    .tactic-defense-evasion { background: none; }
+    .tactic-stealth { background: none; }
+    .tactic-defense-impairment { background: none; }
     .tactic-credential-access { background: none; }
     .tactic-discovery { background: none; }
     .tactic-lateral-movement { background: none; }

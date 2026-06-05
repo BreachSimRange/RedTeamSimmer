@@ -17,6 +17,17 @@ import hashlib
 import secrets
 from functools import wraps
 
+from mitre import (
+    VERSION as MITRE_VERSION,
+    RELEASED as MITRE_RELEASED,
+    get_tactics as mitre_get_tactics,
+    tactic_for_technique as mitre_tactic_for_technique,
+    is_hidden_tactic as mitre_is_hidden_tactic,
+    canonical_tactic_order as mitre_canonical_order,
+    short_to_display as mitre_short_to_display,
+    techniques_for_tactic as mitre_techniques_for_tactic,
+)
+
 # ========================
 # CONFIG
 # ========================
@@ -825,9 +836,17 @@ def parse_markdown_categories():
     
     print(f"[DEBUG] Reading INDEX_MD_WINDOWS: {INDEX_MD_WINDOWS}")
     
+    # MITRE ATT&CK v19 (April 2026): Defense Evasion was split into
+    # Stealth (TA0005) and Defense Impairment (TA0112). Any legacy
+    # "defense-evasion" markdown header is translated to Stealth by default;
+    # techniques are reassigned to Defense Impairment downstream via
+    # mitre_tactic_for_technique().
     TACTIC_NAME_MAP = {
-        "defense-evasion": "Defense Evasion",
-        "defense evasion": "Defense Evasion",
+        "stealth": "Stealth",
+        "defense-impairment": "Defense Impairment",
+        "defense impairment": "Defense Impairment",
+        "defense-evasion": "Stealth",
+        "defense evasion": "Stealth",
         "privilege-escalation": "Privilege Escalation",
         "privilege escalation": "Privilege Escalation",
         "initial-access": "Initial Access",
@@ -957,10 +976,67 @@ def attach_yaml_paths(categories, index_map):
                 tech["tests"] = []
     return categories
 
+def _apply_v19_tactic_mapping(categories):
+    """Reassign techniques to Stealth or Defense Impairment per MITRE v19.
+
+    The upstream Atomic Red Team windows-index.md already uses v19 headers
+    (`# stealth`, `# defense-impairment`), so most techniques land in the
+    right bucket from parsing. This pass is a safety net: any legacy
+    Defense Evasion entry, or any Defense Impairment technique that the
+    markdown left under Stealth, gets re-homed using the v19 dataset.
+
+    Also drops hidden tactics (Reconnaissance, Resource Development) and
+    returns the categories in canonical v19 order.
+    """
+    buckets = {}
+    for cat in categories:
+        short = (cat.get("name") or "").strip().lower().replace(" ", "-")
+        if short == "defense-evasion":
+            short = "stealth"
+        if mitre_is_hidden_tactic(short):
+            continue
+        buckets.setdefault(short, {"name": mitre_short_to_display(short) or cat["name"],
+                                   "techniques": []})
+        for tech in cat.get("techniques", []):
+            tid = tech.get("id")
+            v19_short = mitre_tactic_for_technique(tid)
+            target = v19_short if v19_short else short
+            if mitre_is_hidden_tactic(target):
+                continue
+            target_name = mitre_short_to_display(target) or buckets[short]["name"]
+            buckets.setdefault(target, {"name": target_name, "techniques": []})
+            buckets[target]["techniques"].append(tech)
+
+    # De-duplicate techniques within each tactic (technique ID is unique per tactic)
+    for short, cat in buckets.items():
+        seen = set()
+        unique = []
+        for tech in cat["techniques"]:
+            tid = tech.get("id")
+            if tid in seen:
+                continue
+            seen.add(tid)
+            unique.append(tech)
+        cat["techniques"] = unique
+
+    # Emit in canonical v19 order (hidden tactics already filtered out)
+    ordered = []
+    for short in mitre_canonical_order(include_hidden=False):
+        if short in buckets and buckets[short]["techniques"]:
+            ordered.append(buckets[short])
+    return ordered
+
+
 def get_windows_tactics():
     categories = parse_markdown_categories()
     index_map = load_index_yaml()
-    return {"tactics": attach_yaml_paths(categories, index_map)}
+    categories = attach_yaml_paths(categories, index_map)
+    categories = _apply_v19_tactic_mapping(categories)
+    return {
+        "tactics": categories,
+        "mitre_version": MITRE_VERSION,
+        "mitre_released": MITRE_RELEASED,
+    }
 
 # ========================
 # ROUTES
@@ -1092,6 +1168,96 @@ def api_agent_confirm_file():
 @login_required
 def api_techniques():
     return jsonify(get_windows_tactics())
+
+
+@app.route("/api/mitre/version")
+def api_mitre_version():
+    """Public endpoint reporting the MITRE ATT&CK version this server targets."""
+    return jsonify({
+        "version": MITRE_VERSION,
+        "released": MITRE_RELEASED,
+        "source": "https://attack.mitre.org/resources/updates/updates-april-2026/",
+    })
+
+
+@app.route("/api/mitre/tactics")
+def api_mitre_tactics():
+    """Canonical v19 tactic list in display order.
+    Hidden tactics (Reconnaissance, Resource Development) are excluded by default;
+    pass ?all=1 to include them."""
+    include_hidden = request.args.get("all") in ("1", "true", "yes")
+    return jsonify({
+        "version": MITRE_VERSION,
+        "tactics": mitre_get_tactics(include_hidden=include_hidden),
+    })
+
+
+_TECHNIQUE_TACTIC_MAP_CACHE = None
+
+
+def _build_technique_tactic_map():
+    """Build a flat {technique_id: {tactic_id, tactic_name, tactic_short}} map.
+
+    Source of truth:
+      1. Upstream Atomic Red Team `windows-index.md` for the base tactic grouping
+         of every Windows-supported technique.
+      2. `mitre.tactic_for_technique()` for the v19 Stealth / Defense Impairment
+         split (overrides anything the markdown header suggested).
+    """
+    global _TECHNIQUE_TACTIC_MAP_CACHE
+    if _TECHNIQUE_TACTIC_MAP_CACHE is not None:
+        return _TECHNIQUE_TACTIC_MAP_CACHE
+
+    categories = parse_markdown_categories()
+    tactics_meta = {t["short"]: t for t in mitre_get_tactics(include_hidden=True)}
+
+    out = {}
+    for cat in categories:
+        cat_short = (cat.get("name") or "").strip().lower().replace(" ", "-")
+        if cat_short == "defense-evasion":
+            cat_short = "stealth"
+        for tech in cat.get("techniques", []):
+            tid = tech.get("id")
+            if not tid:
+                continue
+            short = mitre_tactic_for_technique(tid) or cat_short
+            meta = tactics_meta.get(short)
+            if not meta:
+                continue
+            out[tid] = {
+                "tactic_id": meta["id"],
+                "tactic_name": meta["name"],
+                "tactic_short": short,
+            }
+    # Backfill any Stealth / Defense Impairment v19 techniques that the
+    # Windows markdown index doesn't list (e.g. cloud-only or platform-agnostic
+    # entries the UI may still need to label).
+    for short in ("stealth", "defense-impairment"):
+        meta = tactics_meta.get(short)
+        if not meta:
+            continue
+        for tid in mitre_techniques_for_tactic(short):
+            if tid in out:
+                continue
+            out[tid] = {
+                "tactic_id": meta["id"],
+                "tactic_name": meta["name"],
+                "tactic_short": short,
+            }
+    _TECHNIQUE_TACTIC_MAP_CACHE = out
+    return out
+
+
+@app.route("/api/mitre/technique_tactic_map")
+def api_mitre_technique_tactic_map():
+    """Flat technique-id → tactic map, derived from the live atomics index + v19 split.
+
+    Lets the UI avoid hard-coding technique-to-tactic relationships.
+    """
+    return jsonify({
+        "version": MITRE_VERSION,
+        "map": _build_technique_tactic_map(),
+    })
 
 @app.route("/api/agents", methods=["GET", "POST", "DELETE"])
 @login_required
@@ -1436,10 +1602,13 @@ def api_emulation_plans():
             "description": plan.get("description"),
             "mitre_group_id": plan.get("mitre_group_id"),
             "mitre_url": plan.get("mitre_url"),
+            "mitre_version": plan.get("mitre_version"),
+            "mitre_released": plan.get("mitre_released"),
             "aliases": plan.get("aliases", []),
             "attribution": plan.get("attribution"),
             "image_url": plan.get("image_url"),
             "coverage_stats": plan.get("coverage_stats", {}),
+            "v19_changes": plan.get("v19_changes"),
             "test_count": len(plan.get("AtomicTests", []))
         })
     

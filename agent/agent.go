@@ -36,6 +36,10 @@ const (
 	InvokeAtomicModuleUrl  = ServerURL + "/modules/" + InvokeAtomicModuleZip
 	ConfigFile             = "./agent_config.json"
 
+	// MITRE ATT&CK version this agent targets. v19 (April 2026) split the
+	// Defense Evasion tactic into Stealth (TA0005) and Defense Impairment (TA0112).
+	MitreVersion = "19.1"
+
 	// Additional PowerShell modules (offline - hosted on YOUR server)
 	PowershellYamlZip       = "powershell-yaml.zip"
 	PowershellYamlPsd1      = "powershell-yaml.psd1"
@@ -717,6 +721,7 @@ func register() {
 		"agent_info":     agentConfig.AgentInfo,
 		"installed_av":   agentConfig.InstalledAV,
 		"security_level": agentConfig.SecurityLevel,
+		"mitre_version":  MitreVersion,
 	}
 	body := map[string]interface{}{
 		"id":    AgentID,
@@ -2678,16 +2683,17 @@ func (co CommandOutput) HasErrors() bool {
 
 func sendTestResult(taskID string, result TestExecutionResult) {
 	report := map[string]interface{}{
-		"task_id":      taskID,
-		"result_type":  "test_execution",
-		"technique_id": result.TechniqueID,
-		"test_number":  result.TestNumber,
-		"test_name":    result.TestName,
-		"status":       result.Status,
-		"duration":     result.Duration.Seconds(),
-		"start_time":   result.StartTime.Unix(),
-		"end_time":     result.EndTime.Unix(),
-		"partial":      true,
+		"task_id":       taskID,
+		"result_type":   "test_execution",
+		"technique_id":  result.TechniqueID,
+		"test_number":   result.TestNumber,
+		"test_name":     result.TestName,
+		"status":        result.Status,
+		"duration":      result.Duration.Seconds(),
+		"start_time":    result.StartTime.Unix(),
+		"end_time":      result.EndTime.Unix(),
+		"partial":       true,
+		"mitre_version": MitreVersion,
 	}
 
 	if result.MainOutput.Command != "" {

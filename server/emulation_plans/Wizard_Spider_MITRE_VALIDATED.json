@@ -3,9 +3,21 @@
   "description": "VALIDATED emulation plan for Wizard Spider, a Russia-based financially motivated threat group known for TrickBot (since 2016) and ransomware operations (Ryuk, Conti). Notable for targeting hospitals and major corporations.",
   "mitre_group_id": "G0102",
   "mitre_url": "https://attack.mitre.org/groups/G0102/",
-  "aliases": ["UNC1878", "TEMP.MixMaster", "Grim Spider", "FIN12", "GOLD BLACKBURN", "ITG23", "Periwinkle Tempest", "DEV-0193"],
+  "aliases": [
+    "Wizard Spider",
+    "UNC1878",
+    "TEMP.MixMaster",
+    "Grim Spider",
+    "FIN12",
+    "GOLD BLACKBURN",
+    "ITG23",
+    "Periwinkle Tempest",
+    "DEV-0193",
+    "Pistachio Tempest",
+    "DEV-0237"
+  ],
   "attribution": "Russia-based Financially Motivated Criminal Group",
-  "validation_notes": "VALIDATED against MITRE ATT&CK v18 - All techniques documented with evidence citations. Featured in MITRE Engenuity ATT&CK Evaluations 2022.",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v19.1 - All techniques documented with evidence citations. Featured in MITRE Engenuity ATT&CK Evaluations 2022. v19 update: Defense Evasion split into Stealth (TA0005) and Defense Impairment (TA0112); existing tests re-tagged via crosswalk, v19-new attributions appended where Atomic Red Team coverage exists.",
   "techniques_without_atomic_coverage": [
     "T1585.002 - Establish Accounts: Email Accounts (ProtonMail for ransom notes)",
     "T1021 - Remote Services (WebDAV for Ryuk payloads)",
@@ -51,7 +63,9 @@
       "TechniqueName": "BITS Jobs",
       "MitreReference": "Wizard Spider used batch scripts with WMIC to execute BITSAdmin transfers",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1197 -TestNumbers 1,2,3"
+      "Command": "Invoke-AtomicTest T1197 -TestNumbers 1,2,3",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 6,
@@ -179,7 +193,9 @@
       "TechniqueName": "File and Directory Permissions Modification: Windows",
       "MitreReference": "Wizard Spider used icacls to modify access control on backup servers",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1222.001 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1222.001 -TestNumbers 1,2",
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment"
     },
     {
       "TestNumber": 22,
@@ -195,7 +211,9 @@
       "TechniqueName": "Indicator Removal: File Deletion",
       "MitreReference": "Wizard Spider used file deletion to remove modules and configurations",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1070.004 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1070.004 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 24,
@@ -227,7 +245,9 @@
       "TechniqueName": "Masquerading: Masquerade Task or Service",
       "MitreReference": "Wizard Spider used scheduled tasks with legitimate names like WinDotNet, GoogleTask, Sysnetsf",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036.004 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1036.004 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 28,
@@ -235,7 +255,9 @@
       "TechniqueName": "Modify Registry",
       "MitreReference": "Wizard Spider modified WDigest registry key to cache plaintext credentials in memory",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1112 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1112 -TestNumbers 1,2",
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment"
     },
     {
       "TestNumber": 29,
@@ -251,7 +273,9 @@
       "TechniqueName": "Obfuscated Files or Information: Command Obfuscation",
       "MitreReference": "Wizard Spider used Base64 encoding to obfuscate Empire service and PowerShell commands",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1027.010 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1027.010 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 31,
@@ -299,7 +323,9 @@
       "TechniqueName": "Process Injection",
       "MitreReference": "Wizard Spider used process injection to escalate privileges",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1055 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1055 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 37,
@@ -307,7 +333,9 @@
       "TechniqueName": "Process Injection: Dynamic-link Library Injection",
       "MitreReference": "Wizard Spider injected malicious DLLs into memory with read, write, execute permissions",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1055.001 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1055.001 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 38,
@@ -387,7 +415,9 @@
       "TechniqueName": "Subvert Trust Controls: Code Signing",
       "MitreReference": "Wizard Spider used Digicert code-signing certificates for malware",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1553.002 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1553.002 -TestNumbers 1",
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment"
     },
     {
       "TestNumber": 48,
@@ -395,7 +425,9 @@
       "TechniqueName": "System Binary Proxy Execution: Rundll32",
       "MitreReference": "Wizard Spider used rundll32.exe to deploy ransomware commands with WebDAV",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 49,
@@ -467,7 +499,9 @@
       "TechniqueName": "Valid Accounts",
       "MitreReference": "Wizard Spider used valid credentials to access domain controllers",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1078 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1078 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 58,
@@ -475,7 +509,9 @@
       "TechniqueName": "Valid Accounts: Domain Accounts",
       "MitreReference": "Wizard Spider used Domain Admin accounts for lateral movement",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1078.002 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1078.002 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 59,
@@ -484,11 +520,40 @@
       "MitreReference": "Wizard Spider used WMI and LDAP queries for discovery and lateral movement with WMIC batch scripts",
       "atomic_validated": true,
       "Command": "Invoke-AtomicTest T1047 -TestNumbers 1,2,3"
+    },
+    {
+      "TestNumber": 60,
+      "Technique": "T1685",
+      "TechniqueName": "Disable or Modify Tools",
+      "MitreReference": "TrickBot/Ryuk operators disabled Defender via PowerShell prior to Ryuk deployment",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1685 -TestNumbers 1",
+      "v19_new": true,
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment",
+      "attribution_source": "MITRE ATT&CK v19.1 (April 2026)"
     }
   ],
   "coverage_stats": {
     "documented_techniques": 63,
     "atomic_tests_available": 59,
     "coverage_percentage": 94
+  },
+  "mitre_version": "19.1",
+  "mitre_released": "2026-04-28",
+  "v19_changes": {
+    "version": "19.1",
+    "released": "2026-04-28",
+    "tactic_split": "Defense Evasion split into Stealth (TA0005) + Defense Impairment (TA0112)",
+    "existing_tests_retagged": {
+      "stealth": 9,
+      "defense_impairment": 3
+    },
+    "v19_new_attributions_added": [
+      "T1685"
+    ],
+    "v19_attributed_without_atomic_coverage": [],
+    "aliases_refreshed": true,
+    "source": "https://attack.mitre.org/groups/G0102/"
   }
 }

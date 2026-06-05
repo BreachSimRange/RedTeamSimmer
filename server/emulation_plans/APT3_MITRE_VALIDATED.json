@@ -3,9 +3,17 @@
   "description": "VALIDATED emulation plan for APT3, a China-based threat group attributed to China's Ministry of State Security. Responsible for Operation Clandestine Fox, Operation Clandestine Wolf, and Operation Double Tap. Shifted from US victims to Hong Kong political organizations in 2015.",
   "mitre_group_id": "G0022",
   "mitre_url": "https://attack.mitre.org/groups/G0022/",
-  "aliases": ["Gothic Panda", "Pirpi", "UPS Team", "Buckeye", "Threat Group-0110", "TG-0110"],
+  "aliases": [
+    "APT3",
+    "Gothic Panda",
+    "Pirpi",
+    "UPS Team",
+    "Buckeye",
+    "Threat Group-0110",
+    "TG-0110"
+  ],
   "attribution": "China Ministry of State Security (MSS)",
-  "validation_notes": "VALIDATED against MITRE ATT&CK v18 - All techniques documented with evidence citations. MITRE has published official APT3 Adversary Emulation Plan.",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v19.1 - All techniques documented with evidence citations. MITRE has published official APT3 Adversary Emulation Plan. v19 update: Defense Evasion split into Stealth (TA0005) and Defense Impairment (TA0112); existing tests re-tagged via crosswalk, v19-new attributions appended where Atomic Red Team coverage exists.",
   "techniques_without_atomic_coverage": [
     "T1104 - Multi-Stage Channels (SOCKS5 to 192.157.198.103 then 192.184.60.229)",
     "T1095 - Non-Application Layer Protocol (SOCKS5 connections)",
@@ -146,7 +154,9 @@
       "TechniqueName": "Hide Artifacts: Hidden Window",
       "MitreReference": "APT3 used -WindowStyle Hidden to conceal PowerShell windows",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1564.003 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1564.003 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 18,
@@ -154,7 +164,9 @@
       "TechniqueName": "Hijack Execution Flow: DLL",
       "MitreReference": "APT3 side loaded DLLs with valid version of Chrome",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1574.001 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1574.001 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 19,
@@ -162,7 +174,9 @@
       "TechniqueName": "Indicator Removal: File Deletion",
       "MitreReference": "APT3 tool can delete files",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1070.004 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1070.004 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 20,
@@ -186,7 +200,9 @@
       "TechniqueName": "Masquerading: Masquerade Account Name",
       "MitreReference": "APT3 created accounts such as support_388945a0 (legitimate-looking name)",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036.010 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1036.010 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 23,
@@ -194,7 +210,9 @@
       "TechniqueName": "Obfuscated Files or Information",
       "MitreReference": "APT3 obfuscates files/information to evade defensive measures",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1027 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1027 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 24,
@@ -202,7 +220,9 @@
       "TechniqueName": "Obfuscated Files or Information: Software Packing",
       "MitreReference": "APT3 has been known to pack their tools",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1027.002 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1027.002 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 25,
@@ -210,7 +230,9 @@
       "TechniqueName": "Obfuscated Files or Information: Indicator Removal from Tools",
       "MitreReference": "APT3 removes indicators of compromise from tools",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1027.005 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1027.005 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 26,
@@ -282,7 +304,9 @@
       "TechniqueName": "System Binary Proxy Execution: Rundll32",
       "MitreReference": "APT3 tool can run DLLs",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2"
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumbers 1,2",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 35,
@@ -338,12 +362,29 @@
       "TechniqueName": "Valid Accounts: Domain Accounts",
       "MitreReference": "APT3 leveraged valid accounts after gaining credentials within victim domain",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1078.002 -TestNumbers 1"
+      "Command": "Invoke-AtomicTest T1078.002 -TestNumbers 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     }
   ],
   "coverage_stats": {
     "documented_techniques": 44,
     "atomic_tests_available": 41,
     "coverage_percentage": 93
+  },
+  "mitre_version": "19.1",
+  "mitre_released": "2026-04-28",
+  "v19_changes": {
+    "version": "19.1",
+    "released": "2026-04-28",
+    "tactic_split": "Defense Evasion split into Stealth (TA0005) + Defense Impairment (TA0112)",
+    "existing_tests_retagged": {
+      "stealth": 9,
+      "defense_impairment": 0
+    },
+    "v19_new_attributions_added": [],
+    "v19_attributed_without_atomic_coverage": [],
+    "aliases_refreshed": true,
+    "source": "https://attack.mitre.org/groups/G0022/"
   }
 }

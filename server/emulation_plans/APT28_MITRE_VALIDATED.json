@@ -6,7 +6,7 @@
   ],
   "mitre_group_id": "G0007",
   "operating_system": "windows",
-  "validation_notes": "VALIDATED against MITRE ATT&CK v18 (G0007). Only techniques with documented APT28 usage are included. Tests marked with 'atomic_validated: true' have confirmed Atomic Red Team coverage.",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v19.1 (G0007). Only techniques with documented APT28 usage are included. Tests marked with 'atomic_validated: true' have confirmed Atomic Red Team coverage. v19 update: Defense Evasion split into Stealth (TA0005) and Defense Impairment (TA0112); existing tests re-tagged via crosswalk, v19-new attributions appended where Atomic Red Team coverage exists.",
   "techniques_without_atomic_coverage": [
     "T1557.004 - Evil Twin (no atomic test)",
     "T1583.001 - Acquire Infrastructure: Domains (reconnaissance, no atomic)",
@@ -37,7 +37,9 @@
       "TechniqueName": "Access Token Manipulation: Token Impersonation/Theft",
       "MitreReference": "APT28 used CVE-2015-1701 to access SYSTEM token",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1134.001 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1134.001 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 2,
@@ -165,7 +167,9 @@
       "TechniqueName": "Deobfuscate/Decode Files or Information",
       "MitreReference": "APT28 macro uses certutil -decode for base64",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1140 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1140 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 18,
@@ -269,7 +273,9 @@
       "TechniqueName": "Hide Artifacts: Hidden Files and Directories",
       "MitreReference": "APT28 saved files with hidden file attributes",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1564.001 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1564.001 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 31,
@@ -277,7 +283,9 @@
       "TechniqueName": "Hide Artifacts: Hidden Window",
       "MitreReference": "APT28 used WindowStyle parameter to conceal PowerShell",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1564.003 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1564.003 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 32,
@@ -293,7 +301,9 @@
       "TechniqueName": "Indicator Removal: Clear Windows Event Logs",
       "MitreReference": "APT28 used wevtutil cl System/Security",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1070.001 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1070.001 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 34,
@@ -301,7 +311,9 @@
       "TechniqueName": "Indicator Removal: File Deletion",
       "MitreReference": "APT28 deleted files using CCleaner",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1070.004 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1070.004 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 35,
@@ -309,7 +321,9 @@
       "TechniqueName": "Indicator Removal: Timestomp",
       "MitreReference": "APT28 performed timestomping on victim files",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1070.006 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1070.006 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 36,
@@ -341,7 +355,9 @@
       "TechniqueName": "Masquerading",
       "MitreReference": "APT28 renamed WinRAR to avoid detection",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1036 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 40,
@@ -349,7 +365,9 @@
       "TechniqueName": "Masquerading: Match Legitimate Name or Location",
       "MitreReference": "APT28 changed extensions to make exfil benign",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036.005 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1036.005 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 41,
@@ -365,7 +383,9 @@
       "TechniqueName": "Obfuscated Files or Information: Encrypted/Encoded File",
       "MitreReference": "APT28 obfuscated payloads with base64, XOR, RC4",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1027 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1027 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 43,
@@ -480,7 +500,9 @@
       "TechniqueName": "Rootkit",
       "MitreReference": "APT28 used UEFI rootkit LoJax",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1014 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1014 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 57,
@@ -504,7 +526,9 @@
       "TechniqueName": "System Binary Proxy Execution: Rundll32",
       "MitreReference": "APT28 executed CHOPSTICK via rundll32",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1218.011 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 60,
@@ -520,7 +544,9 @@
       "TechniqueName": "Template Injection",
       "MitreReference": "APT28 used weaponized Word docs with remote template",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1221 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1221 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 62,
@@ -552,7 +578,9 @@
       "TechniqueName": "Valid Accounts",
       "MitreReference": "APT28 used stolen credentials via spearphishing",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1078 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1078 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 66,
@@ -561,6 +589,74 @@
       "MitreReference": "APT28 used Google Drive for C2",
       "atomic_validated": true,
       "Command": "Invoke-AtomicTest T1102.002 -TestNumber 1"
+    },
+    {
+      "TestNumber": 67,
+      "Technique": "T1685",
+      "TechniqueName": "Disable or Modify Tools",
+      "MitreReference": "APT28 cleared Windows Event Logs to remove traces (v19: T1685.005)",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1685 -TestNumbers 1",
+      "v19_new": true,
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment",
+      "attribution_source": "MITRE ATT&CK v19.1 (April 2026)"
+    },
+    {
+      "TestNumber": 68,
+      "Technique": "T1686",
+      "TechniqueName": "Disable or Modify System Firewall",
+      "MitreReference": "APT28 modified Windows Host Firewall rules to enable C2 (v19: T1686.003)",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1686 -TestNumbers 1",
+      "v19_new": true,
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment",
+      "attribution_source": "MITRE ATT&CK v19.1 (April 2026)"
     }
-  ]
+  ],
+  "mitre_version": "19.1",
+  "mitre_released": "2026-04-28",
+  "mitre_url": "https://attack.mitre.org/groups/G0007/",
+  "aliases": [
+    "APT28",
+    "Fancy Bear",
+    "Forest Blizzard",
+    "FROZENLAKE",
+    "GruesomeLarch",
+    "IRON TWILIGHT",
+    "SNAKEMACKEREL",
+    "Swallowtail",
+    "Group 74",
+    "Sednit",
+    "Sofacy",
+    "Pawn Storm",
+    "STRONTIUM",
+    "Tsar Team",
+    "Threat Group-4127",
+    "TG-4127"
+  ],
+  "v19_attributed_no_atomic_coverage": [
+    "T1211",
+    "T1684.001"
+  ],
+  "v19_changes": {
+    "version": "19.1",
+    "released": "2026-04-28",
+    "tactic_split": "Defense Evasion split into Stealth (TA0005) + Defense Impairment (TA0112)",
+    "existing_tests_retagged": {
+      "stealth": 14,
+      "defense_impairment": 0
+    },
+    "v19_new_attributions_added": [
+      "T1685",
+      "T1686"
+    ],
+    "v19_attributed_without_atomic_coverage": [
+      "T1211",
+      "T1684.001"
+    ],
+    "aliases_refreshed": true,
+    "source": "https://attack.mitre.org/groups/G0007/"
+  }
 }

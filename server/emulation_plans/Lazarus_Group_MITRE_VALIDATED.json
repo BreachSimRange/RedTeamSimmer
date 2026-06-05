@@ -6,7 +6,7 @@
   ],
   "mitre_group_id": "G0032",
   "operating_system": "windows",
-  "validation_notes": "VALIDATED against MITRE ATT&CK v18 (G0032). Only techniques with documented Lazarus Group usage are included.",
+  "validation_notes": "VALIDATED against MITRE ATT&CK v19.1 (G0032). Only techniques with documented Lazarus Group usage are included. v19 update: Defense Evasion split into Stealth (TA0005) and Defense Impairment (TA0112); existing tests re-tagged via crosswalk, v19-new attributions appended where Atomic Red Team coverage exists.",
   "techniques_without_atomic_coverage": [
     "T1583.001 - Acquire Infrastructure: Domains (reconnaissance)",
     "T1583.004 - Acquire Infrastructure: Server (reconnaissance)",
@@ -39,7 +39,9 @@
       "TechniqueName": "Access Token Manipulation: Create Process with Token",
       "MitreReference": "KiloAlfa obtains user tokens to execute with CreateProcessAsUserA",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1134.002 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1134.002 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 2,
@@ -191,7 +193,9 @@
       "TechniqueName": "Debugger Evasion",
       "MitreReference": "Lazarus tools used IsDebuggerPresent to detect debuggers",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1622 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1622 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 21,
@@ -207,7 +211,9 @@
       "TechniqueName": "Deobfuscate/Decode Files or Information",
       "MitreReference": "Lazarus used shellcode to decrypt and map DLLs at runtime",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1140 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1140 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 23,
@@ -287,7 +293,9 @@
       "TechniqueName": "Hide Artifacts: Hidden Files and Directories",
       "MitreReference": "Lazarus set file attributes to System and Hidden",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1564.001 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1564.001 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 33,
@@ -295,7 +303,9 @@
       "TechniqueName": "Hijack Execution Flow: DLL",
       "MitreReference": "Lazarus replaced win_fw.dll in IDA Pro with malicious DLL",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1574.001 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1574.001 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 34,
@@ -303,7 +313,9 @@
       "TechniqueName": "Hijack Execution Flow: KernelCallbackTable",
       "MitreReference": "Lazarus abused KernelCallbackTable to execute shellcode",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1574.013 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1574.013 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 35,
@@ -327,7 +339,9 @@
       "TechniqueName": "Indicator Removal: Clear Command History",
       "MitreReference": "Lazarus deleted log files on compromised router",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1070.003 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1070.003 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 38,
@@ -335,7 +349,9 @@
       "TechniqueName": "Indicator Removal: File Deletion",
       "MitreReference": "Lazarus uses suicide scripts to delete malware binaries",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1070.004 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1070.004 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 39,
@@ -343,7 +359,9 @@
       "TechniqueName": "Indicator Removal: Timestomp",
       "MitreReference": "Lazarus copies timestamps from calc.exe/mspaint.exe",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1070.006 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1070.006 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 40,
@@ -351,7 +369,9 @@
       "TechniqueName": "Indirect Command Execution",
       "MitreReference": "Lazarus used forfiles.exe to execute .htm files",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1202 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1202 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 41,
@@ -383,7 +403,9 @@
       "TechniqueName": "Masquerading: Rename Legitimate Utilities",
       "MitreReference": "Lazarus renamed wscript.exe and mshta.exe",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036.003 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1036.003 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 45,
@@ -391,7 +413,9 @@
       "TechniqueName": "Masquerading: Masquerade Task or Service",
       "MitreReference": "Lazarus used scheduled task SRCheck to mask .dll execution",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036.004 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1036.004 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 46,
@@ -399,7 +423,9 @@
       "TechniqueName": "Masquerading: Match Legitimate Name or Location",
       "MitreReference": "Lazarus renamed malware to disguise as Microsoft narrator",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036.005 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1036.005 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 47,
@@ -407,7 +433,9 @@
       "TechniqueName": "Masquerading: Masquerade File Type",
       "MitreReference": "Lazarus disguised malicious templates as JPEG files",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1036.008 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1036.008 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 48,
@@ -442,7 +470,9 @@
       "TechniqueName": "Obfuscated Files or Information: Software Packing",
       "MitreReference": "Lazarus packed .db files with Themida",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1027.002 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1027.002 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 52,
@@ -450,7 +480,9 @@
       "TechniqueName": "Obfuscated Files or Information: Encrypted/Encoded File",
       "MitreReference": "Lazarus uses AES, Caracachs, RC4, XOR, Base64 encryption",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1027 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1027 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 53,
@@ -482,7 +514,9 @@
       "TechniqueName": "Pre-OS Boot: Bootkit",
       "MitreReference": "WhiskeyAlfa-Three modifies sector 0 of MBR",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1542.003 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1542.003 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 57,
@@ -498,7 +532,9 @@
       "TechniqueName": "Process Injection: Dynamic-link Library Injection",
       "MitreReference": "Lazarus performs reflective DLL injection",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1055.001 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1055.001 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 59,
@@ -530,7 +566,9 @@
       "TechniqueName": "Reflective Code Loading",
       "MitreReference": "Lazarus changes memory protection and overwrites DLL function code",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1620 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1620 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 63,
@@ -578,7 +616,9 @@
       "TechniqueName": "Subvert Trust Controls: Code Signing",
       "MitreReference": "Lazarus digitally signed malware to evade detection",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1553.002 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1553.002 -TestNumber 1",
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment"
     },
     {
       "TestNumber": 69,
@@ -586,7 +626,9 @@
       "TechniqueName": "System Binary Proxy Execution: Mshta",
       "MitreReference": "Lazarus used mshta.exe to execute HTML pages",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1218.005 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1218.005 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 70,
@@ -594,7 +636,9 @@
       "TechniqueName": "System Binary Proxy Execution: Regsvr32",
       "MitreReference": "Lazarus used regsvr32 to execute malware",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1218.010 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1218.010 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 71,
@@ -602,7 +646,9 @@
       "TechniqueName": "System Binary Proxy Execution: Rundll32",
       "MitreReference": "Lazarus used rundll32 to execute payloads",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1218.011 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1218.011 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 72,
@@ -666,7 +712,9 @@
       "TechniqueName": "Template Injection",
       "MitreReference": "Lazarus used DOCX to retrieve malicious DOTM template",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1221 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1221 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 80,
@@ -690,7 +738,9 @@
       "TechniqueName": "Valid Accounts",
       "MitreReference": "Lazarus used admin credentials for restricted segments",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1078 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1078 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 83,
@@ -698,7 +748,9 @@
       "TechniqueName": "Virtualization/Sandbox Evasion: System Checks",
       "MitreReference": "Lazarus tools detect sandboxes and VMware services",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1497.001 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1497.001 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 84,
@@ -706,7 +758,9 @@
       "TechniqueName": "Virtualization/Sandbox Evasion: Time Based Checks",
       "MitreReference": "Lazarus used GetTickCount and GetSystemTimeAsFileTime",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1497.003 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1497.003 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
     },
     {
       "TestNumber": 85,
@@ -730,7 +784,66 @@
       "TechniqueName": "XSL Script Processing",
       "MitreReference": "Lazarus used remote XSL script to download Base64 DLL",
       "atomic_validated": true,
-      "Command": "Invoke-AtomicTest T1220 -TestNumber 1"
+      "Command": "Invoke-AtomicTest T1220 -TestNumber 1",
+      "v19_tactic_short": "stealth",
+      "v19_tactic": "Stealth"
+    },
+    {
+      "TestNumber": 88,
+      "Technique": "T1685",
+      "TechniqueName": "Disable or Modify Tools",
+      "MitreReference": "Lazarus malware disables security services prior to second-stage execution",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1685 -TestNumbers 1",
+      "v19_new": true,
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment",
+      "attribution_source": "MITRE ATT&CK v19.1 (April 2026)"
+    },
+    {
+      "TestNumber": 89,
+      "Technique": "T1686",
+      "TechniqueName": "Disable or Modify System Firewall",
+      "MitreReference": "Lazarus configured Windows Firewall to permit inbound C2 sockets",
+      "atomic_validated": true,
+      "Command": "Invoke-AtomicTest T1686 -TestNumbers 1",
+      "v19_new": true,
+      "v19_tactic_short": "defense-impairment",
+      "v19_tactic": "Defense Impairment",
+      "attribution_source": "MITRE ATT&CK v19.1 (April 2026)"
     }
-  ]
+  ],
+  "mitre_version": "19.1",
+  "mitre_released": "2026-04-28",
+  "mitre_url": "https://attack.mitre.org/groups/G0032/",
+  "aliases": [
+    "Lazarus Group",
+    "Labyrinth Chollima",
+    "HIDDEN COBRA",
+    "Guardians of Peace",
+    "ZINC",
+    "NICKEL ACADEMY",
+    "Diamond Sleet"
+  ],
+  "v19_attributed_no_atomic_coverage": [
+    "T1684"
+  ],
+  "v19_changes": {
+    "version": "19.1",
+    "released": "2026-04-28",
+    "tactic_split": "Defense Evasion split into Stealth (TA0005) + Defense Impairment (TA0112)",
+    "existing_tests_retagged": {
+      "stealth": 27,
+      "defense_impairment": 1
+    },
+    "v19_new_attributions_added": [
+      "T1685",
+      "T1686"
+    ],
+    "v19_attributed_without_atomic_coverage": [
+      "T1684"
+    ],
+    "aliases_refreshed": true,
+    "source": "https://attack.mitre.org/groups/G0032/"
+  }
 }

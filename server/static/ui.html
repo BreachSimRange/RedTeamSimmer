@@ -542,7 +542,7 @@
             <span class="px-4 py-2 bg-purple-100 text-purple-800 rounded-full font-semibold text-sm">Tailwind CSS</span>
             <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full font-semibold text-sm">D3.js</span>
             <span class="px-4 py-2 bg-red-100 text-red-800 rounded-full font-semibold text-sm">Atomic Red Team</span>
-            <span class="px-4 py-2 bg-indigo-100 text-indigo-800 rounded-full font-semibold text-sm">MITRE ATT&CK</span>
+            <span class="px-4 py-2 bg-indigo-100 text-indigo-800 rounded-full font-semibold text-sm">MITRE ATT&CK <span id="mitre-version-badge" class="ml-1 text-xs text-indigo-600">v19 &middot; Apr 2026</span></span>
           </div>
         </div>
 
@@ -1795,10 +1795,37 @@ function activateAgentSection() {
 // ============================================================================
 // TECHNIQUES
 // ============================================================================
+async function refreshMitreVersionBadge() {
+  try {
+    const r = await fetch('/api/mitre/version');
+    if (!r.ok) return;
+    const v = await r.json();
+    const el = document.getElementById('mitre-version-badge');
+    if (el && v.version) {
+      const released = v.released ? ` · ${v.released.slice(0, 7)}` : '';
+      el.textContent = `v${v.version}${released}`;
+    }
+  } catch (e) { /* keep static fallback */ }
+}
+
+async function refreshMitreTacticOrder() {
+  try {
+    const r = await fetch('/api/mitre/tactics');
+    if (!r.ok) return;
+    const j = await r.json();
+    if (j.tactics && j.tactics.length) {
+      mitreTacticOrder = j.tactics.map(t => t.name);
+    }
+  } catch (e) { /* keep static fallback */ }
+}
+
 async function fetchTactics() {
   const container = document.getElementById('tactics-container');
   if (!container) return;
-  
+
+  await refreshMitreVersionBadge();
+  await refreshMitreTacticOrder();
+
   try {
     const resp = await fetch('/api/techniques');
     const data = await resp.json();
@@ -1832,30 +1859,22 @@ console.log('=== END DEBUG ===');
     
     container.innerHTML = '';
 
-    const mitreTacticOrder = [
-      'Reconnaissance', 'Resource Development', 'Initial Access', 'Execution',
-      'Persistence', 'Privilege Escalation', 'Defense Evasion', 'Credential Access',
-      'Discovery', 'Lateral Movement', 'Collection', 'Command and Control',
-      'Exfiltration', 'Impact'
+    // MITRE ATT&CK v19 (April 2026): Defense Evasion was split into Stealth (TA0005)
+    // and Defense Impairment (TA0112). Reconnaissance and Resource Development are
+    // intentionally omitted from the UI because no Windows atomics target them.
+    // Server provides canonical order via /api/mitre/tactics; this is a fallback
+    // and gets overwritten at render time if the server response succeeds.
+    let mitreTacticOrder = [
+      'Initial Access', 'Execution', 'Persistence', 'Privilege Escalation',
+      'Stealth', 'Defense Impairment', 'Credential Access', 'Discovery',
+      'Lateral Movement', 'Collection', 'Command and Control', 'Exfiltration', 'Impact'
     ];
 
-    const tacticColors = {
-      'Reconnaissance': 'tactic-reconnaissance', 'Resource Development': 'tactic-resource-development',
-      'Initial Access': 'tactic-initial-access', 'Execution': 'tactic-execution',
-      'Persistence': 'tactic-persistence', 'Privilege Escalation': 'tactic-privilege-escalation',
-      'Defense Evasion': 'tactic-defense-evasion', 'Credential Access': 'tactic-credential-access',
-      'Discovery': 'tactic-discovery', 'Lateral Movement': 'tactic-lateral-movement',
-      'Collection': 'tactic-collection', 'Exfiltration': 'tactic-exfiltration',
-      'Command and Control': 'tactic-command-control', 'Impact': 'tactic-impact'
-    };
-
-    const tacticIcons = {
-      'Reconnaissance': '🔭', 'Resource Development': '🏗️', 'Initial Access': '🎯',
-      'Execution': '⚡', 'Persistence': '🔒', 'Privilege Escalation': '⬆️',
-      'Defense Evasion': '🛡️', 'Credential Access': '🔑', 'Discovery': '🔍',
-      'Lateral Movement': '↔️', 'Collection': '📦', 'Exfiltration': '📤',
-      'Command and Control': '📡', 'Impact': '💥'
-    };
+    // Tactic styling comes from module-scope TACTIC_COLOR_CLASS / TACTIC_ICON
+    // so the same maps are shared with renderEmulationTactics() and stay in
+    // one place. (Refactored away from a per-render duplicate.)
+    const tacticColors = TACTIC_COLOR_CLASS;
+    const tacticIcons = TACTIC_ICON;
 
     // Build tactic lookup map
     const tacticDataMap = {};
@@ -2609,53 +2628,97 @@ function loadModuleFiles() {
 }
 
 // ============================================================================
-// MITRE ATT&CK HEATMAP
+// MITRE ATT&CK DATA — hydrated from the server (no hard-coded technique IDs).
+// Sources:
+//   GET /api/mitre/tactics?all=1            -> ordered v19 tactic list
+//   GET /api/mitre/technique_tactic_map     -> {techId: {tactic_id, tactic_name, tactic_short}}
 // ============================================================================
-const MITRE_TACTICS = [
-  { id: 'TA0043', name: 'Reconnaissance', shortName: 'Recon' },
-  { id: 'TA0042', name: 'Resource Development', shortName: 'Resource Dev' },
-  { id: 'TA0001', name: 'Initial Access', shortName: 'Initial Access' },
-  { id: 'TA0002', name: 'Execution', shortName: 'Execution' },
-  { id: 'TA0003', name: 'Persistence', shortName: 'Persistence' },
-  { id: 'TA0004', name: 'Privilege Escalation', shortName: 'Priv Esc' },
-  { id: 'TA0005', name: 'Defense Evasion', shortName: 'Def Evasion' },
-  { id: 'TA0006', name: 'Credential Access', shortName: 'Cred Access' },
-  { id: 'TA0007', name: 'Discovery', shortName: 'Discovery' },
-  { id: 'TA0008', name: 'Lateral Movement', shortName: 'Lateral Mov' },
-  { id: 'TA0009', name: 'Collection', shortName: 'Collection' },
-  { id: 'TA0011', name: 'Command and Control', shortName: 'C2' },
-  { id: 'TA0010', name: 'Exfiltration', shortName: 'Exfil' },
-  { id: 'TA0040', name: 'Impact', shortName: 'Impact' }
-];
-
-const TECHNIQUE_TO_TACTIC = {
-  'T1595': 'TA0043', 'T1592': 'TA0043', 'T1589': 'TA0043', 'T1590': 'TA0043', 'T1591': 'TA0043', 'T1598': 'TA0043', 'T1597': 'TA0043', 'T1596': 'TA0043', 'T1593': 'TA0043', 'T1594': 'TA0043',
-  'T1650': 'TA0042', 'T1583': 'TA0042', 'T1586': 'TA0042', 'T1584': 'TA0042', 'T1587': 'TA0042', 'T1585': 'TA0042', 'T1588': 'TA0042', 'T1608': 'TA0042',
-  'T1189': 'TA0001', 'T1190': 'TA0001', 'T1133': 'TA0001', 'T1200': 'TA0001', 'T1566': 'TA0001', 'T1091': 'TA0001', 'T1195': 'TA0001', 'T1199': 'TA0001', 'T1078': 'TA0001', 'T1659': 'TA0001',
-  'T1651': 'TA0002', 'T1059': 'TA0002', 'T1609': 'TA0002', 'T1610': 'TA0002', 'T1675': 'TA0002', 'T1203': 'TA0002', 'T1559': 'TA0002', 'T1106': 'TA0002', 'T1053': 'TA0002', 'T1129': 'TA0002', 'T1072': 'TA0002', 'T1569': 'TA0002', 'T1204': 'TA0002', 'T1047': 'TA0002',
-  'T1098': 'TA0003', 'T1197': 'TA0003', 'T1547': 'TA0003', 'T1037': 'TA0003', 'T1176': 'TA0003', 'T1554': 'TA0003', 'T1136': 'TA0003', 'T1543': 'TA0003', 'T1546': 'TA0003', 'T1574': 'TA0003', 'T1525': 'TA0003', 'T1556': 'TA0003', 'T1137': 'TA0003', 'T1542': 'TA0003', 'T1505': 'TA0003', 'T1205': 'TA0003', 'T1671': 'TA0003',
-  'T1548': 'TA0004', 'T1134': 'TA0004', 'T1068': 'TA0004', 'T1484': 'TA0004', 'T1611': 'TA0004', 'T1055': 'TA0004',
-  'T1612': 'TA0005', 'T1622': 'TA0005', 'T1678': 'TA0005', 'T1140': 'TA0005', 'T1006': 'TA0005', 'T1480': 'TA0005', 'T1211': 'TA0005', 'T1222': 'TA0005', 'T1564': 'TA0005', 'T1562': 'TA0005', 'T1070': 'TA0005', 'T1202': 'TA0005', 'T1036': 'TA0005', 'T1578': 'TA0005', 'T1112': 'TA0005', 'T1601': 'TA0005', 'T1599': 'TA0005', 'T1027': 'TA0005', 'T1647': 'TA0005', 'T1620': 'TA0005', 'T1207': 'TA0005', 'T1014': 'TA0005', 'T1218': 'TA0005', 'T1216': 'TA0005', 'T1221': 'TA0005', 'T1127': 'TA0005', 'T1535': 'TA0005', 'T1550': 'TA0005', 'T1497': 'TA0005', 'T1600': 'TA0005', 'T1220': 'TA0005', 'T1553': 'TA0005', 'T1666': 'TA0005', 'T1668': 'TA0005',
-  'T1557': 'TA0006', 'T1110': 'TA0006', 'T1555': 'TA0006', 'T1212': 'TA0006', 'T1187': 'TA0006', 'T1606': 'TA0006', 'T1056': 'TA0006', 'T1111': 'TA0006', 'T1621': 'TA0006', 'T1040': 'TA0006', 'T1003': 'TA0006', 'T1528': 'TA0006', 'T1558': 'TA0006', 'T1539': 'TA0006', 'T1552': 'TA0006', 'T1649': 'TA0006',
-  'T1087': 'TA0007', 'T1010': 'TA0007', 'T1217': 'TA0007', 'T1580': 'TA0007', 'T1538': 'TA0007', 'T1526': 'TA0007', 'T1619': 'TA0007', 'T1613': 'TA0007', 'T1652': 'TA0007', 'T1482': 'TA0007', 'T1083': 'TA0007', 'T1615': 'TA0007', 'T1654': 'TA0007', 'T1046': 'TA0007', 'T1135': 'TA0007', 'T1201': 'TA0007', 'T1120': 'TA0007', 'T1069': 'TA0007', 'T1057': 'TA0007', 'T1012': 'TA0007', 'T1018': 'TA0007', 'T1518': 'TA0007', 'T1082': 'TA0007', 'T1614': 'TA0007', 'T1016': 'TA0007', 'T1049': 'TA0007', 'T1033': 'TA0007', 'T1007': 'TA0007', 'T1124': 'TA0007',
-  'T1210': 'TA0008', 'T1534': 'TA0008', 'T1570': 'TA0008', 'T1563': 'TA0008', 'T1021': 'TA0008', 'T1080': 'TA0008',
-  'T1560': 'TA0009', 'T1123': 'TA0009', 'T1119': 'TA0009', 'T1185': 'TA0009', 'T1115': 'TA0009', 'T1530': 'TA0009', 'T1602': 'TA0009', 'T1213': 'TA0009', 'T1005': 'TA0009', 'T1039': 'TA0009', 'T1025': 'TA0009', 'T1074': 'TA0009', 'T1114': 'TA0009', 'T1113': 'TA0009', 'T1125': 'TA0009',
-  'T1071': 'TA0011', 'T1092': 'TA0011', 'T1132': 'TA0011', 'T1001': 'TA0011', 'T1568': 'TA0011', 'T1573': 'TA0011', 'T1008': 'TA0011', 'T1105': 'TA0011', 'T1104': 'TA0011', 'T1095': 'TA0011', 'T1571': 'TA0011', 'T1572': 'TA0011', 'T1090': 'TA0011', 'T1219': 'TA0011', 'T1102': 'TA0011',
-  'T1020': 'TA0010', 'T1030': 'TA0010', 'T1048': 'TA0010', 'T1041': 'TA0010', 'T1011': 'TA0010', 'T1052': 'TA0010', 'T1567': 'TA0010', 'T1029': 'TA0010', 'T1537': 'TA0010',
-  'T1531': 'TA0040', 'T1485': 'TA0040', 'T1486': 'TA0040', 'T1565': 'TA0040', 'T1491': 'TA0040', 'T1561': 'TA0040', 'T1499': 'TA0040', 'T1667': 'TA0040', 'T1672': 'TA0040', 'T1495': 'TA0040', 'T1490': 'TA0040', 'T1498': 'TA0040', 'T1496': 'TA0040', 'T1489': 'TA0040', 'T1529': 'TA0040'
+const TACTIC_COLOR_CLASS = {
+  'Reconnaissance': 'tactic-reconnaissance', 'Resource Development': 'tactic-resource-development',
+  'Initial Access': 'tactic-initial-access', 'Execution': 'tactic-execution',
+  'Persistence': 'tactic-persistence', 'Privilege Escalation': 'tactic-privilege-escalation',
+  'Stealth': 'tactic-stealth', 'Defense Impairment': 'tactic-defense-impairment',
+  'Credential Access': 'tactic-credential-access', 'Discovery': 'tactic-discovery',
+  'Lateral Movement': 'tactic-lateral-movement', 'Collection': 'tactic-collection',
+  'Command and Control': 'tactic-command-control', 'Exfiltration': 'tactic-exfiltration',
+  'Impact': 'tactic-impact'
 };
+const TACTIC_ICON = {
+  'Reconnaissance': '🔭', 'Resource Development': '🏗️', 'Initial Access': '🎯',
+  'Execution': '⚡', 'Persistence': '🔒', 'Privilege Escalation': '⬆️',
+  'Stealth': '🥷', 'Defense Impairment': '🧯',
+  'Credential Access': '🔑', 'Discovery': '🔍',
+  'Lateral Movement': '↔️', 'Collection': '📦', 'Exfiltration': '📤',
+  'Command and Control': '📡', 'Impact': '💥'
+};
+
+const mitreCache = {
+  tactics: [],         // [{id, name, short}, ...] in canonical v19 order (all 15 incl. hidden)
+  techMap: {},         // {techId: {tactic_id, tactic_name, tactic_short}}
+  shortName: {},       // {tacticId: shortName for heatmap chip}
+  ready: false,
+  _promise: null
+};
+
+function shortNameFor(tacticName) {
+  const overrides = {
+    'Reconnaissance': 'Recon', 'Resource Development': 'Resource Dev',
+    'Privilege Escalation': 'Priv Esc', 'Defense Impairment': 'Def Impair',
+    'Credential Access': 'Cred Access', 'Lateral Movement': 'Lateral Mov',
+    'Command and Control': 'C2', 'Exfiltration': 'Exfil'
+  };
+  return overrides[tacticName] || tacticName;
+}
+
+function ensureMitreCacheReady() {
+  if (mitreCache.ready) return Promise.resolve(mitreCache);
+  if (mitreCache._promise) return mitreCache._promise;
+  mitreCache._promise = (async () => {
+    try {
+      const [tacticsResp, mapResp] = await Promise.all([
+        fetch('/api/mitre/tactics?all=1'),
+        fetch('/api/mitre/technique_tactic_map')
+      ]);
+      if (tacticsResp.ok) {
+        const t = await tacticsResp.json();
+        mitreCache.tactics = t.tactics || [];
+        mitreCache.tactics.forEach(tac => {
+          mitreCache.shortName[tac.id] = shortNameFor(tac.name);
+        });
+      }
+      if (mapResp.ok) {
+        const m = await mapResp.json();
+        mitreCache.techMap = m.map || {};
+      }
+      mitreCache.ready = true;
+    } catch (e) {
+      console.warn('MITRE cache hydration failed:', e);
+    }
+    return mitreCache;
+  })();
+  return mitreCache._promise;
+}
+
+// Kick off hydration as early as possible so synchronous render functions
+// downstream see a populated cache.
+ensureMitreCacheReady();
 
 function getTacticForTechnique(techId) {
   if (!techId) return 'TA0002';
   const id = techId.toUpperCase().trim();
-  if (TECHNIQUE_TO_TACTIC[id]) return TECHNIQUE_TO_TACTIC[id];
-  const baseTechnique = id.split('.')[0];
-  if (TECHNIQUE_TO_TACTIC[baseTechnique]) return TECHNIQUE_TO_TACTIC[baseTechnique];
-  return 'TA0002';
+  const entry = mitreCache.techMap[id] || mitreCache.techMap[id.split('.')[0]];
+  return entry ? entry.tactic_id : 'TA0002';
+}
+
+function getTacticNameForTechnique(techId) {
+  if (!techId) return null;
+  const id = techId.toUpperCase().trim();
+  const entry = mitreCache.techMap[id] || mitreCache.techMap[id.split('.')[0]];
+  return entry ? entry.tactic_name : null;
 }
 
 function getTacticName(tacticId) {
-  const tactic = MITRE_TACTICS.find(t => t.id === tacticId);
+  const tactic = mitreCache.tactics.find(t => t.id === tacticId);
   return tactic ? tactic.name : 'Unknown';
 }
 
@@ -2732,7 +2795,7 @@ function drawExecutionFlowGraph(techniques, testResults) {
   });
 
   const tacticGroups = {};
-  MITRE_TACTICS.forEach(t => tacticGroups[t.id] = []);
+  mitreCache.tactics.forEach(t => tacticGroups[t.id] = []);
   Object.values(techniqueStatus).forEach(info => {
     const tacticId = getTacticForTechnique(info.id);
     if (tacticGroups[tacticId]) tacticGroups[tacticId].push(info);
@@ -2752,12 +2815,13 @@ function drawExecutionFlowGraph(techniques, testResults) {
   container.appendChild(heatmapDiv);
   const matrix = heatmapDiv.querySelector('.mitre-matrix');
 
-  MITRE_TACTICS.forEach(tactic => {
-    const techs = tacticGroups[tactic.id];
+  mitreCache.tactics.forEach(tactic => {
+    const techs = tacticGroups[tactic.id] || [];
     const hasTechniques = techs.length > 0;
     const tacticDiv = document.createElement('div');
     tacticDiv.className = `mitre-tactic ${hasTechniques ? 'has-techniques' : 'empty'}`;
-    tacticDiv.innerHTML = `<div class="mitre-tactic-header" title="${tactic.name}">${tactic.shortName}${hasTechniques ? `<span class="tech-count">${techs.length}</span>` : ''}</div><div class="mitre-techniques"></div>`;
+    const shortLabel = mitreCache.shortName[tactic.id] || tactic.name;
+    tacticDiv.innerHTML = `<div class="mitre-tactic-header" title="${tactic.name}">${shortLabel}${hasTechniques ? `<span class="tech-count">${techs.length}</span>` : ''}</div><div class="mitre-techniques"></div>`;
     const techContainer = tacticDiv.querySelector('.mitre-techniques');
     
     if (!hasTechniques) {
@@ -3309,25 +3373,28 @@ function renderEmulationPlanDetail(plan) {
 function renderEmulationTactics(tests) {
   const container = document.getElementById('emulation-tactics-container');
   if (!container) return;
-  
-  const mitreTacticOrder = ['Reconnaissance', 'Resource Development', 'Initial Access', 'Execution', 'Persistence', 'Privilege Escalation', 'Defense Evasion', 'Credential Access', 'Discovery', 'Lateral Movement', 'Collection', 'Command and Control', 'Exfiltration', 'Impact'];
-  const techToTactic = {'T1595':'Reconnaissance','T1592':'Reconnaissance','T1589':'Reconnaissance','T1590':'Reconnaissance','T1591':'Reconnaissance','T1598':'Reconnaissance','T1597':'Reconnaissance','T1596':'Reconnaissance','T1593':'Reconnaissance','T1594':'Reconnaissance','T1583':'Resource Development','T1586':'Resource Development','T1584':'Resource Development','T1587':'Resource Development','T1585':'Resource Development','T1588':'Resource Development','T1608':'Resource Development','T1189':'Initial Access','T1190':'Initial Access','T1133':'Initial Access','T1200':'Initial Access','T1566':'Initial Access','T1091':'Initial Access','T1195':'Initial Access','T1199':'Initial Access','T1078':'Initial Access','T1059':'Execution','T1203':'Execution','T1559':'Execution','T1106':'Execution','T1053':'Execution','T1129':'Execution','T1072':'Execution','T1569':'Execution','T1204':'Execution','T1047':'Execution','T1098':'Persistence','T1197':'Persistence','T1547':'Persistence','T1037':'Persistence','T1176':'Persistence','T1554':'Persistence','T1136':'Persistence','T1543':'Persistence','T1546':'Persistence','T1574':'Persistence','T1525':'Persistence','T1556':'Persistence','T1137':'Persistence','T1542':'Persistence','T1505':'Persistence','T1205':'Persistence','T1548':'Privilege Escalation','T1134':'Privilege Escalation','T1068':'Privilege Escalation','T1484':'Privilege Escalation','T1611':'Privilege Escalation','T1055':'Privilege Escalation','T1140':'Defense Evasion','T1006':'Defense Evasion','T1480':'Defense Evasion','T1211':'Defense Evasion','T1222':'Defense Evasion','T1564':'Defense Evasion','T1562':'Defense Evasion','T1070':'Defense Evasion','T1202':'Defense Evasion','T1036':'Defense Evasion','T1578':'Defense Evasion','T1112':'Defense Evasion','T1027':'Defense Evasion','T1207':'Defense Evasion','T1014':'Defense Evasion','T1218':'Defense Evasion','T1216':'Defense Evasion','T1221':'Defense Evasion','T1127':'Defense Evasion','T1535':'Defense Evasion','T1550':'Defense Evasion','T1497':'Defense Evasion','T1220':'Defense Evasion','T1553':'Defense Evasion','T1557':'Credential Access','T1110':'Credential Access','T1555':'Credential Access','T1212':'Credential Access','T1187':'Credential Access','T1606':'Credential Access','T1056':'Credential Access','T1111':'Credential Access','T1621':'Credential Access','T1040':'Credential Access','T1003':'Credential Access','T1528':'Credential Access','T1558':'Credential Access','T1539':'Credential Access','T1552':'Credential Access','T1087':'Discovery','T1010':'Discovery','T1217':'Discovery','T1580':'Discovery','T1538':'Discovery','T1526':'Discovery','T1619':'Discovery','T1613':'Discovery','T1652':'Discovery','T1482':'Discovery','T1083':'Discovery','T1615':'Discovery','T1654':'Discovery','T1046':'Discovery','T1135':'Discovery','T1201':'Discovery','T1120':'Discovery','T1069':'Discovery','T1057':'Discovery','T1012':'Discovery','T1018':'Discovery','T1518':'Discovery','T1082':'Discovery','T1614':'Discovery','T1016':'Discovery','T1049':'Discovery','T1033':'Discovery','T1007':'Discovery','T1124':'Discovery','T1210':'Lateral Movement','T1534':'Lateral Movement','T1570':'Lateral Movement','T1563':'Lateral Movement','T1021':'Lateral Movement','T1080':'Lateral Movement','T1560':'Collection','T1123':'Collection','T1119':'Collection','T1185':'Collection','T1115':'Collection','T1530':'Collection','T1602':'Collection','T1213':'Collection','T1005':'Collection','T1039':'Collection','T1025':'Collection','T1074':'Collection','T1114':'Collection','T1113':'Collection','T1125':'Collection','T1071':'Command and Control','T1092':'Command and Control','T1132':'Command and Control','T1001':'Command and Control','T1568':'Command and Control','T1573':'Command and Control','T1008':'Command and Control','T1105':'Command and Control','T1104':'Command and Control','T1095':'Command and Control','T1571':'Command and Control','T1572':'Command and Control','T1090':'Command and Control','T1219':'Command and Control','T1102':'Command and Control','T1020':'Exfiltration','T1030':'Exfiltration','T1048':'Exfiltration','T1041':'Exfiltration','T1011':'Exfiltration','T1052':'Exfiltration','T1567':'Exfiltration','T1029':'Exfiltration','T1537':'Exfiltration','T1531':'Impact','T1485':'Impact','T1486':'Impact','T1565':'Impact','T1491':'Impact','T1561':'Impact','T1499':'Impact','T1495':'Impact','T1490':'Impact','T1498':'Impact','T1496':'Impact','T1489':'Impact','T1529':'Impact'};
-  const tacticColors = {'Reconnaissance':'tactic-reconnaissance','Resource Development':'tactic-resource-development','Initial Access':'tactic-initial-access','Execution':'tactic-execution','Persistence':'tactic-persistence','Privilege Escalation':'tactic-privilege-escalation','Defense Evasion':'tactic-defense-evasion','Credential Access':'tactic-credential-access','Discovery':'tactic-discovery','Lateral Movement':'tactic-lateral-movement','Collection':'tactic-collection','Exfiltration':'tactic-exfiltration','Command and Control':'tactic-command-control','Impact':'tactic-impact'};
-  const tacticIcons = {'Reconnaissance':'🔭','Resource Development':'🏗️','Initial Access':'🎯','Execution':'⚡','Persistence':'🔒','Privilege Escalation':'⬆️','Defense Evasion':'🛡️','Credential Access':'🔑','Discovery':'🔍','Lateral Movement':'↔️','Collection':'📦','Exfiltration':'📤','Command and Control':'📡','Impact':'💥'};
-  
+
+  // Tactic ordering + technique→tactic mapping are hydrated from the server
+  // via /api/mitre/tactics and /api/mitre/technique_tactic_map (no hard-coded
+  // tactic lists in the UI). If the cache hasn't populated yet, kick it off
+  // and re-render once it's ready.
+  if (!mitreCache.ready) {
+    ensureMitreCacheReady().then(() => renderEmulationTactics(tests));
+  }
+  const mitreTacticOrder = mitreCache.tactics.map(t => t.name);
+
   const tacticGroups = {};
   tests.forEach((test, idx) => {
-    const techId = test.Technique || '';
-    const baseId = techId.split('.')[0];
-    const tactic = techToTactic[baseId] || 'Unknown';
+    const techId = (test.Technique || '').toUpperCase();
+    const tactic = getTacticNameForTechnique(techId) || 'Unknown';
     if (!tacticGroups[tactic]) tacticGroups[tactic] = { techniques: {} };
     if (!tacticGroups[tactic].techniques[techId]) tacticGroups[tactic].techniques[techId] = { name: test.TechniqueName || techId, tests: [] };
     tacticGroups[tactic].techniques[techId].tests.push({ ...test, originalIndex: idx });
   });
-  
+
   container.innerHTML = '';
   let tacticIdx = 0;
-  
+
   mitreTacticOrder.forEach(tactic => {
     const tacticData = tacticGroups[tactic];
     if (!tacticData) return;
@@ -3337,8 +3404,8 @@ function renderEmulationTactics(tests) {
     if (testCount === 0) return;
     
     const currentTacIdx = tacticIdx++;
-    const colorClass = tacticColors[tactic] || 'tactic-default';
-    const icon = tacticIcons[tactic] || '📋';
+    const colorClass = TACTIC_COLOR_CLASS[tactic] || 'tactic-default';
+    const icon = TACTIC_ICON[tactic] || '📋';
     
     const accordion = document.createElement('div');
     accordion.className = 'tactic-accordion';

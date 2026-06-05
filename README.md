@@ -24,7 +24,7 @@ A Web Based Adversary Emulation Platform and Atomic Red Team Test Orchestration.
 
 RedTeamSimmer bridges the gap between complex adversary emulation tooling and practical usability - giving you the power of Atomic Red Team with a clean, intuitive interface.
 
-It also ships with adversary emulation plans modelled using Atomic Red Team for real threat actors including APT28, APT29, APT3, APT41, FIN7, Lazarus Group, and Wizard Spider for multi-stage attack simulations. Detection rule mappings for Sigma, Splunk, and Elastic Security help blue teams identify coverage gaps and validate alerting. A full operations history provides a complete audit trail for compliance. Designed for red teamers, blue teamers, purple team exercises, EDR/AV testing, and training.
+It also ships with adversary emulation plans modelled using Atomic Red Team for real threat actors including APT28, APT3, APT41, FIN7, Lazarus Group, and Wizard Spider for multi-stage attack simulations. Detection rule mappings for Sigma, Splunk, and Elastic Security help blue teams identify coverage gaps and validate alerting. A full operations history provides a complete audit trail for compliance. Designed for red teamers, blue teamers, purple team exercises, EDR/AV testing, and training.
 
 RedTeamSimmer is created and maintained by the [BreachSimRange](https://breachsimrange.io) team. The original RedTeamSimmer was created by @abhijithbr.
 
@@ -36,7 +36,7 @@ RedTeamSimmer is created and maintained by the [BreachSimRange](https://breachsi
 
 RedTeamSimmer organizes all atomic tests by MITRE ATT&CK tactics, making it easy to navigate and select techniques for execution.
 
-- **Tactic-Based Navigation** - Tests are grouped under their respective tactics (Initial Access, Execution, Persistence, Privilege Escalation, Defense Evasion, Credential Access, Discovery, Lateral Movement, Collection, Command and Control, Exfiltration, Impact)
+- **Tactic-Based Navigation** - Tests are grouped under their respective MITRE ATT&CK v19 tactics (Initial Access, Execution, Persistence, Privilege Escalation, Stealth, Defense Impairment, Credential Access, Discovery, Lateral Movement, Collection, Command and Control, Exfiltration, Impact). v19 (April 2026) split the legacy Defense Evasion tactic into Stealth (TA0005) and Defense Impairment (TA0112) — see [docs/UPDATES.md](docs/UPDATES.md) for the full migration notes.
 - **Technique Details** - View full technique descriptions, supported platforms, executor types, and elevation requirements before execution
 - **Sub-Technique Support** - Properly handles sub-techniques (e.g., T1059.001 PowerShell under T1059 Command and Scripting Interpreter)
 - **ATT&CK Links** - Direct links to MITRE ATT&CK documentation for each technique
@@ -71,7 +71,6 @@ RedTeamSimmer ships with pre-built emulation plans modelled on real-world APT tr
 | Threat Actor | Origin | Focus |
 |--------------|--------|-------|
 | **APT28 (Fancy Bear)** | Russia - GRU Unit 26165 | Government espionage, election interference, credential harvesting |
-| **APT29 (Cozy Bear)** | Russia - SVR | Long-dwell espionage, supply chain compromise, cloud identity abuse |
 | **APT3 (Gothic Panda)** | China - MSS | Aerospace, defence, and telecom targeting |
 | **APT41 (Wicked Panda)** | China - dual-use | Hybrid espionage and financially motivated intrusions |
 | **FIN7 (Carbanak)** | Financially motivated (eCrime) | POS malware, retail and hospitality breach patterns |
@@ -118,26 +117,33 @@ The agent list shows every registered agent with status indicators alongside hos
 
 ## Architecture
 
+![Architecture](docs/architecture.png)
+
+> **Interactive diagram:** [docs/architecture.html](docs/architecture.html) — open in a browser for the full visual with component details and legend.
+
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     RedTeamSimmer Server                     │
-│                      (Python/Flask)                          │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │   Web UI    │  │  REST API   │  │  SQLite Database    │  │
-│  │  (HTML/JS)  │  │  Endpoints  │  │  (Tasks/Results)    │  │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              │ HTTP/HTTPS
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    Windows Target Systems                    │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │   Agent     │  │   Agent     │  │   Agent     │  ...    │
-│  │ (Go Binary) │  │ (Go Binary) │  │ (Go Binary) │         │
-│  │  Windows    │  │  Windows    │  │  Windows    │         │
-│  └─────────────┘  └─────────────┘  └─────────────┘         │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│                        RedTeamSimmer Server                          │
+│                          (Python / Flask)                            │
+│                                                                      │
+│  ┌───────────┐  ┌───────────┐  ┌──────────────┐  ┌───────────────┐  │
+│  │  Web UI   │  │ REST API  │  │ SQLite DB    │  │ Atomic Red    │  │
+│  │ HTML / JS │  │ Endpoints │  │ Tasks/Results│  │ Team (YAML)   │  │
+│  └───────────┘  └───────────┘  └──────────────┘  └───────────────┘  │
+│                                                                      │
+│  ┌───────────────────┐  ┌────────────────────┐  ┌────────────────┐  │
+│  │ MITRE ATT&CK v19.1│  │  Detection Rules   │  │ Emulation Plans│  │
+│  │ Stealth + Def Imp │  │ Sigma/Splunk/Elastic│  │ 6 APT actors  │  │
+│  └───────────────────┘  └────────────────────┘  └────────────────┘  │
+└──────────────────────────────────────────────────────────────────────┘
+                    │                │                │
+                    │  HTTP / HTTPS  │                │
+                    ▼                ▼                ▼
+          ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+          │ Windows Agent│  │ Windows Agent│  │ Windows Agent│  ...
+          │  (Go Binary) │  │  (Go Binary) │  │  (Go Binary) │
+          │  PowerShell  │  │  PowerShell  │  │  PowerShell  │
+          └──────────────┘  └──────────────┘  └──────────────┘
 ```
 
 ---
@@ -839,6 +845,25 @@ Security researcher and developer passionate about building tools for the offens
 | Twitter | [@breachsimrange](https://twitter.com/breachsimrange) |
 | LinkedIn | [BreachSimRange](https://linkedin.com/company/breachsimrange) |
 | Email | contact@breachsimrange.io |
+
+---
+
+## Recent Updates
+
+RedTeamSimmer tracks the latest MITRE ATT&CK release. The current target is **ATT&CK v19.1 (April 2026)**, which split the legacy Defense Evasion tactic into **Stealth (TA0005)** and **Defense Impairment (TA0112)**.
+
+For full details on what changed — repo edits, API additions, per-actor emulation plan updates, atomic test coverage gaps, and what Atomic Red Team upstream still needs to ship for full v19 parity — see:
+
+- **[docs/UPDATES.md](docs/UPDATES.md)** — MITRE ATT&CK v19 migration notes, coverage gap report, upstream wish-list.
+
+Quick highlights from the v19 migration:
+
+- Server, agent, UI, detection rule maps, and all 6 adversary emulation plans (APT3, APT28, APT41, FIN7, Lazarus Group, Wizard Spider) now declare `mitre_version: 19.1`.
+- New API endpoints: `GET /api/mitre/version` and `GET /api/mitre/tactics`.
+- Vendored v19 dataset at `server/mitre/attack_v19.json` with loader at `server/mitre/mitre.py`.
+- Emulation plan aliases refreshed against v19 group pages (APT28 → Forest Blizzard, Lazarus → Diamond Sleet, Wizard Spider → Pistachio Tempest / FIN12, etc.).
+- v19-new attributions (T1685 Disable or Modify Tools, T1686 Disable or Modify System Firewall) appended to relevant plans where Atomic Red Team coverage exists.
+- Coverage gap report: 47 v19 Stealth technique IDs and 36 Defense Impairment technique IDs currently have no atomic test folder — the [UPDATES doc](docs/UPDATES.md) lists every gap and a prioritized upstream wish-list.
 
 ---
 
