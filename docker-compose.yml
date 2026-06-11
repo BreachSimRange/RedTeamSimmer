@@ -1,0 +1,14 @@
+services:
+  redteamsimmer:
+    build: .
+    container_name: redteamsimmer
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server/atomic:/app/atomic:ro
+      - ./server/uploads:/app/uploads
+      - ./server/data_store.sqlite3:/app/data_store.sqlite3
+    environment:
+      - ATOMICC2_ADMIN_TOKEN=ChangeThisAdminToken!
+      - FLASK_SECRET_KEY=change-this-to-a-random-secret
+    restart: unless-stopped

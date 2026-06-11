@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/logo.png" alt="RedTeamSimmer Logo" width="200">
+  <img src="docs/images/redteamsimmer-logo.png" alt="RedTeamSimmer Logo" width="200">
 </p>
 
 <h1 align="center">RedTeamSimmer</h1>
@@ -10,10 +10,13 @@ A Web Based Adversary Emulation Platform and Atomic Red Team Test Orchestration.
 </p>
 
 <p align="center">
-  <a href="https://github.com/breachsimrange/redteamsimmer/releases"><img src="https://img.shields.io/github/v/release/breachsimrange/redteamsimmer?style=flat-square" alt="Release"></a>
-  <a href="https://github.com/breachsimrange/redteamsimmer/blob/main/LICENSE"><img src="https://img.shields.io/github/license/breachsimrange/redteamsimmer?style=flat-square" alt="License"></a>
+  <a href="https://github.com/breachsimrange/redteamsimmer/releases"><img src="https://img.shields.io/badge/version-1.0.1-blue?style=flat-square" alt="Version"></a>
+  <a href="https://github.com/breachsimrange/redteamsimmer/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-GPLv3-green?style=flat-square" alt="License"></a>
+  <a href="https://attack.mitre.org/resources/updates/updates-april-2026/"><img src="https://img.shields.io/badge/MITRE_ATT%26CK-v19.1-red?style=flat-square" alt="MITRE ATT&CK v19.1"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.9+"></a>
+  <a href="https://go.dev/"><img src="https://img.shields.io/badge/go-1.19%2B-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go 1.19+"></a>
   <a href="https://github.com/breachsimrange/redteamsimmer/stargazers"><img src="https://img.shields.io/github/stars/breachsimrange/redteamsimmer?style=flat-square" alt="Stars"></a>
-  <a href="https://twitter.com/breachsimrange"><img src="https://img.shields.io/twitter/follow/breachsimrange?style=flat-square" alt="Twitter"></a>
+  <a href="https://x.com/breachsimrange"><img src="https://img.shields.io/badge/X-@breachsimrange-000000?style=flat-square&logo=x&logoColor=white" alt="X"></a>
 </p>
 
 ---
@@ -26,7 +29,13 @@ RedTeamSimmer bridges the gap between complex adversary emulation tooling and pr
 
 It also ships with adversary emulation plans modelled using Atomic Red Team for real threat actors including APT28, APT3, APT41, FIN7, Lazarus Group, and Wizard Spider for multi-stage attack simulations. Detection rule mappings for Sigma, Splunk, and Elastic Security help blue teams identify coverage gaps and validate alerting. A full operations history provides a complete audit trail for compliance. Designed for red teamers, blue teamers, purple team exercises, EDR/AV testing, and training.
 
-RedTeamSimmer is created and maintained by the [BreachSimRange](https://breachsimrange.io) team. The original RedTeamSimmer was created by @abhijithbr.
+RedTeamSimmer is created and maintained by the [BreachSimRange](https://breachsimrange.io) team. The original RedTeamSimmer was created by @abhijithbr. [@abhijithbr](https://x.com/abhijithbr) 
+
+---
+
+## DEF CON Singapore Demo Labs 2026
+
+RedTeamSimmer was first publicly presented at **DEF CON Singapore Demo Labs 2026**. The Demo Labs showcase was used to demonstrate the platform's adversary emulation capabilities, live atomic test execution to the security community.
 
 ---
 
@@ -119,16 +128,68 @@ The agent list shows every registered agent with status indicators alongside hos
 
 ![Architecture](docs/architecture.png)
 
+---
+
 ## Installation
 
 ### Prerequisites
 
-- **Python 3.9+**
-- **Go 1.19+** (for building agents - see [installation steps below](#installing-go-for-building-agents))
 - **Git**
 - **Windows target systems** (for agent deployment)
+- **Docker + Docker Compose** (for Docker setup)
+- **Python 3.9+** (for direct setup)
+- **Go 1.19+** (for building agents - see [installation steps below](#installing-go-for-building-agents))
 
-### Server Setup
+---
+
+### Option 1: Docker (Recommended)
+
+The fastest way to get the server running. Docker handles all Python dependencies and environment isolation automatically.
+
+#### Step 1: Clone the repository and download atomics
+
+```bash
+git clone https://github.com/breachsimrange/RedTeamSimmer.git
+cd RedTeamSimmer
+
+# Download Atomic Red Team atomics (required before starting the container)
+git clone https://github.com/redcanaryco/atomic-red-team.git atomics_repo
+mv atomics_repo server/atomic
+rm -rf atomics_repo
+```
+
+#### Step 2: Configure environment
+
+Open `docker-compose.yml` and set your values:
+
+```yaml
+environment:
+  - ATOMICC2_ADMIN_TOKEN=YourSecureTokenHere
+  - FLASK_SECRET_KEY=YourRandomSecretKeyHere
+```
+
+#### Step 3: Build and start
+
+```bash
+docker compose up -d
+```
+
+The server will be available at `http://localhost:5000`.
+
+#### Useful Docker commands
+
+```bash
+docker compose logs -f          # stream logs
+docker compose restart          # restart after config changes
+docker compose down             # stop and remove container
+docker compose up -d --build    # rebuild image after code changes
+```
+
+> **Note:** The `server/atomic/`, `server/uploads/`, and `server/data_store.sqlite3` paths are bind-mounted from your host so data persists across container restarts.
+
+---
+
+### Option 2: Direct Setup
 
 The server can run on Windows, Linux, or macOS.
 
@@ -170,36 +231,13 @@ deactivate
 # With the venv activated:
 pip install --upgrade pip
 pip install -r requirements.txt
-```
 
-#### Clone the Atomic Red Team Repository
+# Download Atomic Red Team atomics
+git clone https://github.com/redcanaryco/atomic-red-team.git atomics_repo
+mv atomics_repo ./atomic
+rm -rf atomics_repo
 
-RedTeamSimmer reads atomic test definitions from `atomic/atomics/` relative to the project root. This path is mandatory - the server parses it on startup to build the technique catalogue, resolve `prereq_command` / `get_prereq_command` / executor blocks, and stage technique folders for the file drop system. If the directory is missing or empty, technique listings will be blank in the UI and every execution will fail.
-
-Clone the upstream Atomic Red Team repository directly into the `atomic/` directory. The repo's own root contains an `atomics/` folder, so cloning it as `atomic` gives you the required `atomic/atomics/T<NNNN>/` layout in one step:
-
-```bash
-# From the RedTeamSimmer project root
-git clone https://github.com/redcanaryco/atomic-red-team.git atomic
-
-# Verify the layout
-ls atomic/atomics | head
-# Expected: Indexes  T1003  T1005  T1007  T1010  T1012  T1014  T1016 ...
-```
-
-Refresh the tests periodically to pick up new techniques and upstream fixes:
-
-```bash
-cd atomic && git pull && cd ..
-```
-
-> **Air-gapped deployments:** if the server host has no internet egress, clone the repository on a connected machine, archive it (`tar czf atomic.tar.gz atomic/`), transfer it across, and extract under the project root so the final path is still `atomic/atomics/`. External payloads referenced by individual atomics (binaries, scripts, samples fetched at runtime) need to be pre-staged separately - see the air-gapped deployment notes in the docs.
-
-#### Initialise the Database
-
-With dependencies installed and `atomic/atomics/` in place, run the server once to create the SQLite schema and seed the default admin user:
-
-```bash
+# Initialize the database and create default admin user
 python3 app.py
 ```
 
@@ -723,20 +761,12 @@ The agent handles sub-techniques (e.g., T1059.001) by searching multiple paths. 
 <details>
 <summary>📸 Click to expand screenshots</summary>
 
-### Dashboard
-![Dashboard](docs/images/dashboard.png)
+### Login
+![Login](docs/images/login.png)
 
-### Execute Technique
-![Execute](docs/images/execute.png)
+### Emulation Plans
+![Execute](docs/images/emulation-plans.png)
 
-### MITRE ATT&CK Heatmap
-![Heatmap](docs/images/heatmap.png)
-
-### Live Output
-![Output](docs/images/output.png)
-
-### View Details Modal
-![Details](docs/images/details.png)
 
 </details>
 
@@ -803,8 +833,7 @@ flake8 app.py
 <table>
   <tr>
     <td align="center">
-      <strong>Abhijith "Abx" B R</strong><br>
-      <sub>Author and Project Lead</sub><br>
+      <strong>Abhijith "Abx" B R</strong><sub>Author and Project Lead</sub><br>
       <a href="https://github.com/abhijithbr">GitHub</a> •
       <a href="https://twitter.com/abhijithbr">Twitter</a> •
       <a href="https://linkedin.com/in/abhijith-b-r">LinkedIn</a>
@@ -820,25 +849,11 @@ flake8 app.py
 
 ### Abhijith "Abx" B R
 
-Security researcher and developer passionate about building tools for the offensive cybersecurity community. Founder of [BreachSimRange](https://breachsimrange.io) and [Adversary Village](https://adversaryvillage.org).
+Security researcher and passionate about building tools for the offensive cybersecurity community. Founder of [BreachSimRange](https://breachsimrange.io) and [Adversary Village](https://adversaryvillage.org).
 
 ### BreachSimRange
 
-[BreachSimRange](https://breachsimrange.io) is an offensive security consulting and training company specializing in:
-
-- Red Team Operations
-- Adversary Emulation
-- Penetration Testing
-- Security Training
-
-**Connect with us:**
-
-| Platform | Link |
-|----------|------|
-| Website | [breachsimrange.io](https://breachsimrange.io) |
-| Twitter | [@breachsimrange](https://twitter.com/breachsimrange) |
-| LinkedIn | [BreachSimRange](https://linkedin.com/company/breachsimrange) |
-| Email | contact@breachsimrange.io |
+[BreachSimRange](https://breachsimrange.io) is an offensive security consulting and training company. Our mission is to simplify offensive cyber security operations and breach simulation, ensuring effortless cyber security solutions for all. Trust us to make your cyber defenses stronger, easier, and more effective. 
 
 ---
 
@@ -910,11 +925,6 @@ See the [LICENSE](LICENSE) file for the full license text.
 - **Patent grant** - contributors grant patent rights for the code they contribute
 - **No warranty** - the software is provided as-is
 
-### Commercial / Enterprise Licensing
-
-Organisations that want to build proprietary derivatives, integrate RedTeamSimmer into closed-source products, or bundle it with commercial software without the GPL source-disclosure obligations can obtain a commercial license from BreachSimRange.
-
-Contact: **contact@breachsimrange.io**
 
 ### Contributor License Agreement
 
@@ -928,13 +938,8 @@ The CLA is signed automatically via **CLA Assistant** on your first pull request
 
 ---
 
-<p align="center">
-  <strong>Version 1.0.0</strong><br>
-  Made with ❤️ for the security community
+<p>
+  <strong>Version 1.0.1</strong><br>
+  Made with ❤️ for the security community.
 </p>
 
-<p align="center">
-  <a href="https://github.com/breachsimrange/redteamsimmer">⭐ Star this repo</a> •
-  <a href="https://github.com/breachsimrange/redteamsimmer/issues">🐛 Report Bug</a> •
-  <a href="https://github.com/breachsimrange/redteamsimmer/issues">💡 Request Feature</a>
-</p>

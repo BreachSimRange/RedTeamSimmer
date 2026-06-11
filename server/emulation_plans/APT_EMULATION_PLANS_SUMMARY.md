@@ -20,8 +20,8 @@ All 6 APT emulation plans have been validated against MITRE ATT&CK v19.1 with At
 
 Released April 2026. Key change: **Defense Evasion (TA0003) was split into two distinct tactics:**
 
-- **Stealth (TA0005)** - techniques focused on hiding presence, evading detection (masquerading, obfuscation, rootkits, etc.)
-- **Defense Impairment (TA0112)** - techniques focused on actively degrading defensive capabilities (disabling tools, modifying security controls, policy tampering)
+- **Stealth (TA0005)** — techniques focused on hiding presence, evading detection (masquerading, obfuscation, rootkits, etc.)
+- **Defense Impairment (TA0112)** — techniques focused on actively degrading defensive capabilities (disabling tools, modifying security controls, policy tampering)
 
 All existing techniques that fell under Defense Evasion have been retagged via the `v19_tactic` field in each plan. No plan retains a raw "Defense Evasion" label.
 
@@ -30,7 +30,7 @@ All existing techniques that fell under Defense Evasion have been retagged via t
 | Plan | Stealth Retagged | Defense Impairment Retagged | New v19 Attributions |
 |------|------------------|-----------------------------|----------------------|
 | APT28 | 14 | 2 | T1685, T1686 |
-| APT3 | 9 | 0 | - |
+| APT3 | 9 | 0 | — |
 | APT41 | 19 | 4 | T1685 |
 | FIN7 | 12 | 3 | T1685, T1686 |
 | Lazarus Group | 27 | 3 | T1685, T1686 |
@@ -55,12 +55,12 @@ All existing techniques that fell under Defense Evasion have been retagged via t
 ## Files
 
 ### Validated Emulation Plans (Ready for RedTeamSimmer)
-1. `APT28_MITRE_VALIDATED.json` - 68 validated tests
-2. `Lazarus_Group_MITRE_VALIDATED.json` - 89 validated tests
-3. `FIN7_MITRE_VALIDATED.json` - 56 validated tests
-4. `APT41_MITRE_VALIDATED.json` - 83 validated tests
-5. `APT3_MITRE_VALIDATED.json` - 41 validated tests
-6. `Wizard_Spider_MITRE_VALIDATED.json` - 60 validated tests
+1. `APT28_MITRE_VALIDATED.json` — 68 validated tests
+2. `Lazarus_Group_MITRE_VALIDATED.json` — 89 validated tests
+3. `FIN7_MITRE_VALIDATED.json` — 56 validated tests
+4. `APT41_MITRE_VALIDATED.json` — 83 validated tests
+5. `APT3_MITRE_VALIDATED.json` — 41 validated tests
+6. `Wizard_Spider_MITRE_VALIDATED.json` — 60 validated tests
 
 ## Key Findings
 

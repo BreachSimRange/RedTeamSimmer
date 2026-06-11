@@ -18,12 +18,12 @@
 
 <body class="bg-gray-100 text-gray-900 min-h-screen flex">
 
-  <aside class="w-72 bg-gray-900 text-gray-100 flex flex-col shadow-xl" style="background-color: #121212;">
+  <aside class="bg-gray-900 text-gray-100 flex flex-col shadow-xl" style="background-color: #121212; width: 240px; min-width: 240px;">
     <div class="p-6 border-b border-gray-800">
       <h1 class="text-4xl font-bold text-white tracking-wide">Red<span style="color: #de0039;">Team</span>Simmer</h1>
       <p class="text-xs tracking-widest uppercase text-gray-500 mt-1" style="font-size:1rem;">A Cool UI for Atomic Red Team!</p>
     </div>
-    <nav class="flex-1 px-4 py-6 space-y-1 text-xl">
+    <nav class="flex-1 px-4 py-6 space-y-1 text-lg">
       <a href="#dashboard" data-section="dashboard" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition">
         <i data-lucide="layout-dashboard"></i>Dashboard
       </a>
@@ -59,7 +59,7 @@
   </aside>
 
 
-  <main class="flex-1 h-screen overflow-y-auto p-10 space-y-10">
+  <main class="flex-1 h-screen overflow-y-auto p-8 space-y-8">
 
     <section id="dashboard-section" class="hidden">
       <div class="flex justify-between items-center">
@@ -599,7 +599,7 @@ Atomic Red Team is an open-source project created and maintained by Red Canary. 
         </div>
 
         <div class="text-center mt-8 text-gray-500 text-sm">
-          <p>Version 1.0.0 | © 2026 RedTeamSimmer</p>
+          <p>Version 1.0.1 | © 2026 RedTeamSimmer</p>
           <p class="mt-1">Made with ❤️ for the security community.</p>
         </div>
       </div>
@@ -3767,7 +3767,7 @@ function showEmulationResultModal(opts) {
   if (Array.isArray(opts.skipped) && opts.skipped.length > 0) {
     html += `<details class="text-left bg-yellow-50 border border-yellow-300 rounded-lg p-3 mb-3" ${opts.skipped.length <= 10 ? 'open' : ''}>
       <summary class="cursor-pointer font-semibold text-yellow-800">
-        ${opts.skipped.length} skipped plan entry(ies) &mdash; click to expand
+        ${opts.skipped.length} skipped plan entry(ies) - click to expand
       </summary>
       <ul class="mt-2 space-y-1 max-h-64 overflow-y-auto">
         ${opts.skipped.map(s => `

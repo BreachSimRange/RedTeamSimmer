@@ -1,4 +1,5 @@
 
+    html { font-size: 14px; }
     html, body { height: 100%; }
     body { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.5px; }
     .hidden { display: none; }

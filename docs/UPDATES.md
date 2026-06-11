@@ -1,3 +1,20 @@
+# RedTeamSimmer Updates
+
+## v1.0.1 - 2026-06-11
+
+### UI Sizing Adjustments
+
+Scaled the interface down to match the appearance previously seen at 90% browser zoom, so it renders correctly at native 100% zoom.
+
+| File | Change |
+|------|--------|
+| `server/static/css/style-2.css` | Added `html { font-size: 14px; }` to scale all rem-based sizes (MITRE matrix, cards, badges, modals) from the browser default of 16px |
+| `server/static/ui.html` | Sidebar width reduced from `w-72` (288px) to 240px |
+| `server/static/ui.html` | Sidebar nav font reduced from `text-xl` (20px) to `text-lg` (18px) |
+| `server/static/ui.html` | Main content padding reduced from `p-10 space-y-10` (40px) to `p-8 space-y-8` (32px) |
+
+---
+
 # RedTeamSimmer - MITRE ATT&CK v19 Migration
 
 **Target framework:** MITRE ATT&CK **v19.1**, released **2026-04-28**

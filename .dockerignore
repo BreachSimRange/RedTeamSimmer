@@ -1,0 +1,11 @@
+server/atomic/
+server/uploads/
+server/data_store.sqlite3
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+.git/
+docs/
+agent/
+venv/
+*.md
