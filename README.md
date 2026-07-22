@@ -128,7 +128,29 @@ The agent list shows every registered agent with status indicators alongside hos
 
 ![Architecture](docs/architecture.png)
 
+
 ---
+
+## Screenshots
+
+### Login
+![Login](docs/images/login.png)
+
+### Agents
+![Agents](docs/images/agents.png)
+
+### Technique Execution
+![Technique Execution](docs/images/techniq-execution.png)
+
+### Emulation Plans
+![Emulation Plans](docs/images/emulation-plans.png)
+![Emulation Plans](docs/images/emulation-plans2.png)
+
+### Sample Results
+![Sample Results](docs/images/sample-results.png)
+
+---
+
 
 ## Installation
 
@@ -754,21 +776,6 @@ The agent handles sub-techniques (e.g., T1059.001) by searching multiple paths. 
 3. Check server logs for JSON parsing errors
 4. Validate JSON: `python3 -c "import json; json.load(open('detection/attack_rule_map.json'))"`
 
----
-
-## Screenshots
-
-<details>
-<summary>📸 Click to expand screenshots</summary>
-
-### Login
-![Login](docs/images/login.png)
-
-### Emulation Plans
-![Execute](docs/images/emulation-plans.png)
-
-
-</details>
 
 ---
 
