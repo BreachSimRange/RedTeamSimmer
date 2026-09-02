@@ -16,6 +16,7 @@ import shutil
 import hashlib
 import secrets
 from functools import wraps
+from werkzeug.utils import secure_filename
 
 from mitre import (
     VERSION as MITRE_VERSION,
@@ -1798,31 +1799,56 @@ def api_emulation_plans_reload():
 # FILEDROP AND OTHER ROUTES
 # ========================
 
+def safe_upload_path(agent_id, filename):
+    """Resolve <UPLOAD_DIR>/<agent_id>/<filename>, guaranteeing the result stays
+    inside UPLOAD_DIR. Agent IDs are formatted "HOSTNAME\\username", so backslashes
+    are permitted, but '..', forward slashes, absolute paths and null bytes are
+    rejected. `filename` is expected to be already sanitized via secure_filename.
+    Raises ValueError on any traversal attempt."""
+    if (not agent_id or "\x00" in agent_id or ".." in agent_id
+            or "/" in agent_id or os.path.isabs(agent_id)):
+        raise ValueError("invalid agent id")
+    upload_root = os.path.realpath(CONFIG["UPLOAD_DIR"])
+    agent_dir = os.path.realpath(os.path.join(upload_root, agent_id))
+    if os.path.commonpath([upload_root, agent_dir]) != upload_root:
+        raise ValueError("agent id escapes upload dir")
+    fpath = os.path.realpath(os.path.join(agent_dir, filename))
+    if os.path.commonpath([agent_dir, fpath]) != agent_dir:
+        raise ValueError("filename escapes agent dir")
+    return agent_dir, fpath
+
+
 @app.route("/api/filedrop", methods=["POST"])
 def api_filedrop():
     agent_id = request.form.get("agentId")
     task_id = request.form.get("taskId")
     file = request.files.get("file")
-    
+
     print(f"[DEBUG] Filedrop request: agentId={agent_id}, taskId={task_id}, file={file.filename if file else None}")
-    
+
     if not agent_id or not file:
         return jsonify({"error": "missing agentId or file"}), 400
 
-    agent_dir = os.path.join(CONFIG["UPLOAD_DIR"], agent_id)
-    os.makedirs(agent_dir, exist_ok=True)
-    
-    # Use the EXACT filename from the request if it contains task ID
-    if task_id and "atomic_bundle" in file.filename:
-        fname = file.filename
+    # Sanitize the client-supplied filename before it ever touches the filesystem.
+    orig_name = secure_filename(file.filename or "")
+
+    # Use the sanitized request filename if it contains the task ID
+    if task_id and "atomic_bundle" in orig_name:
+        fname = orig_name
     elif task_id:
-        fname = f"atomic_bundle_{task_id}.zip"
+        fname = f"atomic_bundle_{secure_filename(task_id)}.zip"
     else:
-        fname = f"{uuid.uuid4().hex}_{file.filename}"
-    
-    fpath = os.path.join(agent_dir, fname)
+        fname = f"{uuid.uuid4().hex}_{orig_name}" if orig_name else uuid.uuid4().hex
+
+    # Resolve the destination and reject anything that escapes UPLOAD_DIR.
+    try:
+        agent_dir, fpath = safe_upload_path(agent_id, fname)
+    except ValueError:
+        return jsonify({"error": "invalid agentId or filename"}), 400
+
+    os.makedirs(agent_dir, exist_ok=True)
     print(f"[DEBUG] Saving file to: {fpath}")
-    
+
     file.save(fpath)
     
     # Verify file was saved correctly
