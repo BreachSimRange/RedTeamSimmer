@@ -4,7 +4,7 @@
 # =============================================================================
 # Run this script to download the latest detection rule mappings
 # 
-# Usage: ./download_detection_rules.sh
+# Usage: cd server/detection && ./download-detection-rules.sh
 # =============================================================================
 
 set -e
@@ -104,8 +104,6 @@ echo "==================================================="
 echo "Next Steps"
 echo "==================================================="
 echo ""
-echo "1. Add detection_module.py code to your app.py"
-echo "2. Add ui_detection_panel.js code to your ui.html"
-echo "3. Restart your Flask server"
-echo ""
-echo "See HOWTO.md for detailed integration instructions."
+echo "Detection support is already built into the server."
+echo "Restart the Flask server to load the refreshed rules:"
+echo "    (from the server/ directory) python3 app.py"

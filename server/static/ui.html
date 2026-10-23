@@ -1688,10 +1688,10 @@ async function updateAgentTableAndGraph() {
     tr.className = 'hover:bg-gray-100';
     tr.innerHTML = `
       <td class="py-2 px-2"><img src="${agentIconForOS(os)}" style="height:22px;" /></td>
-      <td>${a.id}</td>
-      <td>${hostname}</td>
-      <td>${username}</td>
-      <td class="font-bold ${statusColor}">${a.status}</td>
+      <td>${escapeHtml(a.id)}</td>
+      <td>${escapeHtml(hostname)}</td>
+      <td>${escapeHtml(username)}</td>
+      <td class="font-bold ${statusColor}">${escapeHtml(a.status)}</td>
       <td>${a.last_seen ? a.last_seen.replace('T',' ').slice(0,19) : ""}</td>
       <td class="space-x-1">
         <button class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs edit-btn">Edit</button>
@@ -2098,12 +2098,12 @@ async function updateTechAgentTable() {
     const { os, hostname, username } = agentInfo(a);
     const statusColor = a.status === 'online' ? 'text-green-600' : 'text-gray-400';
     tbody.innerHTML += `<tr>
-      <td><input type="checkbox" class="exec-agent-cb" data-agentid="${a.id}"></td>
+      <td><input type="checkbox" class="exec-agent-cb" data-agentid="${escapeHtml(a.id)}"></td>
       <td><img src="${agentIconForOS(os)}" style="height:22px;vertical-align:middle;margin-right:8px;" /></td>
-      <td>${a.id}</td>
-      <td>${hostname}</td>
-      <td>${username}</td>
-      <td class="font-bold ${statusColor}">${a.status}</td>
+      <td>${escapeHtml(a.id)}</td>
+      <td>${escapeHtml(hostname)}</td>
+      <td>${escapeHtml(username)}</td>
+      <td class="font-bold ${statusColor}">${escapeHtml(a.status)}</td>
       <td>${a.last_seen ? a.last_seen.replace('T',' ').slice(0,19) : ""}</td>
     </tr>`;
   });
@@ -2364,10 +2364,15 @@ function filterOpLogs(filter) {
 }
 
 function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = String(text);
-    return div.innerHTML;
+    if (text === null || text === undefined) return '';
+    // Encode HTML-significant characters INCLUDING quotes, so the result is
+    // safe in both element-text and quoted-attribute contexts.
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 function renderOperationLogs(logs) {
@@ -3524,7 +3529,7 @@ async function updateEmulationAgentTable() {
       const { os, hostname, username } = agentInfo(a);
       const statusColor = a.status === 'online' ? 'text-green-600' : 'text-gray-400';
       const isOnline = a.status === 'online';
-      tbody.innerHTML += `<tr class="${isOnline ? '' : 'opacity-50'}"><td class="py-2 px-2"><input type="checkbox" class="emulation-agent-cb" data-agentid="${a.id}" ${isOnline ? '' : 'disabled'}></td><td class="py-2 px-2"><img src="${agentIconForOS(os)}" style="height:22px;vertical-align:middle;" /></td><td>${a.id}</td><td>${hostname}</td><td>${username}</td><td class="font-bold ${statusColor}">${a.status}</td><td>${a.last_seen ? a.last_seen.replace('T',' ').slice(0,19) : ""}</td></tr>`;
+      tbody.innerHTML += `<tr class="${isOnline ? '' : 'opacity-50'}"><td class="py-2 px-2"><input type="checkbox" class="emulation-agent-cb" data-agentid="${escapeHtml(a.id)}" ${isOnline ? '' : 'disabled'}></td><td class="py-2 px-2"><img src="${agentIconForOS(os)}" style="height:22px;vertical-align:middle;" /></td><td>${escapeHtml(a.id)}</td><td>${escapeHtml(hostname)}</td><td>${escapeHtml(username)}</td><td class="font-bold ${statusColor}">${escapeHtml(a.status)}</td><td>${a.last_seen ? a.last_seen.replace('T',' ').slice(0,19) : ""}</td></tr>`;
     });
   } catch (err) { console.error("Error updating emulation agent table:", err); }
 }
@@ -3791,10 +3796,15 @@ function showEmulationResultModal(opts) {
 // =============================================================================
 
 function escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    if (text === null || text === undefined) return '';
+    // Encode HTML-significant characters INCLUDING quotes, so the result is
+    // safe in both element-text and quoted-attribute contexts.
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 function renderDetectionRulesPanel(detectionRules) {

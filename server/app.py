@@ -14,8 +14,10 @@ import json
 import shutil
 
 import hashlib
+import hmac
 import secrets
 from functools import wraps
+from werkzeug.utils import secure_filename
 
 from mitre import (
     VERSION as MITRE_VERSION,
@@ -35,7 +37,7 @@ from mitre import (
 CONFIG = {
     "ADMIN_TOKEN": os.environ.get("ATOMICC2_ADMIN_TOKEN", "ChangeThisAdminToken!"),
     "ATOMIC_ROOT": str(Path(__file__).resolve().parent / "atomic" / "atomics"),
-    "DB_FILE": str(Path(__file__).resolve().parent / "data_store.sqlite3"),
+    "DB_FILE": os.environ.get("DB_FILE", str(Path(__file__).resolve().parent / "data_store.sqlite3")),
     "UPLOAD_DIR": str(Path(__file__).resolve().parent / "uploads"),
     "HOST": "0.0.0.0",
     "PORT": 5000,
@@ -236,6 +238,22 @@ def verify_password(password, stored_hash):
         return hash_password(password, salt) == stored_hash
     except:
         return False
+
+def token_valid(provided):
+    """Constant-time comparison of a provided token against the admin token."""
+    return hmac.compare_digest(str(provided or ""), str(CONFIG["ADMIN_TOKEN"]))
+
+
+def agent_token_required(f):
+    """Decorator for agent-facing endpoints authenticated by the shared token
+    sent in the X-AGENT-TOKEN header. Uses a constant-time comparison."""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not token_valid(request.headers.get("X-AGENT-TOKEN")):
+            return jsonify({"error": "unauthorized"}), 403
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 def login_required(f):
     """Decorator to require authentication for routes"""
@@ -1153,6 +1171,7 @@ def index():
     return app.send_static_file("ui.html")
 
 @app.route("/api/agent/confirm_file", methods=["POST"])
+@agent_token_required
 def api_agent_confirm_file():
     body = request.json or {}
     aid = body.get("agentId")
@@ -1478,8 +1497,12 @@ def api_execute():
         return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 @app.route("/api/agent_files/<agent>")
+@login_required
 def api_agent_files(agent):
-    agent_dir = os.path.join(CONFIG["UPLOAD_DIR"], agent)
+    safe_agent = secure_filename(agent or "")
+    if not safe_agent:
+        return jsonify({"files": []})
+    agent_dir = os.path.join(CONFIG["UPLOAD_DIR"], safe_agent)
     files = []
     if os.path.exists(agent_dir):
         for f in os.listdir(agent_dir):
@@ -1799,30 +1822,42 @@ def api_emulation_plans_reload():
 # ========================
 
 @app.route("/api/filedrop", methods=["POST"])
+@login_required
 def api_filedrop():
     agent_id = request.form.get("agentId")
     task_id = request.form.get("taskId")
     file = request.files.get("file")
-    
-    print(f"[DEBUG] Filedrop request: agentId={agent_id}, taskId={task_id}, file={file.filename if file else None}")
-    
+
     if not agent_id or not file:
         return jsonify({"error": "missing agentId or file"}), 400
 
-    agent_dir = os.path.join(CONFIG["UPLOAD_DIR"], agent_id)
+    # Sanitize all path components. secure_filename() strips directory
+    # separators and traversal sequences, so neither the agent id, the task
+    # id, nor the client-supplied filename can escape the uploads directory.
+    safe_agent = secure_filename(agent_id)
+    if not safe_agent:
+        return jsonify({"error": "invalid agentId"}), 400
+
+    safe_task = secure_filename(task_id) if task_id else ""
+    client_name = secure_filename(file.filename or "")
+
+    agent_dir = os.path.join(CONFIG["UPLOAD_DIR"], safe_agent)
     os.makedirs(agent_dir, exist_ok=True)
-    
-    # Use the EXACT filename from the request if it contains task ID
-    if task_id and "atomic_bundle" in file.filename:
-        fname = file.filename
-    elif task_id:
-        fname = f"atomic_bundle_{task_id}.zip"
+
+    if safe_task and client_name.startswith("atomic_bundle"):
+        fname = client_name
+    elif safe_task:
+        fname = f"atomic_bundle_{safe_task}.zip"
     else:
-        fname = f"{uuid.uuid4().hex}_{file.filename}"
-    
+        fname = f"{uuid.uuid4().hex}_{client_name or 'upload.bin'}"
+
     fpath = os.path.join(agent_dir, fname)
-    print(f"[DEBUG] Saving file to: {fpath}")
-    
+
+    # Defense in depth: confirm the resolved path stays inside UPLOAD_DIR.
+    uploads_root = os.path.realpath(CONFIG["UPLOAD_DIR"])
+    if os.path.commonpath([os.path.realpath(fpath), uploads_root]) != uploads_root:
+        return jsonify({"error": "invalid path"}), 400
+
     file.save(fpath)
     
     # Verify file was saved correctly
@@ -1850,7 +1885,7 @@ def api_filedrop():
 @app.route("/api/register", methods=["POST"])
 def api_register():
     data = request.json or {}
-    if data.get("token") != CONFIG["ADMIN_TOKEN"]:
+    if not token_valid(data.get("token")):
         return jsonify({"error": "bad token"}), 403
     info = data.get("info", "")
     if isinstance(info, dict):
@@ -1859,9 +1894,8 @@ def api_register():
     return jsonify({"status": "registered", "id": data.get("id")})
 
 @app.route("/api/poll/<aid>", methods=["GET"])
+@agent_token_required
 def api_poll(aid):
-    if request.headers.get("X-AGENT-TOKEN") != CONFIG["ADMIN_TOKEN"]:
-        return jsonify({"error": "unauthorized"}), 403
     db = get_db()
     now = datetime.datetime.utcnow().isoformat()
     db.execute('UPDATE agents SET last_seen=? WHERE id=?', (now, aid))
@@ -1870,9 +1904,8 @@ def api_poll(aid):
     return jsonify({"status": "task", "task": task}) if task else jsonify({"status": "idle"})
 
 @app.route("/api/report/<aid>", methods=["POST"])
+@agent_token_required
 def api_report(aid):
-    if request.headers.get("X-AGENT-TOKEN") != CONFIG["ADMIN_TOKEN"]:
-        return jsonify({"error": "unauthorized"}), 403
 
     body = request.json or {}
     task_id = body.get("task_id")

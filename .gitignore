@@ -1,0 +1,39 @@
+# --- Local database (contains admin hash, agent & operation records) ---
+*.sqlite3
+*.sqlite
+server/data/
+server/data_store.sqlite3
+
+# --- Python ---
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# --- Secrets / local config ---
+.env
+.env.*
+*.pem
+*.key
+
+# --- Runtime data: uploads & agent file drops ---
+uploads/
+server/uploads/
+!server/uploads/.gitkeep
+
+# --- Atomic Red Team library (downloaded at setup, not vendored) ---
+server/atomic/
+
+# --- Build artifacts ---
+agent/agent
+agent/agent.exe
+*.exe
+
+# --- Editor / OS ---
+.DS_Store
+.idea/
+.vscode/
+*.swp

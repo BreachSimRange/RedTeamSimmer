@@ -7,8 +7,12 @@ services:
     volumes:
       - ./server/atomic:/app/atomic:ro
       - ./server/uploads:/app/uploads
-      - ./server/data_store.sqlite3:/app/data_store.sqlite3
+      # Persist the SQLite database in a host directory. Mounting a directory
+      # (not a single file) avoids Docker creating a bogus directory in its
+      # place when the file does not yet exist on a fresh clone.
+      - ./server/data:/app/data
     environment:
       - ATOMICC2_ADMIN_TOKEN=ChangeThisAdminToken!
       - FLASK_SECRET_KEY=change-this-to-a-random-secret
+      - DB_FILE=/app/data/data_store.sqlite3
     restart: unless-stopped

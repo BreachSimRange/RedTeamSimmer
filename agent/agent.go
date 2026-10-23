@@ -815,6 +815,7 @@ func confirmFileDrop(taskID string) {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-AGENT-TOKEN", AdminToken)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -3035,8 +3036,16 @@ func unzip(src, dest string) error {
 	}
 	defer r.Close()
 
+	destRoot := filepath.Clean(dest)
 	for _, f := range r.File {
 		path := filepath.Join(dest, f.Name)
+
+		// Zip-slip protection: reject any entry whose resolved path escapes
+		// the destination directory (e.g. names containing "../" or "..\").
+		cleanPath := filepath.Clean(path)
+		if cleanPath != destRoot && !strings.HasPrefix(cleanPath, destRoot+string(os.PathSeparator)) {
+			return fmt.Errorf("illegal file path in archive (zip-slip blocked): %s", f.Name)
+		}
 
 		if f.FileInfo().IsDir() {
 			os.MkdirAll(path, f.Mode())

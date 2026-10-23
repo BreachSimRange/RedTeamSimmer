@@ -1,5 +1,51 @@
 # RedTeamSimmer Updates
 
+## Security Hardening - 2026-09-30
+
+Fixed the critical and high-severity issues found in a security review of the server, agent, and web UI. The review covered injection, authentication, file handling, and cross-site scripting.
+
+### Critical
+
+**Unauthenticated arbitrary file write via `/api/filedrop`.** The endpoint had no authentication and built the save path from the client-supplied `agentId` and raw upload filename, allowing an unauthenticated caller to write files anywhere the server process could reach (remote code execution).
+
+| File | Change |
+|------|--------|
+| `server/app.py` | `/api/filedrop` now requires an authenticated operator session (`@login_required`) |
+| `server/app.py` | `agentId`, `taskId`, and the upload filename are passed through `werkzeug.utils.secure_filename`, stripping directory separators and traversal sequences |
+| `server/app.py` | Added a containment check that rejects any resolved save path outside the uploads directory |
+
+### High
+
+**Missing authentication on the agent plane.** Several agent-facing and operator endpoints had no auth, and the token checks that did exist were not constant-time.
+
+| File | Change |
+|------|--------|
+| `server/app.py` | Added `token_valid()` (constant-time compare via `hmac.compare_digest`) and an `agent_token_required` decorator |
+| `server/app.py` | `/api/agent/confirm_file` now requires the agent token |
+| `server/app.py` | `/api/agent_files/<agent>` now requires an operator session and sanitizes the agent path component |
+| `server/app.py` | `/api/register`, `/api/poll`, and `/api/report` token checks converted to the constant-time helper |
+| `agent/agent.go` | `confirmFileDrop()` now sends the `X-AGENT-TOKEN` header so it works against the newly protected endpoint |
+
+**Zip-slip in the agent archive extractor.** `unzip()` joined each ZIP entry name to the destination without validating the result, so a crafted archive from a malicious or man-in-the-middle server could write outside the target directory.
+
+| File | Change |
+|------|--------|
+| `agent/agent.go` | `unzip()` now rejects any entry whose cleaned path escapes the destination directory (`../` / `..\`) |
+
+**Stored XSS from agent-controlled fields in the operator console.** A malicious enrolled agent could set its own hostname, username, or id, which were rendered raw into the agent tables and executed in the operator's browser.
+
+| File | Change |
+|------|--------|
+| `server/static/ui.html` | Hardened both `escapeHtml()` helpers to also encode `"` and `'`, making output safe in quoted-attribute contexts |
+| `server/static/ui.html` | Escaped agent-controlled `id`, `hostname`, `username`, and `status` in the three agent tables (`updateAgentTableAndGraph`, `updateTechAgentTable`, `updateEmulationAgentTable`), including the `data-agentid` attribute |
+
+### Notes
+
+- Lower-severity items from the review remain open, including single-round SHA-256 password hashing (recommend bcrypt/Argon2), plaintext HTTP transport with a hardcoded default agent token, unauthenticated reads under `/uploads/`, the default `redteamsimmer` / `redteamsimmer` credentials, and the remaining medium-severity raw-interpolation and unvalidated-`href` XSS sinks in the UI.
+- Deployments should still set `ATOMICC2_ADMIN_TOKEN` and `FLASK_SECRET_KEY` and serve the app behind TLS.
+
+---
+
 ## v1.0.1 - 2026-06-11
 
 ### UI Sizing Adjustments
